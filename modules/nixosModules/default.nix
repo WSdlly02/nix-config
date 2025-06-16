@@ -43,6 +43,13 @@ in
       };
     };
     networking.firewall = {
+      enable = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = ''
+          Enable firewall
+        '';
+      };
       extraAllowedPorts = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.port;

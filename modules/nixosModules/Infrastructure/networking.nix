@@ -11,7 +11,7 @@
       nftables.enable = lib.mkDefault false;
       tempAddresses = "disabled";
       firewall = rec {
-        enable = true;
+        enable = config.hostSystemSpecific.networking.firewall.enable;
         allowedTCPPorts = [
           7890 # Mihomo
           12024 # Mincraft Server
