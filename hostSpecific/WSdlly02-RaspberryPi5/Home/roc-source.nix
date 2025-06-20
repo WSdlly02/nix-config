@@ -7,7 +7,7 @@
             local.ip = 10.42.0.2
             resampler.profile = high
             fec.code = ldpc
-            sess.latency.msec = 60
+            sess.latency.msec = 40
             local.source.port = 10001
             local.repair.port = 10002
             local.control.port = 10003

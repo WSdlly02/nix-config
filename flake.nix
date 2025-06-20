@@ -15,7 +15,6 @@
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nixpkgs-3098717.url = "github:NixOS/nixpkgs/309871725f09fffa92d7d97a213c3a9f88672265";
     nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/main";
@@ -29,7 +28,6 @@
       my-codes,
       nixos-hardware,
       nixos-wsl,
-      nixpkgs-3098717,
       nixpkgs-unstable,
       self,
       zen-browser,
@@ -90,10 +88,6 @@
             inherit system;
           });
           nixpkgs-unstable = mkPkgs { inherit system; };
-          nixpkgs-3098717 = mkPkgs {
-            nixpkgsInstance = nixpkgs-3098717;
-            inherit system;
-          };
         }
         // self.overlays.exposedPackages null (mkPkgs {
           inherit system;
@@ -130,10 +124,7 @@
       nixosConfigurations = {
         "WSdlly02-PC" = lib.nixosSystem rec {
           system = "x86_64-linux";
-          pkgs = mkPkgs {
-            inherit system;
-            overlays = [ self.overlays.nixpkgs-3098717-overlay ];
-          };
+          pkgs = mkPkgs { inherit system; };
           modules = [
             self.nixosModules.default
             ./hostSpecific/WSdlly02-PC
@@ -189,13 +180,6 @@
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
             epson-inkjet-printer-201601w = callPackage ./pkgs/epson-inkjet-printer-201601w.nix { };
             fabric-survival = callPackage ./pkgs/fabric-survival.nix { };
-          };
-        nixpkgs-3098717-overlay =
-          final: prev: with prev; {
-            pkgs-3098717 = mkPkgs {
-              nixpkgsInstance = nixpkgs-3098717;
-              system = "${stdenv.hostPlatform.system}";
-            };
           };
         id-generator-overlay =
           final: prev: with prev; {
