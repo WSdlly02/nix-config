@@ -5,14 +5,14 @@
 {
   imports = [
     ./eye-care-reminder.nix
-    ./roc-sink.nix
+    # ./roc-sink.nix
     ./sh.nix
     ./syncthing.nix
   ];
   hostUserSpecific = {
     username = "wsdlly02";
     extraPackages = with pkgs; [
-      audio-relay
+      # audio-relay
       discord
       ncmdump
       ocs-desktop

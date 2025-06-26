@@ -20,7 +20,7 @@
         clippy
         rustc
         rustfmt
-        python312Env # Python 3.12
+        # python312Env # Python 3.12 !!!
         # python312FHSEnv
         # Other pkgs
       ];

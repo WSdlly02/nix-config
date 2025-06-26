@@ -8,13 +8,14 @@
   config = lib.mkIf enableInfrastructure {
     networking.networkmanager = {
       enable = true;
+      enableDefaultPlugins = false;
       dns = "systemd-resolved";
       ethernet.macAddress = "stable";
       wifi = {
         macAddress = "stable-ssid";
+        scanRandMacAddress = false;
         powersave = lib.mkIf (config.system.name != "WSdlly02-PC") false;
       };
-      plugins = lib.mkForce [ ];
       # rc-manager has been set as unmanaged
     };
   };

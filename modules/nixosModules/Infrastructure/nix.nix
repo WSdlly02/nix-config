@@ -59,7 +59,6 @@ in
       auto-allocate-uids = true; # Experimental
       experimental-features = [
         "auto-allocate-uids"
-        "ca-derivations"
         "flakes"
         "nix-command"
       ];
@@ -74,7 +73,7 @@ in
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       ];
       trusted-users = [
-        "wsdlly02"
+        config.hostSystemSpecific.defaultUser.name
       ];
     };
     package = pkgs.lixPackageSets.latest.lix;

@@ -9,6 +9,7 @@
     enableBluetooth = false;
     enableDevelopment = false;
     enableInfrastructure = true;
+    enableSmartd = true;
     environment.extraSystemPackages = with pkgs; [
       ntfs3g
     ];
