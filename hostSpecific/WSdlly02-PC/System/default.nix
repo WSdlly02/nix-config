@@ -23,8 +23,6 @@
         "xhci_pci"
         "ahci"
         "usbhid"
-        "usb_storage"
-        "sd_mod"
       ];
       verbose = false;
       kernelModules = [ ];
@@ -33,10 +31,14 @@
     consoleLogLevel = 3;
     kernelPackages = pkgs.linuxKernel.packages.linux_lqx; # pkgs.linuxPackages_xanmod_latest is the equivalent
     # Notice: pkgs.linuxKernel.packages."..." is an attribute set, pkgs.linuxKernel.kernels."..." is the real kernel package
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [
+      "kvm-amd"
+      "snd-hda-intel"
+    ];
     extraModulePackages = with config.boot.kernelPackages; [
       zenergy
     ];
+    extraModprobeConfig = "options snd-hda-intel dmic_detect=0 model=auto position_fix=1";
     kernelParams = [
       "quiet"
       "nowatchdog"

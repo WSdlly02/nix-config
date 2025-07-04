@@ -4,6 +4,7 @@
     ./gamescope.nix
     ./openrazer.nix
     ./openrgb.nix
+    ./zerotierone.nix
   ];
   programs = {
     gamemode.enable = true;
@@ -17,7 +18,6 @@
     (prismlauncher.override rec {
       jdk21 = zulu21; # Actually, it's useless, because Prismlauncher doesn't really need java.
       jdk17 = zulu17;
-      jdk8 = null; # Strip
       jdks = [
         jdk21
         jdk17

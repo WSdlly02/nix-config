@@ -19,120 +19,26 @@
         extraConfig = {
           "10-allow-headless" = {
             "wireplumber.profiles" = {
-              "main" = {
+              main = {
                 "monitor.bluez.seat-monitoring" = "disabled";
               };
             };
           };
-          "20-disable-hfp" = {
-            "monitor.bluez.rules" = [
-              {
-                matches = [ { "device.name" = "~bluez_card.*"; } ];
-                actions = {
-                  update-props = {
-                    "bluez5.auto-connect" = [
-                      "a2dp_sink"
-                      "a2dp_source"
-                    ];
-                    "bluez5.hw-volume" = [
-                      "a2dp_sink"
-                      "a2dp_source"
-                    ];
-                  };
-                };
-              }
-            ];
-            "monitor.bluez.properties" = {
-              "bluez5.roles" = [
-                "a2dp_sink"
-                "a2dp_source"
-                "bap_sink"
-                "bap_source"
-              ];
-              "bluez5.codecs" = [
-                "ldac"
-                "aptx"
-                "aptx_ll_duplex"
-                "aptx_ll"
-                "aptx_hd"
-                "opus_05_pro"
-                "opus_05_71"
-                "opus_05_51"
-                "opus_05"
-                "opus_05_duplex"
-                "aac"
-                "sbc_xq"
-              ];
-              "bluez5.hfphsp-backend" = "none";
+          "20-bluetooth-policy" = {
+            "wireplumber.settings" = {
+              "bluetooth.autoswitch-to-headset-profile" = false;
             };
           };
-          "50-alsa-config" = {
-            "monitor.alsa.properties" = {
-              # Use ALSA-Card-Profile devices. They use UCM or the profile
-              # configuration to configure the device and mixer settings.
-              # alsa.use-acp = true
-              # Use UCM instead of profile when available. Can be disabled
-              # to skip trying to use the UCM profile.
-              "alsa.use-ucm" = true;
-            };
-          };
-          # https://wiki.archlinux.org/title/Bluetooth_headset#Disable_PulseAudio_auto_switching_headset_to_HSP/HFP
-          # "20-bluetooth-settings" = {
-          #   "wireplumber.settings" = {
-          #     "bluetooth.autoswitch-to-headset-profile" = false;
-          #   };
-          #   "monitor.bluez.properties" = {
-          #     "bluez5.roles" = [
-          #       "a2dp_sink"
-          #       "a2dp_source"
-          #     ];
-          #     "bluez5.auto-connect" = [
-          #       "a2dp_sink"
-          #       "a2dp_source"
-          #     ];
-          #     # LDAC encoding quality
-          #     # Available values: auto (Adaptive Bitrate, default)
-          #     #                   hq   (High Quality, 990/909kbps)
-          #     #                   sq   (Standard Quality, 660/606kbps)
-          #     #                   mq   (Mobile use Quality, 330/303kbps)
-          #     "bluez5.a2dp.ldac.quality" = "hq";
-          #     # AAC variable bitrate mode
-          #     # Available values: 0 (cbr, default), 1-5 (quality level)
-          #     "bluez5.a2dp.aac.bitratemode" = 5;
+          # "50-alsa-config" = {
+          #   "monitor.alsa.properties" = {
+          #     # 使用 ALSA-Card-Profile 设备。他们使用UCM或配置文件
+          #     # 配置配置设备和混音器设置。
+          #     "alsa.use-acp" = true;
+          #     # 使用 UCM 而不是配置文件(可用时 ) 。可禁用
+          #     # 跳过尝试使用 UCM 配置文件。
+          #     "alsa.use-ucm" = false;
           #   };
           # };
-          /*
-            # https://wiki.archlinux.org/title/PipeWire#Noticeable_audio_delay_or_audible_pop/crack_when_starting_playback
-            "50-disable-suspension" = {
-              "monitor.alsa.rules" = [
-                {
-                  "matches" = [
-                    {"node.name" = "~alsa_input.*";}
-                    {"node.name" = "~alsa_output.*";}
-                  ];
-                  "actions" = {
-                    "update-props" = {
-                      "session.suspend-timeout-seconds" = 0;
-                    };
-                  };
-                }
-              ];
-              # bluetooth devices
-              "monitor.bluez.rules" = [
-                {
-                  "matches" = [
-                    {"node.name" = "~bluez_input.*";}
-                    {"node.name" = "~bluez_output.*";}
-                  ];
-                  "actions" = {
-                    "update-props" = {
-                      "session.suspend-timeout-seconds" = 0;
-                    };
-                  };
-                }
-              ];
-            };
-          */
         };
       };
       socketActivation = config.hostSystemSpecific.services.pipewire.socketActivation;
@@ -146,21 +52,22 @@
           };
         };
         pipewire-pulse."92-low-latency" = {
-          context.modules = [
+          "context.properties" = [
             {
               name = "libpipewire-module-protocol-pulse";
-              args = {
-                pulse.min.req = "32/48000";
-                pulse.default.req = "32/48000";
-                pulse.max.req = "32/48000";
-                pulse.min.quantum = "32/48000";
-                pulse.max.quantum = "32/48000";
-              };
+              args = { };
             }
           ];
-          stream.properties = {
-            node.latency = "32/48000";
-            resample.quality = 1;
+          "pulse.properties" = {
+            "pulse.min.req" = "32/48000";
+            "pulse.default.req" = "32/48000";
+            "pulse.max.req" = "32/48000";
+            "pulse.min.quantum" = "32/48000";
+            "pulse.max.quantum" = "32/48000";
+          };
+          "stream.properties" = {
+            "node.latency" = "32/48000";
+            "resample.quality" = 1;
           };
         };
       };

@@ -40,7 +40,6 @@
     # };
     limine = {
       enable = true;
-      branding = "WSdlly02-PC Bootloader";
       extraEntries = ''
         /Windows 11
           protocol: efi
@@ -49,10 +48,13 @@
       maxGenerations = 4;
       secureBoot.enable = true;
       style = {
+        interface = {
+          branding = "WSdlly02-PC Bootloader";
+          resolution = "2560x1440";
+        };
         wallpapers = [
           "${pkgs.nixos-artwork.wallpapers.catppuccin-latte.gnomeFilePath}"
         ];
-        interface.resolution = "2560x1440";
       };
     };
   };

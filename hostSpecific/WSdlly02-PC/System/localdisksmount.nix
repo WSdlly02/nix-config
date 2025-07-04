@@ -21,7 +21,7 @@
     };
 
     "/home/wsdlly02/Disks/Files-M" = {
-      device = "/dev/disk/by-uuid/29B31A33EBBBBC0B";
+      device = "/dev/disk/by-uuid/666A5B1D6A5AE8F7";
       fsType = "ntfs3";
       depends = [ "/home" ];
       noCheck = true;
