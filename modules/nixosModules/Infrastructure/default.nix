@@ -40,7 +40,10 @@
     })
     {
       programs = {
-        command-not-found.dbPath = "${pkgs.self.outPath}/programs.sqlite";
+        command-not-found = {
+          enable = true;
+          dbPath = "${config.nixpkgs.flake.source}/programs.sqlite";
+        };
         fish.enable = true;
         git = {
           enable = true;
@@ -104,6 +107,10 @@
           wget
         ]
         ++ config.hostSystemSpecific.environment.extraSystemPackages;
+      # system.etc.overlay = {
+      #   enable = true;
+      #   mutable = true;
+      # };
     }
   ];
 }

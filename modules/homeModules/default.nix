@@ -27,7 +27,7 @@ in
     programs = {
       command-not-found = {
         enable = true;
-        dbPath = "${pkgs.self.outPath}/programs.sqlite";
+        dbPath = "${pkgs.path}/programs.sqlite";
       };
       home-manager.enable = true;
       lazygit.enable = true;

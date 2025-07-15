@@ -15,7 +15,7 @@ in
       "home-manager=${inputs.home-manager}"
       "my-codes=/home/${defaultUsername}/Documents/my-codes"
       "nix-config=/home/${defaultUsername}/Documents/nix-config"
-      "nixpkgs=${pkgs.self.outPath}"
+      "nixpkgs=${config.nixpkgs.flake.source}"
     ];
     registry = {
       "home-manager" = {
@@ -49,7 +49,7 @@ in
         };
       };
       "nixpkgs".to = {
-        path = "${pkgs.self.outPath}";
+        path = "${config.nixpkgs.flake.source}";
         type = "path";
       };
     };

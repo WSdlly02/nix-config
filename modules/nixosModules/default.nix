@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hostSystemSpecific;
 in
@@ -102,5 +107,6 @@ in
       enableDevelopment = cfg.enableDevelopment;
       enableInfrastructure = cfg.enableInfrastructure;
     };
+    nixpkgs.flake.source = lib.mkForce pkgs.path; # make config consistent with pkgs
   };
 }

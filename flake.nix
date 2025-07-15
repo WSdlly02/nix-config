@@ -23,18 +23,10 @@
   };
 
   outputs =
-    {
-      home-manager,
-      my-codes,
-      nixos-hardware,
-      nixos-wsl,
-      nixpkgs-unstable,
-      self,
-      zen-browser,
-    }@inputs:
+    inputs:
     let
-      inherit (nixpkgs-unstable) lib;
-      inherit (self.lib) mkPkgs;
+      inherit (inputs.nixpkgs-unstable) lib;
+      inherit (inputs.self.lib) mkPkgs;
       exposedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -52,24 +44,24 @@
       formatter = forExposedSystems (system: (mkPkgs { inherit system; }).nixfmt-rfc-style);
 
       homeConfigurations = {
-        "wsdlly02@WSdlly02-PC" = home-manager.lib.homeManagerConfiguration {
+        "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
-            self.homeModules.default
-            zen-browser.homeModules.beta
+            inputs.self.homeModules.default
+            inputs.zen-browser.homeModules.beta
             ./hostSpecific/WSdlly02-PC/Home
           ];
           pkgs = mkPkgs { system = "x86_64-linux"; };
         };
-        "wsdlly02@WSdlly02-LT-WSL" = home-manager.lib.homeManagerConfiguration {
+        "wsdlly02@WSdlly02-LT-WSL" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
-            self.homeModules.default
+            inputs.self.homeModules.default
             ./hostSpecific/WSdlly02-LT-WSL/Home
           ];
           pkgs = mkPkgs { system = "x86_64-linux"; };
         };
-        "wsdlly02@WSdlly02-RaspberryPi5" = home-manager.lib.homeManagerConfiguration {
+        "wsdlly02@WSdlly02-RaspberryPi5" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
-            self.homeModules.default
+            inputs.self.homeModules.default
             ./hostSpecific/WSdlly02-RaspberryPi5/Home
           ];
           pkgs = mkPkgs { system = "aarch64-linux"; };
@@ -84,22 +76,22 @@
       legacyPackages = forExposedSystems (
         system:
         {
-          my-codes-exposedPackages = my-codes.overlays.exposedPackages null (mkPkgs {
+          my-codes-exposedPackages = inputs.my-codes.overlays.exposedPackages null (mkPkgs {
             inherit system;
           });
           nixpkgs-unstable = mkPkgs { inherit system; };
         }
-        // self.overlays.exposedPackages null (mkPkgs {
+        // inputs.self.overlays.exposedPackages null (mkPkgs {
           inherit system;
         })
-        // self.overlays.id-generator-overlay null (mkPkgs {
+        // inputs.self.overlays.id-generator-overlay null (mkPkgs {
           inherit system;
         })
       );
 
       lib.mkPkgs =
         {
-          nixpkgsInstance ? nixpkgs-unstable,
+          nixpkgsInstance ? inputs.nixpkgs-unstable,
           config ? { },
           overlays ? [ ],
           system,
@@ -112,12 +104,10 @@
             rocmSupport = true;
           } // config;
           overlays = [
-            my-codes.overlays.exposedPackages
-            self.overlays.exposedPackages
-            self.overlays.id-generator-overlay
-            (final: prev: {
-              self.outPath = "${nixpkgsInstance}";
-            })
+            inputs.my-codes.overlays.exposedPackages
+            inputs.self.overlays.exposedPackages
+            inputs.self.overlays.id-generator-overlay
+            (final: prev: { path = "${nixpkgsInstance}"; })
           ] ++ overlays;
         };
 
@@ -126,7 +116,7 @@
           system = "x86_64-linux";
           pkgs = mkPkgs { inherit system; };
           modules = [
-            self.nixosModules.default
+            inputs.self.nixosModules.default
             ./hostSpecific/WSdlly02-PC
             # TODO: libvirt
           ];
@@ -138,8 +128,8 @@
             inherit system;
           };
           modules = [
-            nixos-hardware.nixosModules.raspberry-pi-5
-            self.nixosModules.default
+            inputs.nixos-hardware.nixosModules.raspberry-pi-5
+            inputs.self.nixosModules.default
             ./hostSpecific/WSdlly02-RaspberryPi5
           ];
         };
@@ -150,8 +140,8 @@
             inherit system;
           };
           modules = [
-            nixos-wsl.nixosModules.default
-            self.nixosModules.default
+            inputs.nixos-wsl.nixosModules.default
+            inputs.self.nixosModules.default
             ./hostSpecific/WSdlly02-LT-WSL
           ];
         };
@@ -163,7 +153,7 @@
           };
           modules = [
             { system.name = "Lily-PC"; }
-            self.nixosModules.default
+            inputs.self.nixosModules.default
             ./hostSpecific/Lily-PC
           ];
         };
