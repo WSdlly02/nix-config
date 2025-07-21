@@ -82,6 +82,7 @@ in
         qbittorrent-enhanced
         qcm
         scrcpy
+        sourcegit
         vlc
         wechat-uos
         wemeet

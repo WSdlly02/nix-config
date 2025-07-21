@@ -54,6 +54,7 @@
         nix-ld.enable = true;
       };
       services = {
+        atd.enable = true;
         smartd.enable = config.hostSystemSpecific.enableSmartd;
         fstrim.enable = true;
         btrfs.autoScrub = lib.mkIf config.hostSystemSpecific.enableBtrfsScrub {
@@ -92,7 +93,7 @@
           lm_sensors
           lsof
           # nixd
-          # nixfmt-rfc-style
+          # nixfmt
           # nix-diff
           # nix-output-monitor
           # nix-tree

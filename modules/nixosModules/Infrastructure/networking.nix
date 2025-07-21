@@ -17,7 +17,8 @@
           12024 # Mincraft Server
           21027 # Syncthing
           22000 # Syncthing
-        ] ++ config.hostSystemSpecific.networking.firewall.extraAllowedPorts;
+        ]
+        ++ config.hostSystemSpecific.networking.firewall.extraAllowedPorts;
         allowedTCPPortRanges = [ ] ++ config.hostSystemSpecific.networking.firewall.extraAllowedPortRanges;
         allowedUDPPorts = allowedTCPPorts;
         allowedUDPPortRanges = allowedTCPPortRanges;

@@ -41,7 +41,7 @@
         }
       );
 
-      formatter = forExposedSystems (system: (mkPkgs { inherit system; }).nixfmt-rfc-style);
+      formatter = forExposedSystems (system: (mkPkgs { inherit system; }).nixfmt);
 
       homeConfigurations = {
         "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
@@ -102,13 +102,15 @@
             allowAliases = false;
             allowUnfree = true;
             rocmSupport = true;
-          } // config;
+          }
+          // config;
           overlays = [
             inputs.my-codes.overlays.exposedPackages
             inputs.self.overlays.exposedPackages
             inputs.self.overlays.id-generator-overlay
             (final: prev: { path = "${nixpkgsInstance}"; })
-          ] ++ overlays;
+          ]
+          ++ overlays;
         };
 
       nixosConfigurations = {

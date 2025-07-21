@@ -45,7 +45,7 @@ in
           fastfetch
           currentNixConfig
           nixd
-          nixfmt-rfc-style
+          nixfmt
           nix-diff
           nix-output-monitor
           nix-tree
