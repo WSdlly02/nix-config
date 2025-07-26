@@ -84,9 +84,6 @@
         // inputs.self.overlays.exposedPackages null (mkPkgs {
           inherit system;
         })
-        // inputs.self.overlays.id-generator-overlay null (mkPkgs {
-          inherit system;
-        })
       );
 
       lib.mkPkgs =
@@ -107,7 +104,6 @@
           overlays = [
             inputs.my-codes.overlays.exposedPackages
             inputs.self.overlays.exposedPackages
-            inputs.self.overlays.id-generator-overlay
             (final: prev: { path = "${nixpkgsInstance}"; })
           ]
           ++ overlays;
@@ -172,21 +168,6 @@
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
             epson-inkjet-printer-201601w = callPackage ./pkgs/epson-inkjet-printer-201601w.nix { };
             fabric-survival = callPackage ./pkgs/fabric-survival.nix { };
-          };
-        id-generator-overlay =
-          final: prev: with prev; {
-            id-generator = writeShellApplication {
-              name = "id-generator";
-              runtimeInputs = [ ];
-              text = ''
-                if [[ $# == 0 ]]; then
-                  exit 1
-                fi
-                sha512ID=$(echo -n "$1" | sha512sum | head -c 8)
-                echo "$1 -> $sha512ID" >> ~/Documents/id-list.txt
-                echo "$1 -> $sha512ID"
-              '';
-            };
           };
       };
     };

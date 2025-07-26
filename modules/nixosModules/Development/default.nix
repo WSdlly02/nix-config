@@ -13,14 +13,14 @@
     environment = {
       systemPackages = with pkgs; [
         cloc # counts blank lines, comment lines, and physical lines of source code
-        gcc
-        haskellEnv # Haskell
         # Rust toolchains
         cargo
         clippy
         rustc
         rustfmt
-        # python312Env # Python 3.12 !!!
+        haskellEnv # Haskell
+        stdenv.cc # gcc
+        python312Env # Python 3.12 !!!
         # python312FHSEnv
         # Other pkgs
       ];
