@@ -20,8 +20,8 @@
         rustfmt
         haskellEnv # Haskell
         stdenv.cc # gcc
-        python312Env # Python 3.12 !!!
-        # python312FHSEnv
+        python3Env # Python 3.12 !!!
+        # python3FHSEnv
         # Other pkgs
       ];
       sessionVariables = {

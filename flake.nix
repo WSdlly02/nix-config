@@ -16,6 +16,10 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
+    obfuscator = {
+      url = "github:WSdlly02/obfuscator/main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -103,6 +107,7 @@
           // config;
           overlays = [
             inputs.my-codes.overlays.exposedPackages
+            inputs.obfuscator.overlays.default
             inputs.self.overlays.exposedPackages
             (final: prev: { path = "${nixpkgsInstance}"; })
           ]

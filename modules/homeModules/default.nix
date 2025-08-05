@@ -49,7 +49,7 @@ in
           nix-diff
           nix-output-monitor
           nix-tree
-          id-generator
+          obfuscator
           yazi
         ]
         ++ cfg.extraPackages;
