@@ -19,9 +19,6 @@
       extraGroups = [ ];
     };
     nix.settings.max-jobs = 32;
-    programs = {
-      proxychains.proxies.host = "192.168.71.64";
-    };
     services.pipewire.socketActivation = false;
   };
 }

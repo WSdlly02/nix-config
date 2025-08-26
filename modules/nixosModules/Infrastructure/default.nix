@@ -21,7 +21,6 @@
     ./nix.nix
     ./openssh.nix
     ./pipewire.nix
-    ./proxychains.nix
     ##./samba.nix
     ##./smartdns.nix
     ##./static-web-server.nix

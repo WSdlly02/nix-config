@@ -20,7 +20,7 @@
         rustfmt
         haskellEnv # Haskell
         stdenv.cc # gcc
-        python3Env # Python 3.12 !!!
+        python3Env
         # python3FHSEnv
         # Other pkgs
       ];

@@ -41,9 +41,9 @@ in
     noisetorch.enable = true;
     obs-studio = {
       enable = true;
-      enableVirtualCamera = true;
+      # enableVirtualCamera = true;
       plugins = with pkgs.obs-studio-plugins; [
-        #droidcam-obs
+        # droidcam-obs
         obs-vkcapture
         input-overlay
       ];

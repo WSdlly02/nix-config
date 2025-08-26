@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -87,11 +86,6 @@ in
         type = lib.types.listOf lib.types.str;
         description = "Nix top-level packages to be compiled using CCache";
       };
-      proxychains.proxies.host = lib.mkOption {
-        default = "127.0.0.1";
-        type = lib.types.str;
-        description = "default proxy addr";
-      };
     };
     services.pipewire.socketActivation = lib.mkOption {
       default = true;
@@ -107,6 +101,5 @@ in
       enableDevelopment = cfg.enableDevelopment;
       enableInfrastructure = cfg.enableInfrastructure;
     };
-    nixpkgs.flake.source = lib.mkForce pkgs.path; # make config consistent with pkgs
   };
 }

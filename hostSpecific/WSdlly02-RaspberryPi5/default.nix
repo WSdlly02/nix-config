@@ -38,7 +38,6 @@
     nix.settings.max-jobs = 32;
     programs = {
       ccache.extraPackageNames = [ "linux_rpi5" ];
-      proxychains.proxies.host = "10.42.0.1";
     };
     services.pipewire.socketActivation = false;
   };

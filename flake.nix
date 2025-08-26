@@ -109,7 +109,6 @@
             inputs.my-codes.overlays.exposedPackages
             inputs.obfuscator.overlays.default
             inputs.self.overlays.exposedPackages
-            (final: prev: { path = "${nixpkgsInstance}"; })
           ]
           ++ overlays;
         };

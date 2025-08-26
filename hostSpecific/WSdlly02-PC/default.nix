@@ -32,6 +32,5 @@
       extraAllowedPorts = [ ];
     };
     nix.settings.max-jobs = 64;
-    programs.proxychains.proxies.host = "127.0.0.1";
   };
 }
