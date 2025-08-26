@@ -11,7 +11,7 @@
       enable = true;
       package = pkgs.proxychains-ng;
       quietMode = true;
-      proxies."mihomo-party" = {
+      proxies."mihomo" = {
         enable = true;
         type = "http";
         host = config.hostSystemSpecific.programs.proxychains.proxies.host;

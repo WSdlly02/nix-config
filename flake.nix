@@ -7,7 +7,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     my-codes = {
-      url = "github:WSdlly02/my-codes/master";
+      url = "github:WSdlly02/my-codes/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";

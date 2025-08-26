@@ -75,7 +75,6 @@ in
         fsearch
         gapless
         helvum
-        mihomo-party
         mpv
         ncdu
         pass-wayland

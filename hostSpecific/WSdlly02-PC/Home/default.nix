@@ -14,6 +14,7 @@
     extraPackages = with pkgs; [
       # audio-relay
       discord
+      gemini-cli
       ncmdump
       ocs-desktop
       telegram-desktop
