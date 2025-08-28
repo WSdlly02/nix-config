@@ -90,6 +90,7 @@
           dnsutils
           fzf
           iperf
+          iptables
           lm_sensors
           lsof
           # nixd
@@ -97,6 +98,7 @@
           # nix-diff
           # nix-output-monitor
           # nix-tree
+          net-tools
           nmap
           pciutils
           psmisc

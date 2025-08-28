@@ -28,7 +28,6 @@
       extraGroups = [ ];
     };
     networking.firewall = {
-      enable = false;
       extraAllowedPorts = [ ];
     };
     nix.settings.max-jobs = 64;

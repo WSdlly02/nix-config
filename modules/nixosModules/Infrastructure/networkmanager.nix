@@ -8,7 +8,7 @@
   config = lib.mkIf enableInfrastructure {
     networking.networkmanager = {
       enable = true;
-      dns = "systemd-resolved";
+      dns = "none";
       ethernet.macAddress = "stable";
       wifi = {
         macAddress = "stable-ssid";
