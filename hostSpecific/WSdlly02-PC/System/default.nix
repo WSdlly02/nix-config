@@ -33,12 +33,12 @@
     # Notice: pkgs.linuxKernel.packages."..." is an attribute set, pkgs.linuxKernel.kernels."..." is the real kernel package
     kernelModules = [
       "kvm-amd"
-      "snd-hda-intel"
+      # "snd-hda-intel"
     ];
     extraModulePackages = with config.boot.kernelPackages; [
       zenergy
     ];
-    extraModprobeConfig = "options snd-hda-intel dmic_detect=0 model=auto position_fix=1";
+    # extraModprobeConfig = "options snd-hda-intel dmic_detect=0 model=auto position_fix=1";
     kernelParams = [
       "quiet"
       "nowatchdog"

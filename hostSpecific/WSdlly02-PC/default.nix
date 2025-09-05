@@ -9,7 +9,7 @@
     boot.kernel.sysctl."vm.swappiness" = 10;
     enableBtrfsScrub = true;
     enableBluetooth = true;
-    enableDevelopment = true;
+    enableDevEnv = true;
     enableInfrastructure = true;
     enableSmartd = true;
     environment.extraSystemPackages = with pkgs; [

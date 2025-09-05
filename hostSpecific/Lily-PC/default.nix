@@ -7,7 +7,7 @@
   ];
   hostSystemSpecific = {
     enableBluetooth = false;
-    enableDevelopment = false;
+    enableDevEnv = false;
     enableInfrastructure = true;
     enableSmartd = true;
     environment.extraSystemPackages = with pkgs; [

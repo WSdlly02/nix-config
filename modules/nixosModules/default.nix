@@ -21,7 +21,7 @@ in
       '';
     };
     enableBtrfsScrub = lib.mkEnableOption "Enable Btrfs scrub";
-    enableDevelopment = lib.mkEnableOption "Install development softwares";
+    enableDevEnv = lib.mkEnableOption "Install development softwares";
     enableInfrastructure = lib.mkEnableOption "Install infrastructure softwares";
     enableBluetooth = lib.mkEnableOption "Enable bluetooth";
     enableSmartd = lib.mkEnableOption "Enable smart daemon";
@@ -91,7 +91,7 @@ in
   config = {
     _module.args = {
       # Add configs to specialArgs in order to accelerate eval
-      enableDevelopment = cfg.enableDevelopment;
+      enableDevEnv = cfg.enableDevEnv;
       enableInfrastructure = cfg.enableInfrastructure;
     };
   };

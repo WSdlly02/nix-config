@@ -5,28 +5,26 @@
 {
   lib,
   pkgs,
-  enableDevelopment,
+  enableDevEnv,
   ...
 }:
-{
-  config = lib.mkIf enableDevelopment {
-    environment = {
-      systemPackages = with pkgs; [
-        cloc # counts blank lines, comment lines, and physical lines of source code
-        # Rust toolchains
-        cargo
-        clippy
-        rustc
-        rustfmt
-        haskellEnv # Haskell
-        stdenv.cc # gcc
-        python3Env
-        # python3FHSEnv
-        # Other pkgs
-      ];
-      sessionVariables = {
-        RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
-      };
+lib.mkIf enableDevEnv {
+  environment = {
+    systemPackages = with pkgs; [
+      cloc # counts blank lines, comment lines, and physical lines of source code
+      # Rust toolchains
+      cargo
+      clippy
+      rustc
+      rustfmt
+      haskellEnv # Haskell
+      stdenv.cc # gcc
+      python3Env
+      # python3FHSEnv
+      # Other pkgs
+    ];
+    sessionVariables = {
+      RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
     };
   };
 }

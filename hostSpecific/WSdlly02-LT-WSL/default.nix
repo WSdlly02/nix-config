@@ -5,7 +5,7 @@
     ./System
   ];
   hostSystemSpecific = {
-    enableDevelopment = true;
+    enableDevEnv = true;
     enableInfrastructure = false;
     environment.extraSystemPackages = with pkgs; [ wsl-open ];
     defaultUser = {

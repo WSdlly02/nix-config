@@ -5,13 +5,11 @@
   enableInfrastructure,
   ...
 }:
-{
-  config = lib.mkIf enableInfrastructure {
-    services.mihomo = {
-      enable = true;
-      tunMode = true;
-      webui = pkgs.metacubexd;
-      configFile = "/home/${config.hostSystemSpecific.defaultUser.name}/.config/mihomo/config.yaml";
-    };
+lib.mkIf enableInfrastructure {
+  services.mihomo = {
+    enable = true;
+    tunMode = true;
+    webui = pkgs.metacubexd;
+    configFile = "/home/${config.hostSystemSpecific.defaultUser.name}/.config/mihomo/config.yaml";
   };
 }
