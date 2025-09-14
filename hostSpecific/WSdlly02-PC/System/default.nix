@@ -9,6 +9,7 @@
     ./cups.nix
     ./gpu.nix
     ./localdisksmount.nix
+    ./networking.nix
     ./nixpkgs-x86_64.nix
     ./plymouth.nix
     ##./remotefsmount.nix
@@ -29,7 +30,7 @@
       systemd.enable = true; # Hibernate Required
     };
     consoleLogLevel = 3;
-    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod; # pkgs.linuxPackages_xanmod_latest is the equivalent
+    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest; # pkgs.linuxPackages_xanmod_latest is the equivalent
     # Notice: pkgs.linuxKernel.packages."..." is an attribute set, pkgs.linuxKernel.kernels."..." is the real kernel package
     kernelModules = [
       "kvm-amd"
@@ -54,7 +55,6 @@
       cleanOnBoot = true;
     };
   };
-
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
@@ -139,7 +139,6 @@
       ];
     };
   };
-
   swapDevices = [
     {
       device = "/nix/swapfile";
