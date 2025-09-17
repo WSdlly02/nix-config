@@ -76,6 +76,5 @@ in
         config.hostSystemSpecific.defaultUser.name
       ];
     };
-    package = pkgs.lixPackageSets.latest.lix;
   };
 }

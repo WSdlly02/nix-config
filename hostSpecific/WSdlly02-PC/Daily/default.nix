@@ -83,7 +83,7 @@ in
         scrcpy
         sourcegit
         vlc
-        wechat-uos
+        wechat
         wemeet
         wpsoffice-cn
       ]

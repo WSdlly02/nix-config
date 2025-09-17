@@ -14,6 +14,11 @@ lib.mkIf enableInfrastructure {
       scanRandMacAddress = false;
       powersave = lib.mkIf (config.system.name != "WSdlly02-PC") false;
     };
+    unmanaged = [
+      "mihomo-tun"
+      "zt6ovysmva"
+      "tailscale0"
+    ];
     # rc-manager has been set as unmanaged
   };
 }
