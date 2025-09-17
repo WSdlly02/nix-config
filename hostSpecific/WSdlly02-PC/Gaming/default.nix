@@ -4,7 +4,6 @@
     ./gamescope.nix
     ./openrazer.nix
     ./openrgb.nix
-    # ./zerotierone.nix
   ];
   programs = {
     gamemode.enable = true;

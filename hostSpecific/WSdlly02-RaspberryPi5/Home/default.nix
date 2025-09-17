@@ -7,11 +7,11 @@
     # ./roc-source.nix
     ./sh.nix
     ./syncthing.nix
-    ./zerotierone.nix
+    ./tailscale.nix
   ];
   hostUserSpecific = {
     username = "wsdlly02";
-    extraPackages = with pkgs; [ zerotierone ];
+    extraPackages = with pkgs; [ ];
   };
   programs = {
     java = {

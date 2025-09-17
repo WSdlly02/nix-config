@@ -16,7 +16,6 @@ lib.mkIf enableInfrastructure {
     };
     unmanaged = [
       "mihomo-tun"
-      "zt6ovysmva"
       "tailscale0"
     ];
     # rc-manager has been set as unmanaged

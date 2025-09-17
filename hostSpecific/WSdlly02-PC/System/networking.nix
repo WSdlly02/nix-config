@@ -84,12 +84,12 @@ in
       # =========================
       $IPTABLES --table filter --append INPUT --in-interface lo --jump ACCEPT # 允许本地回环
       $IPTABLES --table filter --append INPUT --in-interface mihomo-tun --jump ACCEPT # mihomo
-      $IPTABLES --table filter --append INPUT --in-interface zt6ovysmva --jump ACCEPT # zerotier
+      $IPTABLES --table filter --append INPUT --in-interface tailscale0 --jump ACCEPT # tailscale
       $IPTABLES --table filter --append INPUT --protocol icmp --jump ACCEPT # 允许 ping
 
       $IP6TABLES --table filter --append INPUT --in-interface lo --jump ACCEPT
       $IP6TABLES --table filter --append INPUT --in-interface mihomo-tun --jump ACCEPT
-      $IP6TABLES --table filter --append INPUT --in-interface zt6ovysmva --jump ACCEPT
+      $IP6TABLES --table filter --append INPUT --in-interface tailscale0 --jump ACCEPT
       $IP6TABLES --table filter --append INPUT --protocol icmpv6 --jump ACCEPT # IPv6 必需的 ICMPv6 (邻居发现/PMTU)
 
       $IPTABLES --table filter --append INPUT --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT # 已建立/相关连接
