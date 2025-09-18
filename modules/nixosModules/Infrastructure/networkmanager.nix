@@ -15,8 +15,8 @@ lib.mkIf enableInfrastructure {
       powersave = lib.mkIf (config.system.name != "WSdlly02-PC") false;
     };
     unmanaged = [
-      "mihomo-tun"
-      "tailscale0"
+      "interface-name:mihomo-tun"
+      "interface-name:tailscale0"
     ];
     # rc-manager has been set as unmanaged
   };
