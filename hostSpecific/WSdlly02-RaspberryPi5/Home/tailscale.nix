@@ -3,6 +3,7 @@
   xdg.configFile = {
     "tailscaled-override.conf".text = ''
       [Service]
+      Environment="FLAGS=--tun tun-tailscale"
       ExecStartPost=${pkgs.writeShellScript "tailscale-up.sh" ''
         while [[ "$(/usr/bin/tailscale status --json --peers=false | /usr/bin/jq -r '.BackendState')" == "NoState" ]]; do
           sleep 0.5

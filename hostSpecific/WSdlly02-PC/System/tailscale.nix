@@ -3,7 +3,7 @@
     enable = true;
     useRoutingFeatures = "both";
     openFirewall = true;
-    interfaceName = "tailscale0";
+    interfaceName = "tun-tailscale";
     authKeyFile = "/var/lib/tailscale/authkey";
     extraUpFlags = [
       "--ssh"
