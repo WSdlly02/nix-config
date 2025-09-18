@@ -32,8 +32,6 @@ let
   ];
 in
 {
-  networking.interfaces.enp14s0.wakeOnLan.enable = true;
-
   systemd.services."iptables-router" = {
     description = "iptables-based router & firewall";
     wantedBy = [ "multi-user.target" ];

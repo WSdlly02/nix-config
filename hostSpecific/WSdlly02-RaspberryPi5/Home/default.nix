@@ -4,6 +4,7 @@
 }:
 {
   imports = [
+    ./network-autoswitch.nix
     # ./roc-source.nix
     ./sh.nix
     ./syncthing.nix
