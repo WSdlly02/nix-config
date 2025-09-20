@@ -17,9 +17,6 @@ lib.mkIf enableInfrastructure {
     unmanaged = [
       "interface-name:tun-*"
     ];
-    connectionConfig = {
-      "ethernet.wake-on-lan" = "magic";
-    };
     # rc-manager has been set as unmanaged
   };
 }

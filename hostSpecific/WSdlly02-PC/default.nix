@@ -25,7 +25,9 @@
     defaultUser = {
       name = "wsdlly02";
       linger = false;
-      extraGroups = [ ];
+      extraGroups = [
+        "libvirtd" # archlinux vm
+      ];
     };
     networking.firewall = {
       extraAllowedPorts = [ ];
