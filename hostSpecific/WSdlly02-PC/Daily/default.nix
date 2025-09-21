@@ -9,7 +9,6 @@ let
 in
 {
   imports = [
-    ./archlinux-vm.nix
     ./fcitx5.nix
     ./lact.nix
     # ./paperless.nix

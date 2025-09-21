@@ -83,11 +83,13 @@ in
       $IPTABLES --table filter --append INPUT --in-interface lo --jump ACCEPT # 允许本地回环
       $IPTABLES --table filter --append INPUT --in-interface tun-mihomo --jump ACCEPT # mihomo
       $IPTABLES --table filter --append INPUT --in-interface tun-tailscale --jump ACCEPT # tailscale
+      $IPTABLES --table filter --append INPUT --in-interface bridge-vm --jump ACCEPT # VMs
       $IPTABLES --table filter --append INPUT --protocol icmp --jump ACCEPT # 允许 ping
 
       $IP6TABLES --table filter --append INPUT --in-interface lo --jump ACCEPT
       $IP6TABLES --table filter --append INPUT --in-interface tun-mihomo --jump ACCEPT
       $IP6TABLES --table filter --append INPUT --in-interface tun-tailscale --jump ACCEPT
+      $IP6TABLES --table filter --append INPUT --in-interface bridge-vm --jump ACCEPT
       $IP6TABLES --table filter --append INPUT --protocol icmpv6 --jump ACCEPT # IPv6 必需的 ICMPv6 (邻居发现/PMTU)
 
       $IPTABLES --table filter --append INPUT --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT # 已建立/相关连接
@@ -99,7 +101,7 @@ in
       # =========================
       # 4. 允许局域网流量
       # =========================
-      $IPTABLES --table filter --append INPUT --source 192.168.1.0/24 --jump ACCEPT          # 局域网
+      $IPTABLES --table filter --append INPUT --source 192.168.0.0/16 --jump ACCEPT          # 局域网
       $IPTABLES --table filter --append INPUT --source 10.42.0.0/24 --jump ACCEPT            # 热点子网
       $IPTABLES --table filter --append INPUT --destination 224.0.0.0/4 --jump ACCEPT        # IPv4 多播
 
@@ -122,8 +124,8 @@ in
       # 7. DNS 劫持到 mihomo:10053
       # =========================
       # 局域网、热点设备 DNS
-      $IPTABLES --table nat --append PREROUTING --source 192.168.1.0/24 --protocol udp --dport 53 --jump REDIRECT --to-port 10053
-      $IPTABLES --table nat --append PREROUTING --source 192.168.1.0/24 --protocol tcp --dport 53 --jump REDIRECT --to-port 10053
+      $IPTABLES --table nat --append PREROUTING --source 192.168.0.0/16 --protocol udp --dport 53 --jump REDIRECT --to-port 10053
+      $IPTABLES --table nat --append PREROUTING --source 192.168.0.0/16 --protocol tcp --dport 53 --jump REDIRECT --to-port 10053
       $IPTABLES --table nat --append PREROUTING --source 10.42.0.0/24 --protocol udp --dport 53 --jump REDIRECT --to-port 10053
       $IPTABLES --table nat --append PREROUTING --source 10.42.0.0/24 --protocol tcp --dport 53 --jump REDIRECT --to-port 10053
 

@@ -8,6 +8,7 @@
     ./bootloader.nix
     ./cups.nix
     ./gpu.nix
+    ./libvirt.nix
     ./localdisksmount.nix
     ./networking.nix
     ./nixpkgs-x86_64.nix
