@@ -25,15 +25,10 @@
     networking.firewall = {
       extraAllowedPorts = [
         8080
-        8384
       ];
-      extraAllowedPortRanges = [
-        {
-          from = 10001;
-          to = 10003;
-          # ROC Source & Repair & Control ports
-        }
-      ];
+      extraAllowedPortRanges = [ ];
+      lanOnlyPorts = [ 5353 ];
+      lanOnlyPortRanges = [ ];
     };
     nix.settings.max-jobs = 32;
     programs = {

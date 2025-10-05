@@ -5,31 +5,13 @@
   ...
 }:
 let
-  expandRanges =
-    ranges:
-    lib.concatLists (
-      map (
-        r:
-        let
-          start = r.from;
-          end = r.to;
-        in
-        lib.range start end
-      ) ranges
-    );
+  cfg = config.networking.firewall;
+  cfgHS = config.hostSystemSpecific.networking.firewall;
+  expandRanges = ranges: lib.concatLists (map (r: lib.range r.from r.to) ranges);
 
-  allowedPortsFull =
-    config.networking.firewall.allowedUDPPorts
-    ++ expandRanges config.networking.firewall.allowedUDPPortRanges;
-  lanOnlyPortsFull = [
-    5353
-  ]
-  ++ expandRanges [
-    {
-      from = 1714;
-      to = 1764;
-    }
-  ];
+  allowedPortsFull = lib.unique (cfg.allowedUDPPorts ++ expandRanges cfg.allowedUDPPortRanges);
+  lanOnlyPortsFull = lib.unique (cfgHS.lanOnlyPorts ++ expandRanges cfgHS.lanOnlyPortRanges);
+  finalAllowedPortsFull = builtins.filter (p: !(builtins.elem p lanOnlyPortsFull)) allowedPortsFull;
 in
 {
   systemd.services."iptables-router" = {
@@ -146,7 +128,7 @@ in
 
           $IP6TABLES --table filter --append INPUT --protocol udp --dport ${toString p} --jump ACCEPT
           $IP6TABLES --table filter --append INPUT --protocol tcp --dport ${toString p} --jump ACCEPT
-        '') (builtins.filter (p: !(builtins.elem p lanOnlyPortsFull)) allowedPortsFull)
+        '') finalAllowedPortsFull
       )}
 
       # =========================

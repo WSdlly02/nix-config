@@ -64,6 +64,21 @@ in
           accepted.
         '';
       };
+      lanOnlyPorts = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf lib.types.port;
+        apply = ports: lib.unique (builtins.sort builtins.lessThan ports);
+        description = ''
+          List of ports will be excluded from allowedPorts
+        '';
+      };
+      lanOnlyPortRanges = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf (lib.types.attrsOf lib.types.port);
+        description = ''
+          A range of ports will be excluded from allowedPortRanges
+        '';
+      };
     };
     nix.settings.max-jobs = lib.mkOption {
       default = 32;

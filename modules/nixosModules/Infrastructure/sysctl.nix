@@ -43,6 +43,10 @@ lib.mkIf enableInfrastructure {
     "net.ipv6.conf.default.accept_redirects" = 0;
     "net.ipv6.conf.all.accept_source_route" = 0; # 禁止 IPv6 源路由
     "net.ipv6.conf.default.accept_source_route" = 0;
+    # Kernel Hardening
+    "kernel.randomize_va_space" = 2;
+    "kernel.unprivileged_bpf_disabled" = 1;
+    "kernel.dmesg_restrict" = 1;
     # System
     "vm.max_map_count" = 2147483642;
     "vm.swappiness" = config.hostSystemSpecific.boot.kernel.sysctl."vm.swappiness";

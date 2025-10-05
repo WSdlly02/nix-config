@@ -20,7 +20,10 @@
 
   boot = {
     initrd = {
-      supportedFilesystems = [ "btrfs" ];
+      supportedFilesystems = [
+        "btrfs"
+        "ext4"
+      ];
       availableKernelModules = [
         "nvme"
         "xhci_pci"
@@ -47,7 +50,8 @@
       "nowatchdog"
       "udev.log_level=3"
       "amd_pstate=active"
-      "amd_iommu=pt"
+      "amd_iommu=on"
+      "iommu=pt"
       "amdgpu.ppfeaturemask=0xffffffff"
     ];
     # blacklistedKernelModules = ["k10temp"];

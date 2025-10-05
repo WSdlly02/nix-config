@@ -53,6 +53,7 @@
         lazygit.enable = true;
         nix-ld.enable = true;
       };
+      security.apparmor.enable = true;
       services = {
         atd.enable = true;
         smartd.enable = config.hostSystemSpecific.enableSmartd;

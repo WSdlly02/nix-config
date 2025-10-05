@@ -31,6 +31,14 @@
     };
     networking.firewall = {
       extraAllowedPorts = [ ];
+      extraAllowedPortRanges = [ ];
+      lanOnlyPorts = [ 5353 ];
+      lanOnlyPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        }
+      ];
     };
     nix.settings.max-jobs = 64;
   };

@@ -4,6 +4,10 @@
   enableInfrastructure,
   ...
 }:
+let
+  cfg = config.networking.firewall;
+  cfgHS = config.hostSystemSpecific.networking.firewall;
+in
 lib.mkIf enableInfrastructure {
   networking = {
     hostName = config.system.name;
@@ -20,10 +24,10 @@ lib.mkIf enableInfrastructure {
         21027 # Syncthing
         22000 # Syncthing
       ]
-      ++ config.hostSystemSpecific.networking.firewall.extraAllowedPorts;
-      allowedTCPPortRanges = [ ] ++ config.hostSystemSpecific.networking.firewall.extraAllowedPortRanges;
-      allowedUDPPorts = config.networking.firewall.allowedTCPPorts;
-      allowedUDPPortRanges = config.networking.firewall.allowedTCPPortRanges;
+      ++ cfgHS.extraAllowedPorts;
+      allowedTCPPortRanges = cfgHS.extraAllowedPortRanges;
+      allowedUDPPorts = cfg.allowedTCPPorts;
+      allowedUDPPortRanges = cfg.allowedTCPPortRanges;
     };
     nameservers = [ "127.0.0.1" ];
     timeServers = [
