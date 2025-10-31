@@ -27,7 +27,7 @@
     mangohud
     mangojuice
     mcrcon
-    protonup-qt
+    protonplus
     # vkbasalt
     # vkbasalt-cli
   ];

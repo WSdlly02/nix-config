@@ -44,6 +44,7 @@ in
         [
           fastfetch
           currentNixConfig
+          Duplicate-File-Finder
           nixd
           nixfmt
           nix-diff

@@ -65,6 +65,7 @@ in
       with pkgs;
       [
         (bilibili.override enableWayland)
+        (code-cursor.override enableWayland)
         (google-chrome.override enableWayland)
         (microsoft-edge.override enableWayland)
         (obsidian.override enableWayland)
@@ -77,9 +78,10 @@ in
         helvum
         mpv
         ncdu
+        netease-cloud-music-gtk
         pass-wayland
+        protonvpn-gui
         qbittorrent-enhanced
-        qcm
         scrcpy
         sourcegit
         vlc
@@ -89,7 +91,7 @@ in
       ]
       ++ [
         kdePackages.sddm-kcm
-        kdePackages.wallpaper-engine-plugin
+        # kdePackages.wallpaper-engine-plugin
         kdePackages.yakuake
         sddm-astronaut
       ];

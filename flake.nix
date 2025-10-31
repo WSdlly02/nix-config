@@ -2,6 +2,10 @@
   description = "WSdlly02's NixOS flake";
 
   inputs = {
+    Duplicate-File-Finder = {
+      url = "github:WSdlly02/Duplicate-File-Finder/main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -40,6 +44,7 @@
     {
       devShells = forExposedSystems (
         system: with (mkPkgs { inherit system; }); {
+          aitools = callPackage ./pkgs/devShells-aitools.nix { };
           default = my-codes.devShells."${system}".default;
           nixfmt = callPackage ./pkgs/devShells-nixfmt.nix { };
         }
@@ -106,6 +111,7 @@
           }
           // config;
           overlays = [
+            inputs.Duplicate-File-Finder.overlays.default
             inputs.my-codes.overlays.exposedPackages
             inputs.obfuscator.overlays.default
             inputs.self.overlays.exposedPackages

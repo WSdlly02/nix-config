@@ -6,15 +6,6 @@
     onShutdown = "shutdown";
     qemu = {
       package = pkgs.qemu_kvm;
-      ovmf = {
-        enable = true;
-        packages = with pkgs; [
-          (OVMF.override {
-            secureBoot = true;
-            tpmSupport = true;
-          }).fd
-        ];
-      };
       vhostUserPackages = with pkgs; [ virtiofsd ];
       swtpm.enable = true;
     };
