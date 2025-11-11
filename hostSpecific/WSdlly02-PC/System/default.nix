@@ -8,7 +8,6 @@
     ./bootloader.nix
     ./cups.nix
     ./gpu.nix
-    ./libvirt.nix
     ./localdisksmount.nix
     ./networking.nix
     ./nixpkgs-x86_64.nix
@@ -16,6 +15,7 @@
     ##./remotefsmount.nix
     ./tailscale.nix
     ./tpm.nix
+    ./virtualisation.nix
   ];
 
   boot = {

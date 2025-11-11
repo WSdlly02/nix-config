@@ -14,6 +14,7 @@
     enableSmartd = true;
     environment.extraSystemPackages = with pkgs; [
       amdgpu_top
+      distrobox
       lact # AMDGPU Fan Control
       libva-utils
       mesa-demos
@@ -26,7 +27,8 @@
       name = "wsdlly02";
       linger = false;
       extraGroups = [
-        "libvirtd" # archlinux vm
+        "libvirtd"
+        "podman"
       ];
     };
     networking.firewall = {

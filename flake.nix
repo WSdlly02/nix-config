@@ -2,10 +2,6 @@
   description = "WSdlly02's NixOS flake";
 
   inputs = {
-    Duplicate-File-Finder = {
-      url = "github:WSdlly02/Duplicate-File-Finder/main";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -43,9 +39,9 @@
     in
     {
       devShells = forExposedSystems (
-        system: with (mkPkgs { inherit system; }); {
+        system: with (mkPkgs { inherit system; }); rec {
           aitools = callPackage ./pkgs/devShells-aitools.nix { };
-          default = my-codes.devShells."${system}".default;
+          default = aitools;
           nixfmt = callPackage ./pkgs/devShells-nixfmt.nix { };
         }
       );
@@ -111,7 +107,6 @@
           }
           // config;
           overlays = [
-            inputs.Duplicate-File-Finder.overlays.default
             inputs.my-codes.overlays.exposedPackages
             inputs.obfuscator.overlays.default
             inputs.self.overlays.exposedPackages
@@ -178,6 +173,7 @@
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
             epson-inkjet-printer-201601w = callPackage ./pkgs/epson-inkjet-printer-201601w.nix { };
             fabric-survival = callPackage ./pkgs/fabric-survival.nix { };
+            rocmFHSEnv = callPackage ./pkgs/rocmFHSEnv.nix { };
           };
       };
     };

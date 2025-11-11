@@ -17,6 +17,7 @@
       gemini-cli
       ncmdump
       ocs-desktop
+      qoder
       telegram-desktop
     ];
   };
