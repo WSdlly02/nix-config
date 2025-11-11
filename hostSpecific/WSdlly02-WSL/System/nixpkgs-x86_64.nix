@@ -24,8 +24,8 @@
     "aarch64-linux"
   ];
   system = {
-    name = "WSdlly02-LT-WSL";
+    name = "WSdlly02-WSL";
     # nixos.tag = [];
-    stateVersion = "24.11";
+    stateVersion = "25.05";
   };
 }

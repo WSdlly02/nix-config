@@ -1,3 +1,4 @@
+{ config, ... }:
 {
   imports = [
     #./i18n.nix
@@ -10,8 +11,10 @@
   ];
   wsl = {
     enable = true;
-    defaultUser = "wsdlly02";
+    defaultUser = config.hostSystemSpecific.defaultUser.name;
+    startMenuLaunchers = true;
     interop.register = true;
     useWindowsDriver = true;
   };
+  environment.etc."resolv.conf".source = ./.;
 }

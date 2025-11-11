@@ -46,7 +46,7 @@
         }
       );
 
-      formatter = forExposedSystems (system: (mkPkgs { inherit system; }).nixfmt);
+      formatter = forExposedSystems (system: (mkPkgs { inherit system; }).nixfmt-tree);
 
       homeConfigurations = {
         "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
@@ -57,10 +57,10 @@
           ];
           pkgs = mkPkgs { system = "x86_64-linux"; };
         };
-        "wsdlly02@WSdlly02-LT-WSL" = inputs.home-manager.lib.homeManagerConfiguration {
+        "wsdlly02@WSdlly02-WSL" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
             inputs.self.homeModules.default
-            ./hostSpecific/WSdlly02-LT-WSL/Home
+            ./hostSpecific/WSdlly02-WSL/Home
           ];
           pkgs = mkPkgs { system = "x86_64-linux"; };
         };
@@ -136,7 +136,7 @@
             ./hostSpecific/WSdlly02-RaspberryPi5
           ];
         };
-        "WSdlly02-LT-WSL" = lib.nixosSystem rec {
+        "WSdlly02-WSL" = lib.nixosSystem rec {
           system = "x86_64-linux";
           pkgs = mkPkgs {
             config.rocmSupport = false;
@@ -145,7 +145,7 @@
           modules = [
             inputs.nixos-wsl.nixosModules.default
             inputs.self.nixosModules.default
-            ./hostSpecific/WSdlly02-LT-WSL
+            ./hostSpecific/WSdlly02-WSL
           ];
         };
         "Lily-PC" = lib.nixosSystem rec {
