@@ -8,7 +8,10 @@ let
   cfg = config.hostUserSpecific;
 in
 {
-  imports = [ ./sh.nix ];
+  imports = [
+    ./direnv.nix
+    ./sh.nix
+  ];
   options.hostUserSpecific = {
     username = lib.mkOption {
       default = "wsdlly02";
@@ -49,7 +52,6 @@ in
           nix-diff
           nix-output-monitor
           nix-tree
-          obfuscator
           yazi
         ]
         ++ cfg.extraPackages;

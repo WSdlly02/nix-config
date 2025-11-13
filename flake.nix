@@ -16,10 +16,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
-    obfuscator = {
-      url = "github:WSdlly02/obfuscator/main";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -30,24 +26,14 @@
     inputs:
     let
       inherit (inputs.nixpkgs-unstable) lib;
-      inherit (inputs.self.lib) mkPkgs;
+      inherit (inputs.self.lib) pkgs';
       exposedSystems = [
         "x86_64-linux"
         "aarch64-linux"
       ];
-      forExposedSystems = lib.genAttrs exposedSystems;
+      forExposedSystems = f: builtins.foldl' lib.recursiveUpdate { } (map f exposedSystems);
     in
     {
-      devShells = forExposedSystems (
-        system: with (mkPkgs { inherit system; }); rec {
-          aitools = callPackage ./pkgs/devShells-aitools.nix { };
-          default = aitools;
-          nixfmt = callPackage ./pkgs/devShells-nixfmt.nix { };
-        }
-      );
-
-      formatter = forExposedSystems (system: (mkPkgs { inherit system; }).nixfmt-tree);
-
       homeConfigurations = {
         "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
@@ -55,43 +41,28 @@
             inputs.zen-browser.homeModules.beta
             ./hostSpecific/WSdlly02-PC/Home
           ];
-          pkgs = mkPkgs { system = "x86_64-linux"; };
+          pkgs = pkgs' { system = "x86_64-linux"; };
         };
         "wsdlly02@WSdlly02-WSL" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
             inputs.self.homeModules.default
             ./hostSpecific/WSdlly02-WSL/Home
           ];
-          pkgs = mkPkgs { system = "x86_64-linux"; };
+          pkgs = pkgs' { system = "x86_64-linux"; };
         };
         "wsdlly02@WSdlly02-RaspberryPi5" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
             inputs.self.homeModules.default
             ./hostSpecific/WSdlly02-RaspberryPi5/Home
           ];
-          pkgs = mkPkgs { system = "aarch64-linux"; };
+          pkgs = pkgs' { system = "aarch64-linux"; };
         };
       };
-
       homeModules.default = {
         _module.args = { inherit inputs; };
         imports = [ ./modules/homeModules ];
       };
-
-      legacyPackages = forExposedSystems (
-        system:
-        {
-          my-codes-exposedPackages = inputs.my-codes.overlays.exposedPackages null (mkPkgs {
-            inherit system;
-          });
-          nixpkgs-unstable = mkPkgs { inherit system; };
-        }
-        // inputs.self.overlays.exposedPackages null (mkPkgs {
-          inherit system;
-        })
-      );
-
-      lib.mkPkgs =
+      lib.pkgs' =
         {
           nixpkgsInstance ? inputs.nixpkgs-unstable,
           config ? { },
@@ -108,16 +79,16 @@
           // config;
           overlays = [
             inputs.my-codes.overlays.exposedPackages
-            inputs.obfuscator.overlays.default
+            inputs.self.overlays.default
             inputs.self.overlays.exposedPackages
+            inputs.self.overlays.libraryPackages
           ]
           ++ overlays;
         };
-
       nixosConfigurations = {
         "WSdlly02-PC" = lib.nixosSystem rec {
           system = "x86_64-linux";
-          pkgs = mkPkgs { inherit system; };
+          pkgs = pkgs' { inherit system; };
           modules = [
             inputs.self.nixosModules.default
             ./hostSpecific/WSdlly02-PC
@@ -126,7 +97,7 @@
         };
         "WSdlly02-RaspberryPi5" = lib.nixosSystem rec {
           system = "aarch64-linux";
-          pkgs = mkPkgs {
+          pkgs = pkgs' {
             config.rocmSupport = false;
             inherit system;
           };
@@ -138,7 +109,7 @@
         };
         "WSdlly02-WSL" = lib.nixosSystem rec {
           system = "x86_64-linux";
-          pkgs = mkPkgs {
+          pkgs = pkgs' {
             config.rocmSupport = false;
             inherit system;
           };
@@ -150,7 +121,7 @@
         };
         "Lily-PC" = lib.nixosSystem rec {
           system = "x86_64-linux";
-          pkgs = mkPkgs {
+          pkgs = pkgs' {
             config.rocmSupport = false;
             inherit system;
           };
@@ -161,20 +132,41 @@
           ];
         };
       };
-
       nixosModules.default = {
         _module.args = { inherit inputs; };
         imports = [ ./modules/nixosModules ];
       };
-
       overlays = {
+        default = final: prev: {
+          # Overlays here will be applied to all packages
+        };
         exposedPackages =
-          final: prev: with prev; {
+          # Packages here will be exposed and used as libraries in other parts of the flake
+          final: prev: inputs.self.legacyPackages."${prev.stdenv.hostPlatform.system}".exposedPackages;
+        libraryPackages =
+          # Packages here will be used as library but won't be exposed
+          final: prev: inputs.self.legacyPackages."${prev.stdenv.hostPlatform.system}".libraryPackages;
+      };
+    }
+    // forExposedSystems (
+      system: with (pkgs' { inherit system; }); {
+        devShells."${system}" = rec {
+          aitools = callPackage ./pkgs/devShells-aitools.nix { };
+          default = aitools;
+          nixfmt = callPackage ./pkgs/devShells-nixfmt.nix { };
+        };
+        formatter."${system}" = nixfmt-tree;
+        legacyPackages."${system}" = {
+          exposedPackages = {
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
             epson-inkjet-printer-201601w = callPackage ./pkgs/epson-inkjet-printer-201601w.nix { };
             fabric-survival = callPackage ./pkgs/fabric-survival.nix { };
             rocmFHSEnv = callPackage ./pkgs/rocmFHSEnv.nix { };
           };
-      };
-    };
+          libraryPackages = { };
+          my-codes-exposedPackages = inputs.my-codes.legacyPackages."${system}".exposedPackages; # For convenience
+          nixpkgs-unstable = pkgs' { inherit system; };
+        };
+      }
+    );
 }
