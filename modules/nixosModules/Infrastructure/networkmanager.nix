@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   enableInfrastructure,
   ...
 }:
@@ -15,7 +14,6 @@ lib.mkIf enableInfrastructure {
       scanRandMacAddress = false;
       powersave = lib.mkIf (config.system.name != "WSdlly02-PC") false;
     };
-    plugins = with pkgs; [ networkmanager-openvpn ];
     unmanaged = [
       "interface-name:bridge-*"
       "interface-name:tun-*"

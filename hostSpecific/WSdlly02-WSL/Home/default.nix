@@ -9,6 +9,8 @@
   hostUserSpecific = {
     username = "wsdlly02";
     extraPackages = with pkgs; [
+      codex
+      gemini-cli
       ncmdump
     ];
   };

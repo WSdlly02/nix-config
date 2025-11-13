@@ -80,7 +80,6 @@ in
         ncdu
         netease-cloud-music-gtk
         pass-wayland
-        protonvpn-gui
         qbittorrent-enhanced
         scrcpy
         sourcegit

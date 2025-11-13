@@ -55,6 +55,7 @@
       "amdgpu.ppfeaturemask=0xffffffff"
     ];
     # blacklistedKernelModules = ["k10temp"];
+    # resumeDevice = ""; No longer required by config.boot.initrd.systemd.enable
     tmp = {
       useTmpfs = true;
       tmpfsSize = "100%";

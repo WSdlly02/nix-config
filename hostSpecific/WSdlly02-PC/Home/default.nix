@@ -13,6 +13,7 @@
     username = "wsdlly02";
     extraPackages = with pkgs; [
       # audio-relay
+      codex
       discord
       gemini-cli
       ncmdump
