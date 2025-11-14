@@ -9,7 +9,7 @@
   imports = [
     ./avahi.nix
     ./bluetooth.nix
-    ./ccache.nix
+    ##./ccache.nix
     ./getty.nix
     ##./gitDaemon.nix
     ./gnupg.nix

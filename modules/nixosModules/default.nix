@@ -88,13 +88,6 @@ in
         build in parallel.
       '';
     };
-    programs = {
-      ccache.extraPackageNames = lib.mkOption {
-        default = [ ];
-        type = lib.types.listOf lib.types.str;
-        description = "Nix top-level packages to be compiled using CCache";
-      };
-    };
     services.pipewire.socketActivation = lib.mkOption {
       default = true;
       type = lib.types.bool;

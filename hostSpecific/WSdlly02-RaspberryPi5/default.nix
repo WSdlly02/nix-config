@@ -31,9 +31,6 @@
       lanOnlyPortRanges = [ ];
     };
     nix.settings.max-jobs = 32;
-    programs = {
-      ccache.extraPackageNames = [ "linux_rpi5" ];
-    };
     services.pipewire.socketActivation = false;
   };
 }

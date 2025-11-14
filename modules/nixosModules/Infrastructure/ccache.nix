@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   enableInfrastructure,
   ...
@@ -7,7 +6,7 @@
 lib.mkIf enableInfrastructure {
   programs.ccache = {
     enable = true;
-    packageNames = [ ] ++ config.hostSystemSpecific.programs.ccache.extraPackageNames;
+    packageNames = [ ];
     # Which adds ccacheStdenv to overlays
   };
 }

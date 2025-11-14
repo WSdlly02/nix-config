@@ -1,7 +1,6 @@
 {
   config,
   inputs,
-  lib,
   pkgs,
   ...
 }:
@@ -64,9 +63,11 @@ in
         "flakes"
         "nix-command"
       ];
-      extra-sandbox-paths = lib.optionals config.programs.ccache.enable [
-        config.programs.ccache.cacheDir
-      ];
+      /*
+        extra-sandbox-paths = lib.optionals config.programs.ccache.enable [
+          config.programs.ccache.cacheDir
+        ];
+      */
       fsync-metadata = false;
       http-connections = 0;
       max-jobs = config.hostSystemSpecific.nix.settings.max-jobs;
