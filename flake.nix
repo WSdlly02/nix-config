@@ -136,21 +136,19 @@
         _module.args = { inherit inputs; };
         imports = [ ./modules/nixosModules ];
       };
-      overlays =
-        let
-          lp = inputs.self.legacyPackages;
-        in
-        {
-          default = final: prev: {
-            # Overlays here will be applied to all packages
-          };
-          exposedPackages =
-            # Packages here will be exposed and used as libraries in other parts of the flake
-            final: prev: (lp.${prev.stdenv.hostPlatform.system} or { }).exposedPackages or { };
-          libraryPackages =
-            # Packages here will be used as library but won't be exposed
-            final: prev: (lp.${prev.stdenv.hostPlatform.system} or { }).libraryPackages or { };
+      overlays = {
+        default = final: prev: {
+          # Overlays here will be applied to all packages
         };
+        exposedPackages =
+          # Packages here will be exposed and used as libraries in other parts of the flake
+          final: prev:
+          (inputs.self.legacyPackages.${prev.stdenv.hostPlatform.system} or { }).exposedPackages or { };
+        libraryPackages =
+          # Packages here will be used as library but won't be exposed
+          final: prev:
+          (inputs.self.legacyPackages.${prev.stdenv.hostPlatform.system} or { }).libraryPackages or { };
+      };
     }
     // forExposedSystems (
       system: with (pkgs' { inherit system; }); {

@@ -1,0 +1,34 @@
+name: Build RPi5 kernel (closure export)
+
+on:
+  workflow_dispatch: # 先只支持手动触发，安全又好调试
+
+jobs:
+  build-kernel:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Build RPi5 kernel
+        run: |
+          nix build .#nixosConfigurations.WSdlly02-RaspberryPi5.config.system.build.kernel --print-build-logs
+
+      - name: Export kernel closure to .nar
+        run: |
+          store_path=$(readlink -f result)
+          # 导出“闭包”：先用 --query --requisites 拿到依赖，再全部 export
+          nix-store --export $(nix-store --query --requisites "$store_path") > rpi5-kernel-closure.nar
+
+      - name: Upload closure artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpi5-kernel-closure
+          path: rpi5-kernel-closure.nar
