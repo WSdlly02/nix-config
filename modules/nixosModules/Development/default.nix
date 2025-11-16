@@ -13,10 +13,10 @@ lib.mkIf enableDevEnv {
     systemPackages = with pkgs; [
       cloc # counts blank lines, comment lines, and physical lines of source code
       # Rust toolchains
-      cargo
-      clippy
-      rustc
-      rustfmt
+      # cargo
+      # clippy
+      # rustc
+      # rustfmt
       haskellEnv # Haskell
       stdenv.cc # gcc
       python3Env
@@ -24,7 +24,7 @@ lib.mkIf enableDevEnv {
       # Other pkgs
     ];
     sessionVariables = {
-      RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+      # RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
     };
   };
 }

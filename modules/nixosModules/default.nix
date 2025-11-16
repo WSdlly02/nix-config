@@ -25,6 +25,7 @@ in
     enableInfrastructure = lib.mkEnableOption "Install infrastructure softwares";
     enableBluetooth = lib.mkEnableOption "Enable bluetooth";
     enableSmartd = lib.mkEnableOption "Enable smart daemon";
+    enablePythonRocmSupport = lib.mkEnableOption "Enable Python Rocm Support";
     environment.extraSystemPackages = lib.mkOption {
       default = [ ];
       type = lib.types.listOf lib.types.package;
@@ -102,5 +103,17 @@ in
       enableDevEnv = cfg.enableDevEnv;
       enableInfrastructure = cfg.enableInfrastructure;
     };
+    nixpkgs.overlays = lib.optionals cfg.enablePythonRocmSupport [
+      (final: prev: {
+        python3 = prev.python3.override {
+          packageOverrides =
+            pyfinal: pyprev:
+            builtins.mapAttrs (
+              _: pypkg: if pypkg ? rocmSupport then pypkg.override { rocmSupport = true; } else pypkg
+            ) pyprev;
+        };
+        python3Packages = final.python3.pkgs;
+      })
+    ];
   };
 }

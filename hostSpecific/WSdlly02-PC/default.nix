@@ -12,6 +12,7 @@
     enableDevEnv = true;
     enableInfrastructure = true;
     enableSmartd = true;
+    enablePythonRocmSupport = true;
     environment.extraSystemPackages = with pkgs; [
       amdgpu_top
       distrobox

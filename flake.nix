@@ -74,7 +74,7 @@
           config = {
             allowAliases = false;
             allowUnfree = true;
-            rocmSupport = true;
+            # rocmSupport = true;
           }
           // config;
           overlays = [
@@ -97,10 +97,7 @@
         };
         "WSdlly02-RaspberryPi5" = lib.nixosSystem rec {
           system = "aarch64-linux";
-          pkgs = pkgs' {
-            config.rocmSupport = false;
-            inherit system;
-          };
+          pkgs = pkgs' { inherit system; };
           modules = [
             inputs.nixos-hardware.nixosModules.raspberry-pi-5
             inputs.self.nixosModules.default
@@ -109,10 +106,7 @@
         };
         "WSdlly02-WSL" = lib.nixosSystem rec {
           system = "x86_64-linux";
-          pkgs = pkgs' {
-            config.rocmSupport = false;
-            inherit system;
-          };
+          pkgs = pkgs' { inherit system; };
           modules = [
             inputs.nixos-wsl.nixosModules.default
             inputs.self.nixosModules.default
@@ -121,10 +115,7 @@
         };
         "Lily-PC" = lib.nixosSystem rec {
           system = "x86_64-linux";
-          pkgs = pkgs' {
-            config.rocmSupport = false;
-            inherit system;
-          };
+          pkgs = pkgs' { inherit system; };
           modules = [
             { system.name = "Lily-PC"; }
             inputs.self.nixosModules.default
