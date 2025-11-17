@@ -7,7 +7,7 @@
   ];
   hostSystemSpecific = {
     enableBluetooth = true;
-    enableDevEnv = true;
+    enableDevEnv = false;
     enableInfrastructure = true;
     environment.extraSystemPackages = with pkgs; [
       libraspberrypi

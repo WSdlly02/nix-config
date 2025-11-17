@@ -1,6 +1,14 @@
 {
   description = "WSdlly02's NixOS flake";
-
+  nixConfig = {
+    extra-substituters = [
+      "https://nixos-raspberrypi.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+    ];
+    connect-timeout = 5;
+  };
   inputs = {
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -10,7 +18,7 @@
       url = "github:WSdlly02/my-codes/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/develop";
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -95,11 +103,13 @@
             # TODO: libvirt
           ];
         };
-        "WSdlly02-RaspberryPi5" = lib.nixosSystem rec {
-          system = "aarch64-linux";
-          pkgs = pkgs' { inherit system; };
+        "WSdlly02-RaspberryPi5" = inputs.nixos-raspberrypi.lib.nixosSystemFull {
+          specialArgs = inputs;
           modules = [
-            inputs.nixos-hardware.nixosModules.raspberry-pi-5
+            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.base
+            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
+            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
+            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.bluetooth
             inputs.self.nixosModules.default
             ./hostSpecific/WSdlly02-RaspberryPi5
           ];

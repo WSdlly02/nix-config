@@ -1,3 +1,4 @@
+{ inputs, ... }:
 {
   nixpkgs = {
     /*
@@ -12,13 +13,17 @@
     */
     overlays = [
       # Very important!!! Don't delete!!!
-      (final: prev: {
-        makeModulesClosure = x: prev.makeModulesClosure (x // { allowMissing = true; });
-        linux_rpi5 = prev.linuxKernel.kernels.linux_rpi4.override {
-          rpiVersion = 5;
-          argsOverride.defconfig = "bcm2712_defconfig";
-        };
-      })
+      # (final: prev: {
+      #   makeModulesClosure = x: prev.makeModulesClosure (x // { allowMissing = true; });
+      #   linux_rpi5 = prev.linuxKernel.kernels.linux_rpi4.override {
+      #     rpiVersion = 5;
+      #     argsOverride.defconfig = "bcm2712_defconfig";
+      #   };
+      # })
+      inputs.my-codes.overlays.exposedPackages
+      inputs.self.overlays.default
+      inputs.self.overlays.exposedPackages
+      inputs.self.overlays.libraryPackages
     ];
   };
   /*

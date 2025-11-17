@@ -1,0 +1,33 @@
+name: Build RPi5 system (closure export)
+
+on:
+  workflow_dispatch: # 先只支持手动触发，安全又好调试
+
+jobs:
+  build-system:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Build RPi5 system
+        run: |
+          nix build .#nixosConfigurations.WSdlly02-RaspberryPi5.config.system.build.toplevel --print-build-logs
+
+      - name: Export system closure to .nar
+        run: |
+          store_path=$(readlink -f result)
+          nix-store --export $(nix-store --query --requisites "$store_path") > rpi5-system-closure.nar
+
+      - name: Upload closure artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpi5-system-closure
+          path: rpi5-system-closure.nar

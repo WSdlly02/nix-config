@@ -99,7 +99,7 @@
           # nix-diff
           # nix-output-monitor
           # nix-tree
-          net-tools
+          nettools
           nmap
           pciutils
           psmisc
