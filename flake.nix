@@ -34,7 +34,8 @@
     inputs:
     let
       inherit (inputs.nixpkgs-unstable) lib;
-      inherit (inputs.self.lib) pkgs';
+      myLib = import ./lib { inherit inputs; };
+      inherit (myLib) pkgs';
       exposedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -70,29 +71,6 @@
         _module.args = { inherit inputs; };
         imports = [ ./modules/homeModules ];
       };
-      lib.pkgs' =
-        {
-          nixpkgsInstance ? inputs.nixpkgs-unstable,
-          config ? { },
-          overlays ? [ ],
-          system,
-        }:
-        import nixpkgsInstance {
-          inherit system;
-          config = {
-            allowAliases = false;
-            allowUnfree = true;
-            # rocmSupport = true;
-          }
-          // config;
-          overlays = [
-            inputs.my-codes.overlays.exposedPackages
-            inputs.self.overlays.default
-            inputs.self.overlays.exposedPackages
-            inputs.self.overlays.libraryPackages
-          ]
-          ++ overlays;
-        };
       nixosConfigurations = {
         "WSdlly02-PC" = lib.nixosSystem rec {
           system = "x86_64-linux";
@@ -103,7 +81,7 @@
             # TODO: libvirt
           ];
         };
-        "WSdlly02-RaspberryPi5" = inputs.nixos-raspberrypi.lib.nixosSystemFull {
+        "WSdlly02-RaspberryPi5" = inputs.nixos-raspberrypi.lib.nixosSystem {
           specialArgs = inputs;
           modules = [
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.base
