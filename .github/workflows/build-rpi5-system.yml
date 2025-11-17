@@ -19,7 +19,7 @@ jobs:
 
       - name: Build RPi5 system
         run: |
-          nix build .#nixosConfigurations.WSdlly02-RaspberryPi5.config.system.build.toplevel --print-build-logs
+          nix build .#nixosConfigurations.WSdlly02-RaspberryPi5.config.system.build.toplevel --accept-flake-config
 
       - name: Export system closure to .nar
         run: |

@@ -55,11 +55,7 @@ in
     settings = {
       accept-flake-config = true; # Experimental
       auto-optimise-store = true;
-      auto-allocate-uids = true; # Experimental
-      use-cgroups = true; # Requirements
       experimental-features = [
-        "auto-allocate-uids"
-        "cgroups"
         "flakes"
         "nix-command"
       ];
