@@ -34,8 +34,7 @@
     inputs:
     let
       inherit (inputs.nixpkgs-unstable) lib;
-      myLib = import ./lib { inherit inputs; };
-      inherit (myLib) pkgs';
+      inherit (inputs.self.lib) pkgs';
       exposedSystems = [
         "x86_64-linux"
         "aarch64-linux"
@@ -71,6 +70,7 @@
         _module.args = { inherit inputs; };
         imports = [ ./modules/homeModules ];
       };
+      lib = import ./lib { inherit inputs; };
       nixosConfigurations = {
         "WSdlly02-PC" = lib.nixosSystem rec {
           system = "x86_64-linux";

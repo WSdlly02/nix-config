@@ -64,6 +64,7 @@ in
     systemPackages =
       with pkgs;
       [
+        (antigravity.override enableWayland)
         (bilibili.override enableWayland)
         (code-cursor.override enableWayland)
         (google-chrome.override enableWayland)
