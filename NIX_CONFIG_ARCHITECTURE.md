@@ -35,13 +35,13 @@
     - `lib.pkgs'`：封装 `nixpkgs` 导入逻辑，统一 overlay、配置和 `system`。
     - `nixosConfigurations`：为每台 NixOS 主机构建系统配置：
       - `"WSdlly02-PC"`：x86_64 PC，模块为 `self.nixosModules.default` + `./hostSpecific/WSdlly02-PC`。
-      - `"WSdlly02-RaspberryPi5"`：aarch64 树莓派 5，额外引入 `nixos-hardware.nixosModules.raspberry-pi-5`。
+      - `"WSdlly02-RPi5"`：aarch64 树莓派 5，额外引入 `nixos-hardware.nixosModules.raspberry-pi-5`。
       - `"WSdlly02-WSL"`：x86_64 WSL，额外引入 `nixos-wsl.nixosModules.default`。
       - `"Lily-PC"`：x86_64 PC，额外设置 `{ system.name = "Lily-PC"; }`。
     - `homeConfigurations`：为每个用户/主机组合构建 Home Manager 配置：
       - `"wsdlly02@WSdlly02-PC"`：`homeModules.default` + `zen-browser.homeModules.beta` + `./hostSpecific/WSdlly02-PC/Home`。
       - `"wsdlly02@WSdlly02-WSL"`：`homeModules.default` + `./hostSpecific/WSdlly02-WSL/Home`。
-      - `"wsdlly02@WSdlly02-RaspberryPi5"`：`homeModules.default` + `./hostSpecific/WSdlly02-RaspberryPi5/Home`。
+      - `"wsdlly02@WSdlly02-RPi5"`：`homeModules.default` + `./hostSpecific/WSdlly02-RPi5/Home`。
     - `homeModules.default`：将 `./modules/homeModules` 作为一个整体模块暴露，同时向模块传入 `inputs`。
     - `nixosModules.default`：将 `./modules/nixosModules` 作为一个整体模块暴露，同时向模块传入 `inputs`。
     - `overlays`：
@@ -262,7 +262,7 @@ hostSpecific/
 │   ├── Home/
 │   ├── System/
 │   └── default.nix
-├── WSdlly02-RaspberryPi5/
+├── WSdlly02-RPi5/
 │   ├── Daily/
 │   ├── Gaming/
 │   ├── Home/
@@ -379,9 +379,9 @@ hostSpecific/
   - `eye-care-reminder.nix`：护眼提醒相关配置。  
   - `roc-sink.nix`：ROC 音频 sink 相关设置（目前在 `imports` 中注释）。
 
-### 3. WSdlly02-RaspberryPi5（hostSpecific/WSdlly02-RaspberryPi5）
+### 3. WSdlly02-RPi5（hostSpecific/WSdlly02-RPi5）
 
-- `hostSpecific/WSdlly02-RaspberryPi5/default.nix`  
+- `hostSpecific/WSdlly02-RPi5/default.nix`  
   - 类型：树莓派 5 主机入口模块。  
   - `imports`：
     - `./Daily`
@@ -400,19 +400,19 @@ hostSpecific/
     - `nix.settings.max-jobs = 32`。  
     - `services.pipewire.socketActivation = false`。
 
-- `hostSpecific/WSdlly02-RaspberryPi5/System/*.nix`  
+- `hostSpecific/WSdlly02-RPi5/System/*.nix`  
   - `default.nix`：树莓派 System 子模块入口。  
   - `nixpkgs-aarch64.nix`：为 aarch64 平台指定/调整 nixpkgs 设置。  
   - `nixos-pi-installer.nix`：树莓派专用的安装/引导工具或初始系统配置。
 
-- `hostSpecific/WSdlly02-RaspberryPi5/Daily/default.nix`  
+- `hostSpecific/WSdlly02-RPi5/Daily/default.nix`  
   - 日常使用相关配置入口，针对树莓派环境做精简/特化。
 
-- `hostSpecific/WSdlly02-RaspberryPi5/Gaming/*.nix`  
+- `hostSpecific/WSdlly02-RPi5/Gaming/*.nix`  
   - `default.nix`：Gaming 子模块入口。  
   - `minecraft-server.nix`：在树莓派上运行 Minecraft Server 的配置（通常与 `pkgs/fabric-survival.nix` 配合）。
 
-- `hostSpecific/WSdlly02-RaspberryPi5/Home/*.nix`  
+- `hostSpecific/WSdlly02-RPi5/Home/*.nix`  
   - `default.nix`：
     - `imports`：  
       - `./network-autoswitch.nix`  

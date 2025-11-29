@@ -37,7 +37,7 @@
     In other words, specify this to cross-compile NixOS.
   */
   system = {
-    name = "WSdlly02-RaspberryPi5";
+    name = "WSdlly02-RPi5";
     # nixos.tag = [];
     stateVersion = "25.05";
   };

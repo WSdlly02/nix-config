@@ -10,6 +10,10 @@
     connect-timeout = 5;
   };
   inputs = {
+    disko = {
+      url = "github:nix-community/disko/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -58,10 +62,10 @@
           ];
           pkgs = pkgs' { system = "x86_64-linux"; };
         };
-        "wsdlly02@WSdlly02-RaspberryPi5" = inputs.home-manager.lib.homeManagerConfiguration {
+        "wsdlly02@WSdlly02-RPi5" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
             inputs.self.homeModules.default
-            ./hostSpecific/WSdlly02-RaspberryPi5/Home
+            ./hostSpecific/WSdlly02-RPi5/Home
           ];
           pkgs = pkgs' { system = "aarch64-linux"; };
         };
@@ -81,15 +85,15 @@
             # TODO: libvirt
           ];
         };
-        "WSdlly02-RaspberryPi5" = inputs.nixos-raspberrypi.lib.nixosSystem {
+        "WSdlly02-RPi5" = inputs.nixos-raspberrypi.lib.nixosSystem {
           specialArgs = inputs;
           modules = [
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.base
-            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
-            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.bluetooth
+            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
+            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
             inputs.self.nixosModules.default
-            ./hostSpecific/WSdlly02-RaspberryPi5
+            ./hostSpecific/WSdlly02-RPi5
           ];
         };
         "WSdlly02-WSL" = lib.nixosSystem rec {
@@ -99,6 +103,15 @@
             inputs.nixos-wsl.nixosModules.default
             inputs.self.nixosModules.default
             ./hostSpecific/WSdlly02-WSL
+          ];
+        };
+        "WSdlly02-SRV" = lib.nixosSystem rec {
+          system = "x86_64-linux";
+          pkgs = pkgs' { inherit system; };
+          modules = [
+            { system.name = "WSdlly02-SRV"; }
+            inputs.self.nixosModules.default
+            ./hostSpecific/WSdlly02-SRV
           ];
         };
         "Lily-PC" = lib.nixosSystem rec {

@@ -46,6 +46,7 @@
   #   ];
   #   # tmp.useTmpfs = true; # out of memory when compiling big derivations
   # };
+  boot.loader.raspberryPi.bootloader = "kernel";
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";

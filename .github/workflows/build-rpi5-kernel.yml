@@ -19,7 +19,7 @@ jobs:
 
       - name: Build RPi5 kernel
         run: |
-          nix build .#nixosConfigurations.WSdlly02-RaspberryPi5.config.system.build.kernel --print-build-logs--accept-flake-config
+          nix build .#nixosConfigurations.WSdlly02-RPi5.config.system.build.kernel --print-build-logs--accept-flake-config
 
       - name: Export kernel closure to .nar
         run: |

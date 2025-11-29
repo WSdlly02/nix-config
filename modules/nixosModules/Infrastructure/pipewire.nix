@@ -71,7 +71,7 @@ lib.mkIf enableInfrastructure {
       };
     };
   };
-  systemd.user.services = lib.mkIf (config.system.name == "WSdlly02-RaspberryPi5") {
+  systemd.user.services = lib.mkIf (config.system.name == "WSdlly02-RPi5") {
     pipewire = {
       preStart = "${pkgs.networkmanager}/bin/nm-online -q"; # Fix up
       wantedBy = [ "default.target" ];
