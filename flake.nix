@@ -130,6 +130,7 @@
       };
       overlays = {
         default = final: prev: {
+          net-tools = prev.net-tools or prev.nettools;
           # Overlays here will be applied to all packages
         };
         exposedPackages =
