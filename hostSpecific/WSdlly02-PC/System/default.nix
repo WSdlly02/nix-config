@@ -52,7 +52,6 @@
       "amd_pstate=active"
       "amd_iommu=on"
       "iommu=pt"
-      "amdgpu.ppfeaturemask=0xffffffff"
     ];
     # blacklistedKernelModules = ["k10temp"];
     # resumeDevice = ""; No longer required by config.boot.initrd.systemd.enable

@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   ...
 }:
 {
@@ -46,7 +45,7 @@
   #   ];
   #   # tmp.useTmpfs = true; # out of memory when compiling big derivations
   # };
-  boot.loader.raspberryPi.bootloader = "kernel";
+  boot.loader.raspberryPi.bootloader = lib.mkForce "kernel";
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";

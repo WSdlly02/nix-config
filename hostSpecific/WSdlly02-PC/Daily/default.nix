@@ -38,6 +38,10 @@ in
   programs = {
     # appimage.enable = true;
     kdeconnect.enable = true;
+    localsend = {
+      enable = true;
+      openFirewall = true;
+    };
     noisetorch.enable = true;
     obs-studio = {
       enable = true;
@@ -87,6 +91,7 @@ in
         vlc
         wechat
         wemeet
+        winboat
         wpsoffice-cn
       ]
       ++ [

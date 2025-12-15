@@ -22,7 +22,11 @@
       url = "github:WSdlly02/my-codes/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/develop";
+    nixos-raspberrypi = {
+      url = "github:nvmd/nixos-raspberrypi/develop";
+      # inputs.nixpkgs.url = "github:nvmd/nixpkgs/modules-with-keys-unstable"; # Use custom nixpkgs with Raspberry Pi modules
+      # inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -130,7 +134,6 @@
       };
       overlays = {
         default = final: prev: {
-          net-tools = prev.net-tools or prev.nettools;
           # Overlays here will be applied to all packages
         };
         exposedPackages =

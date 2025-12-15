@@ -1,28 +1,35 @@
-{ pkgs, ... }:
+{ lib, ... }:
 {
-  environment.etc."lact/config.yaml".text = ''
-    version: 5
+  services.lact.enable = true;
+  environment.etc."lact/config.yaml".text = lib.mkForce ''
+    apply_settings_timer: 5
+    auto_switch_profiles: false
+    current_profile: null
     daemon:
-      log_level: info
       admin_group: wheel
       disable_clocks_cleanup: false
-    apply_settings_timer: 5
+      log_level: info
     gpus:
+      1002:13C0-1458:D000-0000:13:00.0:
+        fan_control_enabled: false
+        performance_level: auto
       1002:73DF-1002:0E36-0000:03:00.0:
         fan_control_enabled: true
         fan_control_settings:
-          mode: curve
-          static_speed: 0.5
-          temperature_key: edge
-          interval_ms: 500
+          change_threshold: 1
           curve:
             40: 0.2
             50: 0.4
             60: 0.85
             70: 1.0
+          interval_ms: 500
+          mode: curve
           spindown_delay_ms: 1000
-          change_threshold: 1
+          static_speed: 0.5
+          temperature_key: edge
+        max_core_clock: 2640
         performance_level: manual
+        power_cap: 213.0
         power_profile_mode_index: 1
         power_states:
           core_clock:
@@ -33,19 +40,7 @@
           - 1
           - 2
           - 3
-    current_profile: null
-    auto_switch_profiles: false
-  ''; # source = (pkgs.formats.yaml {}).generate "lact-config" {}; Insolubility encountered
-  systemd.services.lactd = {
-    unitConfig = {
-      Description = "AMDGPU Control Daemon";
-      After = [ "multi-user.target" ];
-    };
-    serviceConfig = {
-      ExecStart = "${pkgs.lact}/bin/lact daemon";
-      Nice = -10;
-      Restart = "on-failure";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
+        voltage_offset: -10
+    version: 5
+  '';
 }

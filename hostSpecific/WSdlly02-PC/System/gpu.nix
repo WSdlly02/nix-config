@@ -6,6 +6,7 @@
   */
   hardware.amdgpu = {
     initrd.enable = true;
+    overdrive.enable = true;
     # opencl.enable = true; # Add Rocm support to opencl driver
   };
   environment.sessionVariables = {
