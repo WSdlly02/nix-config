@@ -47,6 +47,7 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
+      # this function folds over all exposed systems and merges the results
       forExposedSystems = f: builtins.foldl' lib.recursiveUpdate { } (map f exposedSystems);
     in
     {
@@ -148,7 +149,7 @@
     }
     // forExposedSystems (
       system: with (pkgs' { inherit system; }); {
-        devShells."${system}" = rec {
+        devShells."${system}" = inputs.my-codes.devShells."${system}" // rec {
           aitools = callPackage ./pkgs/devShells-aitools.nix { };
           default = aitools;
           nixfmt = callPackage ./pkgs/devShells-nixfmt.nix { };
@@ -159,7 +160,6 @@
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
             epson-inkjet-printer-201601w = callPackage ./pkgs/epson-inkjet-printer-201601w.nix { };
             fabric-survival = callPackage ./pkgs/fabric-survival.nix { };
-            rocmFHSEnv = callPackage ./pkgs/rocmFHSEnv.nix { };
           };
           libraryPackages = { };
           my-codes-exposedPackages = inputs.my-codes.legacyPackages."${system}".exposedPackages; # For convenience

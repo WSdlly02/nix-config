@@ -27,6 +27,7 @@ in
       # 定义 iptables 命令路径，--wait 参数防止锁竞争导致规则应用失败
       IPTABLES="${pkgs.iptables}/bin/iptables --wait"
       IP6TABLES="${pkgs.iptables}/bin/ip6tables --wait"
+      MARK_ID_MIHOMO=10053  # Mihomo 服务标记，用于区分流量来源
 
       # =========================
       # 1. 清空旧规则
@@ -165,26 +166,25 @@ in
       $IPTABLES --table nat --append PREROUTING --source 10.42.0.0/24 --protocol tcp --dport 53 --jump REDIRECT --to-port 10053
 
       # 劫持本机发出的 DNS 请求 (慎用：需防止 Mihomo 自身死循环)
-      # 逻辑：如果是 mihomo 用户发出的包，不进行 REDIRECT (隐式 ACCEPT)
+      # 逻辑：如果是 mihomo 发出的包，不进行 REDIRECT (隐式 ACCEPT)
       # 如果是其他用户 (root, your_user, etc)，则执行 REDIRECT
 
-      # 排除 mihomo 用户
-      # ! --uid-owner mihomo 表示 "不是 mihomo 用户时"
+      # 排除 mihomo 服务的 DNS 请求
       $IPTABLES --table nat --append OUTPUT --protocol udp --dport 53 \
-        --match owner ! --uid-owner mihomo \
+        --match mark ! --mark $MARK_ID_MIHOMO \
         --jump REDIRECT --to-port 10053
         
       $IPTABLES --table nat --append OUTPUT --protocol tcp --dport 53 \
-        --match owner ! --uid-owner mihomo \
+        --match mark ! --mark $MARK_ID_MIHOMO \
         --jump REDIRECT --to-port 10053
         
       # IPv6 处理 (如果有 IPv6 需求)
       $IP6TABLES --table nat --append OUTPUT --protocol udp --dport 53 \
-        --match owner ! --uid-owner mihomo \
+        --match mark ! --mark $MARK_ID_MIHOMO \
         --jump REDIRECT --to-port 10053 2>/dev/null || true
 
       $IP6TABLES --table nat --append OUTPUT --protocol tcp --dport 53 \
-        --match owner ! --uid-owner mihomo \
+        --match mark ! --mark $MARK_ID_MIHOMO \
         --jump REDIRECT --to-port 10053 2>/dev/null || true
 
       # =========================

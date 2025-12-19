@@ -14,6 +14,7 @@
     ##./gitDaemon.nix
     ./gnupg.nix
     ./i18n.nix
+    ./localllm.nix
     ./mihomo.nix
     ./neovim.nix
     ./networking.nix
