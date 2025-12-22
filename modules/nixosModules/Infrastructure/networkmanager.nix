@@ -15,8 +15,8 @@ lib.mkIf enableInfrastructure {
       powersave = lib.mkIf (config.system.name != "WSdlly02-PC") false;
     };
     unmanaged = [
-      "interface-name:bridge-*"
-      "interface-name:tun-*"
+      "except:interface-name:enp14s0"
+      "except:interface-name:wlp15s0"
     ];
     # rc-manager has been set as unmanaged
   };

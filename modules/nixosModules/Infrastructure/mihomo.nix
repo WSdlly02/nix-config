@@ -5,17 +5,53 @@
   enableInfrastructure,
   ...
 }:
+let
+  user = config.hostSystemSpecific.defaultUser.name;
+in
 lib.mkIf enableInfrastructure {
-  services.mihomo = {
-    enable = true;
-    tunMode = true;
-    webui = pkgs.metacubexd;
-    configFile = "/home/${config.hostSystemSpecific.defaultUser.name}/.config/mihomo/config.yaml";
-  };
-  systemd.services.mihomo = {
+  virtualisation.quadlet.containers.mihomo = {
+    containerConfig = {
+      image = "docker.io/metacubex/mihomo:latest";
+      networks = [ "host" ];
+      volumes = [
+        "/home/${user}/.config/mihomo:/etc/mihomo"
+      ];
+      addCapabilities = [ "NET_ADMIN" ];
+      devices = [ "/dev/net/tun" ];
+      exec = [
+        "-d"
+        "/etc/mihomo"
+      ];
+      autoUpdate = "registry";
+    };
+
     serviceConfig = {
-      # 给这个服务发出的所有数据包打上标记 10053 (随便选个没用的数)
+      Delegate = true;
+      ExecStartPre = [
+        "${pkgs.coreutils}/bin/mkdir -p /home/${user}/.config/mihomo"
+        (pkgs.writeShellScript "wait-for-tailscale-up" ''
+          if ${pkgs.iproute2}/bin/ip link show tailscale0 >/dev/null 2>&1; then
+            echo "tailscale0 exists, waiting for IP 100.64.16.64..."
+            until ${pkgs.iproute2}/bin/ip addr show tailscale0 | ${pkgs.gnugrep}/bin/grep -q "100.64.16.64"; do
+              sleep 1
+            done
+            echo "IP 100.64.16.64 is ready."
+          else
+            echo "tailscale0 does not exist, skipping wait."
+          fi
+        '')
+      ];
       FirewallMark = 10053;
+      Restart = "always";
+    };
+
+    unitConfig = {
+      Description = "Mihomo in Podman container";
+      After = [
+        "network-online.target"
+        "tailscale.service"
+      ];
+      Wants = [ "network-online.target" ];
     };
   };
 }

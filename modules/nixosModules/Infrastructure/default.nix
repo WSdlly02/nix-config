@@ -27,6 +27,7 @@
     ##./static-web-server.nix
     ./sudo.nix
     ./sysctl.nix
+    ./tailscale.nix
     ./tmux.nix
   ];
 

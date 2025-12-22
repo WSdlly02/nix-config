@@ -15,6 +15,11 @@
       enable = true;
       dockerCompat = true;
     };
+    quadlet = {
+      enable = true;
+      autoUpdate.enable = true;
+      autoEscape = true;
+    };
   };
   programs.virt-manager.enable = true;
   environment.etc."distrobox/distrobox.conf".text = ''

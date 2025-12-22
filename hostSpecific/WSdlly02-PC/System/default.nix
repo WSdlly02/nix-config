@@ -13,7 +13,6 @@
     ./nixpkgs-x86_64.nix
     ./plymouth.nix
     ##./remotefsmount.nix
-    ./tailscale.nix
     ./tpm.nix
     ./virtualisation.nix
   ];

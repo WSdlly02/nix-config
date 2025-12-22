@@ -10,10 +10,6 @@
     connect-timeout = 5;
   };
   inputs = {
-    disko = {
-      url = "github:nix-community/disko/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -32,6 +28,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -86,6 +83,7 @@
           pkgs = pkgs' { inherit system; };
           modules = [
             inputs.self.nixosModules.default
+            inputs.quadlet-nix.nixosModules.quadlet
             ./hostSpecific/WSdlly02-PC
             # TODO: libvirt
           ];
