@@ -1,63 +1,112 @@
 {
+  config,
   lib,
   pkgs,
   enableInfrastructure,
   ...
 }:
+let
+  config-toml = pkgs.writeText "config.toml" ''
+    interval_seconds = 60
+    filename_prefix = "gen-"
+    allow_types = ["_http._tcp"]
+
+    [port_map]
+    "10.64.16.10:8000" = 8080
+
+    [[txt_rewrite]]
+    from = "10.64.16.10:8000"
+    to   = "wsdlly02-pc.local:8080"
+  '';
+in
 lib.mkIf enableInfrastructure {
-  # services.avahi = {
-  #   enable = true;
-  #   publish.enable = true;
-  #   nssmdns6 = true;
-  #   nssmdns4 = true;
-  #   ipv6 = true;
-  #   ipv4 = true;
-  #   extraConfig = ''
-  #     [server]
-  #     disallow-other-stacks=yes
-  #   '';
-  # };
-  system = {
-    nssModules = lib.optional true pkgs.nssmdns;
-    nssDatabases.hosts = lib.mkForce [
-      "files"
-      "myhostname"
-      "mdns4_minimal"
-      "[NOTFOUND=return]"
-      "resolve"
-      "[!UNAVAIL=return]"
-      "dns"
+  services.avahi = {
+    enable = true;
+    allowInterfaces = [
+      "enp14s0"
+      "wlp15s0"
     ];
+    publish = {
+      enable = true;
+      addresses = true;
+      workstation = true;
+      userServices = true;
+    };
+    # nssmdns6 = true;
+    nssmdns4 = true;
+    ipv6 = true;
+    ipv4 = true;
+    extraConfig = ''
+      [server]
+      disallow-other-stacks=yes
+    '';
   };
-  virtualisation.quadlet.containers.avahi = {
-    containerConfig = {
-      image = "docker.io/flungo/avahi";
-      networks = [ "host" ]; # 等价于 --network host
-      volumes = [ "/run/avahi-daemon:/run/avahi-daemon" ];
-      user = "0";
-      autoUpdate = "registry";
-      environments = {
-        SERVER_ALLOW_INTERFACES = "enp14s0,wlp15s0";
-        #SERVER_DISALLOW_OTHER_STACKS = "true";
-        #SERVER_ENABLE_DBUS = "true";
-        #SERVER_USE_IPV6 = "false";
+  /*
+    systemd.services.mdns-collector-sync = {
+      description = "Sync generated Avahi services from drop-in dir";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = pkgs.writeShellScript "mdns-dropin-sync.sh" ''
+          set -euo pipefail
+
+          SRC="/var/lib/mdns-collector/generated-services"
+          DST="/etc/avahi/services"
+
+          # 同步（只放我们生成的文件，避免污染手写文件）
+          # 约定：生成文件都以 "gen-" 开头
+          mkdir -p "$DST"
+
+          # 删除旧的 gen- 文件
+          find "$DST" -maxdepth 1 -type f -name 'gen-*.service' -delete
+
+          # 拷贝新的
+          shopt -s nullglob
+          for f in "$SRC"/gen-*.service; do
+            install -m 0644 "$f" "$DST/$(basename "$f")"
+          done
+
+          # 不必重启
+          # systemctl restart avahi-daemon.service
+        '';
       };
-      # 可选：添加环境变量等
     };
+    systemd.paths.mdns-collector-sync = {
+      description = "Watch mdns drop-in dir for changes";
+      wantedBy = [ "multi-user.target" ];
+      pathConfig = {
+        PathChanged = "/var/lib/mdns-collector/generated-services";
+        PathModified = "/var/lib/mdns-collector/generated-services";
+      };
+    };
+    virtualisation.quadlet.containers.mdns-collector = {
+      containerConfig = {
+        image = "ghcr.io/wsdlly02/my-codes/mdns-collector:latest";
+        networks = [ config.virtualisation.quadlet.networks.vlan-with-mdns.ref ];
+        ip = "10.64.16.2";
+        volumes = [
+          "/var/lib/mdns-collector/generated-services:/out"
+          #"/etc/mdns-collector/config.toml:/config.toml:ro"
+          "${config-toml}:/config.toml:ro"
+        ];
+        user = "0";
+        autoUpdate = "registry";
+      };
 
-    serviceConfig = {
-      Delegate = true;
-      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /run/avahi-daemon";
-      ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /run/avahi-daemon";
-      Restart = "always";
-      TimeoutStartSec = "300"; # 可选，延长启动超时
-    };
+      serviceConfig = {
+        Delegate = true;
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/mdns-collector/generated-services";
+        Restart = "always";
+      };
 
-    # 关键：启动前创建目录（/run 是 tmpfs，重启后消失）
-    unitConfig = {
-      Description = "Avahi mDNS daemon in Podman container";
-      After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
+      unitConfig.Description = "mdns collector (mdnsnet -> host avahi static)";
     };
-  };
+    virtualisation.quadlet.networks.vlan-with-mdns.networkConfig = {
+      driver = "bridge";
+      ipamDriver = "host-local";
+      ipv6 = false;
+      name = "vlan-with-mdns";
+      gateways = [ "10.64.16.1" ];
+      subnets = [ "10.64.16.0/24" ];
+    };
+  */
 }

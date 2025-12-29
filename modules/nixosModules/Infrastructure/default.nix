@@ -10,6 +10,7 @@
     ./avahi.nix
     ./bluetooth.nix
     ##./ccache.nix
+    ./dnsmasq.nix
     ./getty.nix
     ##./gitDaemon.nix
     ./gnupg.nix

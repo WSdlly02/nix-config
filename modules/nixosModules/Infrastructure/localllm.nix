@@ -28,6 +28,9 @@ lib.mkIf enableInfrastructure {
   virtualisation.quadlet.containers.ollama = {
     containerConfig = {
       image = if cfg then "docker.io/ollama/ollama:rocm" else "docker.io/ollama/ollama:latest";
+      # use default bridge network
+      # networks = [ config.virtualisation.quadlet.networks.vlan-with-mdns.ref ];
+      # ip = "10.64.16.2";
       publishPorts = [
         "11434:11434"
       ];

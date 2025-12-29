@@ -15,9 +15,7 @@ lib.mkIf enableInfrastructure {
     containerConfig = {
       image = "docker.io/tailscale/tailscale:latest";
       networks = [ "host" ];
-      volumes = [
-        "/var/lib/tailscale:/var/lib/tailscale"
-      ];
+      volumes = [ "/var/lib/tailscale:/var/lib/tailscale" ];
       devices = [
         "/dev/net/tun:/dev/net/tun"
       ];

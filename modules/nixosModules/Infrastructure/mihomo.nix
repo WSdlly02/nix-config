@@ -13,9 +13,7 @@ lib.mkIf enableInfrastructure {
     containerConfig = {
       image = "docker.io/metacubex/mihomo:latest";
       networks = [ "host" ];
-      volumes = [
-        "/home/${user}/.config/mihomo:/etc/mihomo"
-      ];
+      volumes = [ "/home/${user}/.config/mihomo:/etc/mihomo" ];
       addCapabilities = [ "NET_ADMIN" ];
       devices = [ "/dev/net/tun" ];
       exec = [
@@ -33,7 +31,7 @@ lib.mkIf enableInfrastructure {
           if ${pkgs.iproute2}/bin/ip link show tailscale0 >/dev/null 2>&1; then
             echo "tailscale0 exists, waiting for IP 100.64.16.64..."
             until ${pkgs.iproute2}/bin/ip addr show tailscale0 | ${pkgs.gnugrep}/bin/grep -q "100.64.16.64"; do
-              sleep 1
+              ${pkgs.coreutils}/bin/sleep 1
             done
             echo "IP 100.64.16.64 is ready."
           else
@@ -41,7 +39,6 @@ lib.mkIf enableInfrastructure {
           fi
         '')
       ];
-      FirewallMark = 10053;
       Restart = "always";
     };
 
