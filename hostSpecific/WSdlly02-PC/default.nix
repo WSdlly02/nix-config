@@ -26,7 +26,7 @@
     ];
     defaultUser = {
       name = "wsdlly02";
-      linger = false;
+      linger = true;
       extraGroups = [
         "libvirtd"
         "podman"

@@ -5,6 +5,8 @@
 {
   imports = [
     ./eye-care-reminder.nix
+    ./localllm.nix
+    ./mihomo-updater.nix
     # ./roc-sink.nix
     ./sh.nix
     ./syncthing.nix

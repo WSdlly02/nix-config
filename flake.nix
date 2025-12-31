@@ -52,6 +52,7 @@
         "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
           modules = [
             inputs.self.homeModules.default
+            inputs.quadlet-nix.homeManagerModules.quadlet
             inputs.zen-browser.homeModules.beta
             ./hostSpecific/WSdlly02-PC/Home
           ];
@@ -96,6 +97,7 @@
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
             inputs.self.nixosModules.default
+            inputs.quadlet-nix.nixosModules.quadlet
             ./hostSpecific/WSdlly02-RPi5
           ];
         };
