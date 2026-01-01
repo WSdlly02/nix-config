@@ -1,20 +1,13 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
-let
-  modelsList = [
-    "qwen3:0.6b"
-    "qwen3:8b"
-    "qwen3-vl:8b"
-  ];
-in
 {
   virtualisation.quadlet.containers.ollama = {
     containerConfig = {
       image = "docker.io/ollama/ollama:rocm";
+      networks = [ "Bridge" ];
       publishPorts = [
         "127.0.0.1:11433:11434"
       ];
@@ -39,38 +32,6 @@ in
     unitConfig = {
       Description = "Ollama ROCm in Podman container";
       BindsTo = [ "ollama-proxy.service" ];
-    };
-  };
-
-  systemd.user.services.ollama-model-loader = {
-    Unit = {
-      Description = "Ollama Model Loader";
-      Requires = [
-        "ollama.service"
-        "ollama-proxy.service"
-      ];
-      After = [
-        "ollama.service"
-        "ollama-proxy.service"
-      ];
-    };
-    Service = {
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "ollama-load-models" ''
-        # Wait for ollama to be ready
-        until ${pkgs.curl}/bin/curl -s http://localhost:11434/api/tags > /dev/null; do
-          echo "Waiting for Ollama API..."
-          sleep 1
-        done
-        ${lib.concatMapStringsSep "\n" (
-          model:
-          "${pkgs.curl}/bin/curl -X POST http://localhost:11434/api/pull -d '{\"model\": \"${model}\"}'"
-        ) modelsList}
-      '';
-      RemainAfterExit = true;
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
     };
   };
   # 1. Systemd Socket 监听 11434 端口并进行 IP 过滤
