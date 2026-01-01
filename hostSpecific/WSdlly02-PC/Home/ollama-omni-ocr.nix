@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -6,16 +7,9 @@
   virtualisation.quadlet.containers.ollama-omni-ocr = {
     containerConfig = {
       image = "ghcr.io/wsdlly02/ollama-omni-ocr/ollama-omni-ocr:latest";
-      addHosts = [
-        "host.docker.internal:host-gateway"
-      ];
-      networks = [ "Bridge" ];
-      publishPorts = [
-        "127.0.0.1:7079:80"
-        "127.0.0.1:7442:443"
-      ];
+      pod = config.virtualisation.quadlet.pods.ollama-pod.ref;
       environments = {
-        OLLAMA_HOST = "http://host.docker.internal:11434"; # 指向主机的 Ollama 服务
+        OLLAMA_HOST = "http://127.0.0.1:11434";
       };
       autoUpdate = "registry";
     };
@@ -26,7 +20,8 @@
     };
     unitConfig = {
       Description = "Ollama Omni OCR in Podman container";
-      After = [ "ollama-proxy.socket" ]; # 确保 Ollama 服务在此服务之前启动
+      After = [ "ollama.service" ]; # 确保 Ollama 服务在此服务之前启动
+      Requires = [ "ollama.service" ];
       BindsTo = [
         "ollama-omni-ocr-proxy-http.service"
         "ollama-omni-ocr-proxy-https.service"

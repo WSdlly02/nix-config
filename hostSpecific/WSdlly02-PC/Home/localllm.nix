@@ -4,13 +4,15 @@
   ...
 }:
 {
+  virtualisation.quadlet.pods.ollama-pod.podConfig.publishPorts = [
+    "127.0.0.1:11433:11434" # Ollama 主服务端口
+    "127.0.0.1:7079:80" # Ollama Omni OCR HTTP 端口
+    "127.0.0.1:7442:443" # Ollama Omni OCR HTTPS 端口
+  ];
   virtualisation.quadlet.containers.ollama = {
     containerConfig = {
       image = "docker.io/ollama/ollama:rocm";
-      networks = [ "Bridge" ];
-      publishPorts = [
-        "127.0.0.1:11433:11434"
-      ];
+      pod = config.virtualisation.quadlet.pods.ollama-pod.ref;
       volumes = [ "${config.home.homeDirectory}/.ollama:/root/.ollama" ];
       devices = [
         "/dev/kfd"

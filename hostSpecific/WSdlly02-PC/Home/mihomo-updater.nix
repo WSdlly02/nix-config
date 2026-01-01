@@ -4,12 +4,12 @@
     enable = true;
     autoUpdate.enable = true;
     autoEscape = true;
+    pods.mihomo-updater-pod.podConfig.publishPorts = [ "127.0.0.1:8087:8088" ];
     containers = {
       mihomo-updater = {
         containerConfig = {
           image = "ghcr.io/wsdlly02/my-codes/mihomo-updater:latest";
-          # 关键：加入 subconverter 的网络命名空间，实现 127.0.0.1 互通
-          networks = [ "container:subconverter" ]; # 不用独立Bridge网络
+          pod = config.virtualisation.quadlet.pods.mihomo-updater-pod.ref;
           volumes = [ "${config.home.homeDirectory}/Documents/my-codes/SOPs/mihomo-updater/.env:/.env:ro" ];
           autoUpdate = "registry";
         };
@@ -29,9 +29,7 @@
       subconverter = {
         containerConfig = {
           image = "docker.io/tindy2013/subconverter:latest";
-          # 映射宿主机 127.0.0.1:8087 到容器内 8088 (mihomo-updater 监听的端口)
-          networks = [ "Bridge" ]; # 使用 Bridge 网络
-          publishPorts = [ "127.0.0.1:8087:8088" ];
+          pod = config.virtualisation.quadlet.pods.mihomo-updater-pod.ref;
           autoUpdate = "registry";
         };
         serviceConfig = {
