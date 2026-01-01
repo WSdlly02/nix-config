@@ -16,7 +16,7 @@ in
     containerConfig = {
       image = "docker.io/ollama/ollama:rocm";
       publishPorts = [
-        "127.0.0.1:11435:11434"
+        "127.0.0.1:11433:11434"
       ];
       volumes = [ "${config.home.homeDirectory}/.ollama:/root/.ollama" ];
       devices = [
@@ -25,6 +25,8 @@ in
       ];
       environments = {
         HSA_OVERRIDE_GFX_VERSION = "10.3.0";
+        OLLAMA_ORIGINS = "*";
+        OLLAMA_HOST = "0.0.0.0";
       };
       autoUpdate = "registry";
     };
@@ -97,7 +99,7 @@ in
       After = [ "ollama.service" ];
     };
     Service = {
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:11435";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:11433";
     };
   };
 }

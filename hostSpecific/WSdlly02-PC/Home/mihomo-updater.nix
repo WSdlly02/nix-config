@@ -29,8 +29,8 @@
       subconverter = {
         containerConfig = {
           image = "docker.io/tindy2013/subconverter:latest";
-          # 映射宿主机 127.0.0.1:18088 到容器内 8088 (mihomo-updater 监听的端口)
-          publishPorts = [ "127.0.0.1:18088:8088" ];
+          # 映射宿主机 127.0.0.1:8087 到容器内 8088 (mihomo-updater 监听的端口)
+          publishPorts = [ "127.0.0.1:8087:8088" ];
           autoUpdate = "registry";
         };
         serviceConfig = {
@@ -82,7 +82,7 @@
       # 转发到本地 18088
       # --exit-idle-time=600s (10分钟) 无流量自动退出 Proxy
       # Proxy 退出后，由于 StopWhenUnneeded=true，后端容器也会自动停止
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:18088";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:8087";
     };
   };
 }

@@ -7,6 +7,7 @@
     ./eye-care-reminder.nix
     ./localllm.nix
     ./mihomo-updater.nix
+    ./ollama-omni-ocr.nix
     # ./roc-sink.nix
     ./sh.nix
     ./syncthing.nix
