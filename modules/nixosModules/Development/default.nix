@@ -17,7 +17,7 @@ lib.mkIf enableDevEnv {
       # clippy
       # rustc
       # rustfmt
-      haskellEnv # Haskell
+      # haskellEnv # Haskell
       stdenv.cc # gcc
       python3Env
       # python3FHSEnv
