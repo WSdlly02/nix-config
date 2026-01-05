@@ -21,6 +21,8 @@
         HSA_OVERRIDE_GFX_VERSION = "10.3.0";
         OLLAMA_ORIGINS = "*";
         OLLAMA_HOST = "0.0.0.0";
+        # Ollama configuration envs
+        OLLAMA_FLASH_ATTENTION = "1";
       };
       autoUpdate = "registry";
     };
