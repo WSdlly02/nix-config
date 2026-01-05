@@ -4,7 +4,14 @@
     enable = true;
     autoUpdate.enable = true;
     autoEscape = true;
-    pods.mihomo-updater-pod.podConfig.publishPorts = [ "127.0.0.1:8087:8088" ];
+    pods.mihomo-updater-pod = {
+      podConfig.publishPorts = [ "127.0.0.1:8087:8088" ];
+      unitConfig = {
+        Description = "Pod for Mihomo Updater and Subconverter";
+        BindsTo = [ "mihomo-updater-proxy.service" ];
+        StopWhenUnneeded = true;
+      };
+    };
     containers = {
       mihomo-updater = {
         containerConfig = {
@@ -20,7 +27,7 @@
         unitConfig = {
           Description = "Mihomo Updater in Podman container";
           # 必须在 subconverter 之后启动，因为它要加入后者的网络
-          BindsTo = [ "mihomo-updater-proxy.service" ];
+          BindsTo = [ "mihomo-updater-pod-pod.service" ];
           Requires = [ "subconverter.service" ];
           After = [ "subconverter.service" ];
           StopWhenUnneeded = true;
@@ -45,8 +52,7 @@
         };
         unitConfig = {
           Description = "Subconverter in Podman container";
-          # 当不再被需要时（即 mihomo-updater 停止后），自动停止
-          BindsTo = [ "mihomo-updater.service" ];
+          BindsTo = [ "mihomo-updater-pod-pod.service" ];
           StopWhenUnneeded = true;
         };
       };
@@ -74,8 +80,11 @@
   systemd.user.services.mihomo-updater-proxy = {
     Unit = {
       Description = "Proxy for Mihomo Updater with Idle Timeout";
-      Requires = [ "mihomo-updater.service" ];
-      After = [ "mihomo-updater.service" ];
+      # 移除 Requires，改用 Wants 或直接依赖
+      # Requires 会导致 Proxy 启动时强制拉起 Pod，
+      # 但如果 Pod 启动失败或被手动停止，Proxy 也会被关掉。
+      # 关键：移除 After，避免循环依赖或启动顺序导致的“假活跃”
+      Wants = [ "mihomo-updater-pod-pod.service" ];
     };
     Service = {
       # 转发到本地 18088

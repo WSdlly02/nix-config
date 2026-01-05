@@ -22,43 +22,12 @@
       Description = "Ollama Omni OCR in Podman container";
       After = [ "ollama.service" ]; # 确保 Ollama 服务在此服务之前启动
       Requires = [ "ollama.service" ];
-      BindsTo = [
-        "ollama-omni-ocr-proxy-http.service"
-        "ollama-omni-ocr-proxy-https.service"
-      ];
+      BindsTo = [ "ollama-omni-ocr-proxy.service" ];
       StopWhenUnneeded = true;
     };
   };
-  # 1. Systemd Socket 监听 7080 端口并进行 IP 过滤
-  systemd.user.sockets.ollama-omni-ocr-proxy-http = {
-    Unit.Description = "Socket for Ollama Omni OCR Proxy with IP Filtering";
-    Socket = {
-      ListenStream = "0.0.0.0:7080";
-      # 限制访问来源：本地、LAN、Tailscale
-      IPAddressAllow = [
-        "127.0.0.1"
-        "::1"
-        "192.168.0.0/16"
-        "100.64.16.0/24"
-      ];
-      IPAddressDeny = "any";
-    };
-    Install.WantedBy = [ "sockets.target" ];
-  };
-
-  # 2. Socket Proxy 服务：转发流量到容器监听的 7079 端口
-  systemd.user.services.ollama-omni-ocr-proxy-http = {
-    Unit = {
-      Description = "Proxy for Ollama with IP Filtering";
-      # 确保容器服务在代理启动时也启动
-      Requires = [ "ollama-omni-ocr.service" ];
-      After = [ "ollama-omni-ocr.service" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:7079";
-    };
-  };
-  systemd.user.sockets.ollama-omni-ocr-proxy-https = {
+  # 1. Systemd Socket 监听 7443 端口并进行 IP 过滤
+  systemd.user.sockets.ollama-omni-ocr-proxy = {
     Unit.Description = "Socket for Ollama Omni OCR Proxy with IP Filtering";
     Socket = {
       ListenStream = "0.0.0.0:7443";
@@ -75,7 +44,7 @@
   };
 
   # 2. Socket Proxy 服务：转发流量到容器监听的 7442 端口
-  systemd.user.services.ollama-omni-ocr-proxy-https = {
+  systemd.user.services.ollama-omni-ocr-proxy = {
     Unit = {
       Description = "Proxy for Ollama with IP Filtering";
       # 确保容器服务在代理启动时也启动
@@ -83,7 +52,7 @@
       After = [ "ollama-omni-ocr.service" ];
     };
     Service = {
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:7442";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:7442";
     };
   };
 }
