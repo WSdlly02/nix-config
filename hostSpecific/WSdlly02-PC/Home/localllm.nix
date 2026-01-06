@@ -41,9 +41,6 @@
     };
     unitConfig = {
       Description = "Ollama ROCm in Podman container";
-      Requires = [ "ollama-pod-pod.service" ];
-      After = [ "ollama-pod-pod.service" ];
-      BindsTo = [ "ollama-proxy.service" ];
       StopWhenUnneeded = true;
     };
   };
@@ -69,15 +66,18 @@
     Unit = {
       Description = "Proxy for Ollama with IP Filtering";
       # 确保容器服务在代理启动时也启动
-      Requires = [ "ollama.service" ];
-      After = [ "ollama.service" ];
+      Requires = [ "ollama-proxy.socket" ];
+      After = [ "ollama-proxy.socket" ];
     };
     Service = {
-      ExecStart = ''
-        ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd \
-          # --exit-idle-time=600 \ # 可选：空闲10分钟后退出
-          127.0.0.1:11433
-      '';
+      Environment = [
+        "SERVICES_START_ORDER=\"ollama-pod-pod.service ollama.service\""
+        "SERVICES_STOP_ORDER=\"ollama.service ollama-pod-pod.service\""
+      ];
+      TimeoutStartSec = 300;
+      ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "ollama-proxy";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:11433";
+      ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "ollama-proxy";
     };
   };
   systemd.user.services = {

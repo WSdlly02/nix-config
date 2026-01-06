@@ -30,15 +30,6 @@
         };
         unitConfig = {
           Description = "Mihomo Updater in Podman container";
-          Requires = [
-            "mihomo-updater-pod-pod.service"
-            "subconverter.service"
-          ];
-          After = [
-            "mihomo-updater-pod-pod.service"
-            "subconverter.service"
-          ];
-          BindsTo = [ "mihomo-updater-proxy.service" ];
           StopWhenUnneeded = true;
         };
       };
@@ -61,9 +52,6 @@
         };
         unitConfig = {
           Description = "Subconverter in Podman container";
-          Requires = [ "mihomo-updater-pod-pod.service" ];
-          After = [ "mihomo-updater-pod-pod.service" ];
-          BindsTo = [ "mihomo-updater.service" ];
           StopWhenUnneeded = true;
         };
       };
@@ -90,15 +78,19 @@
   systemd.user.services.mihomo-updater-proxy = {
     Unit = {
       Description = "Proxy for Mihomo Updater with Idle Timeout";
-      Requires = [ "mihomo-updater.service" ];
-      After = [ "mihomo-updater.service" ];
+      Requires = [ "mihomo-updater-proxy.socket" ];
+      After = [ "mihomo-updater-proxy.socket" ];
     };
     Service = {
-      ExecStart = ''
-        ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd \
-          --exit-idle-time=600 \ # 空闲10分钟后退出
-          127.0.0.1:8087
-      '';
+      Environment = [
+        "SERVICES_START_ORDER=\"mihomo-updater-pod-pod.service subconverter.service mihomo-updater.service\""
+        "SERVICES_STOP_ORDER=\"mihomo-updater.service subconverter.service mihomo-updater-pod-pod.service\""
+      ];
+      TimeoutStartSec = 300;
+      ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "mihomo-updater-proxy";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:8087";
+      # 10分钟无流量则退出
+      ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "mihomo-updater-proxy";
     };
   };
   systemd.user.services = {
@@ -112,14 +104,14 @@
   只有socket服务自启动
   mihomo-updater-proxy.socket
     |-> mihomo-updater-proxy.service
-          |-<-> mihomo-updater.service
-                  |-> mihomo-updater-pod-pod.service
-                  |-<-> subconverter.service
-                          |-> mihomo-updater-pod-pod.service
+          |-> mihomo-updater-pod-pod.service
+          |-> subconverter.service
+          |-> mihomo-updater.service
+          |-> systemd-socket-proxyd
 
   停止依赖说明：
   mihomo-updater-proxy.service
-    |-<-> mihomo-updater.service
-            |-<-> subconverter.service
-                    |-> mihomo-updater-pod-pod.service
+    |-> mihomo-updater.service
+    |-> subconverter.service
+    |-> mihomo-updater-pod-pod.service
 */

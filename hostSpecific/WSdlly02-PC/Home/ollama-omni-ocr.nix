@@ -20,15 +20,6 @@
     };
     unitConfig = {
       Description = "Ollama Omni OCR in Podman container";
-      After = [
-        "ollama-pod-pod.service"
-        "ollama.service"
-      ]; # 确保 Ollama 服务在此服务之前启动
-      Requires = [
-        "ollama-pod-pod.service"
-        "ollama.service"
-      ];
-      BindsTo = [ "ollama-omni-ocr-proxy.service" ];
       StopWhenUnneeded = true;
     };
   };
@@ -54,28 +45,41 @@
     Unit = {
       Description = "Proxy for Ollama with IP Filtering";
       # 确保容器服务在代理启动时也启动
-      Requires = [ "ollama-omni-ocr.service" ];
-      After = [ "ollama-omni-ocr.service" ];
+      Requires = [ "ollama-omni-ocr-proxy.socket" ];
+      After = [ "ollama-omni-ocr-proxy.socket" ];
     };
     Service = {
-      ExecStart = ''
-        ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd \
-          # --exit-idle-time=600 \ # 可选：空闲10分钟后退出
-          127.0.0.1:7442
-      '';
+      Environment = [
+        "SERVICES_START_ORDER=\"ollama-pod-pod.service ollama.service ollama-omni-ocr.service\""
+        "SERVICES_STOP_ORDER=\"ollama-omni-ocr.service\""
+      ];
+      TimeoutStartSec = 300;
+      ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "ollama-omni-ocr-proxy";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:7442";
+      ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "ollama-omni-ocr-proxy";
     };
   };
 }
 /*
   启动依赖说明：
+  只有socket服务自启动
   ollama-proxy.socket
     |-> ollama-proxy.service
-          |-<-> ollama.service
-                  |-> ollama-pod-pod.service
+          |-> ollama-pod-pod.service
+          |-> ollama.service
+          |-> systemd-socket-proxyd
   ollama-omni-ocr-proxy.socket
     |-> ollama-omni-ocr-proxy.service
-          |-<-> ollama-omni-ocr.service
-                  |-> ollama-pod-pod.service
-                  |-> ollama.service
-                        |-> ollama-pod-pod.service
+          |-> ollama-pod-pod.service
+          |-> ollama.service
+          |-> ollama-omni-ocr.service
+          |-> systemd-socket-proxyd
+
+  停止依赖说明：
+  ollama-proxy.service
+    |-> ollama.service
+    |-> ollama-pod-pod.service
+  ollama-omni-ocr-proxy.service
+    |-> ollama-omni-ocr.service
+        ollama.service 独立停止，不在这里处理
 */
