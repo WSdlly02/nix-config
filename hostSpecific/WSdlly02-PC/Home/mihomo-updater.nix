@@ -94,7 +94,11 @@
       After = [ "mihomo-updater.service" ];
     };
     Service = {
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:8087";
+      ExecStart = ''
+        ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd \
+          --exit-idle-time=600 \ # 空闲10分钟后退出
+          127.0.0.1:8087
+      '';
     };
   };
   systemd.user.services = {
@@ -106,10 +110,16 @@
 /*
   启动依赖说明：
   只有socket服务自启动
-  mihomo-updater-proxy-socket -> mihomo-updater-proxy -> mihomo-updater
-  mihomo-updater -+-> mihomo-updater-pod-pod
-                  +-> subconverter -> mihomo-updater-pod-pod
+  mihomo-updater-proxy.socket
+    |-> mihomo-updater-proxy.service
+          |-<-> mihomo-updater.service
+                  |-> mihomo-updater-pod-pod.service
+                  |-<-> subconverter.service
+                          |-> mihomo-updater-pod-pod.service
+
   停止依赖说明：
-  mihomo-updater-proxy -> mihomo-updater
-                          +-> subconverter -> mihomo-updater-pod-pod
+  mihomo-updater-proxy.service
+    |-<-> mihomo-updater.service
+            |-<-> subconverter.service
+                    |-> mihomo-updater-pod-pod.service
 */

@@ -20,8 +20,14 @@
     };
     unitConfig = {
       Description = "Ollama Omni OCR in Podman container";
-      After = [ "ollama.service" ]; # 确保 Ollama 服务在此服务之前启动
-      Requires = [ "ollama.service" ];
+      After = [
+        "ollama-pod-pod.service"
+        "ollama.service"
+      ]; # 确保 Ollama 服务在此服务之前启动
+      Requires = [
+        "ollama-pod-pod.service"
+        "ollama.service"
+      ];
       BindsTo = [ "ollama-omni-ocr-proxy.service" ];
       StopWhenUnneeded = true;
     };
@@ -52,7 +58,24 @@
       After = [ "ollama-omni-ocr.service" ];
     };
     Service = {
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:7442";
+      ExecStart = ''
+        ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd \
+          # --exit-idle-time=600 \ # 可选：空闲10分钟后退出
+          127.0.0.1:7442
+      '';
     };
   };
 }
+/*
+  启动依赖说明：
+  ollama-proxy.socket
+    |-> ollama-proxy.service
+          |-<-> ollama.service
+                  |-> ollama-pod-pod.service
+  ollama-omni-ocr-proxy.socket
+    |-> ollama-omni-ocr-proxy.service
+          |-<-> ollama-omni-ocr.service
+                  |-> ollama-pod-pod.service
+                  |-> ollama.service
+                        |-> ollama-pod-pod.service
+*/

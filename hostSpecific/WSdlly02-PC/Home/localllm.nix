@@ -1,13 +1,20 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
 {
-  virtualisation.quadlet.pods.ollama-pod.podConfig.publishPorts = [
-    "127.0.0.1:11433:11434" # Ollama 主服务端口
-    "127.0.0.1:7442:443" # Ollama Omni OCR HTTPS 端口
-  ];
+  virtualisation.quadlet.pods.ollama-pod = {
+    podConfig.publishPorts = [
+      "127.0.0.1:11433:11434" # Ollama 主服务端口
+      "127.0.0.1:7442:443" # Ollama Omni OCR HTTPS 端口
+    ];
+    unitConfig = {
+      Description = "Pod for Ollama ROCm and Ollama Omni OCR";
+      StopWhenUnneeded = true;
+    };
+  };
   virtualisation.quadlet.containers.ollama = {
     containerConfig = {
       image = "docker.io/ollama/ollama:rocm";
@@ -34,7 +41,10 @@
     };
     unitConfig = {
       Description = "Ollama ROCm in Podman container";
+      Requires = [ "ollama-pod-pod.service" ];
+      After = [ "ollama-pod-pod.service" ];
       BindsTo = [ "ollama-proxy.service" ];
+      StopWhenUnneeded = true;
     };
   };
   # 1. Systemd Socket 监听 11434 端口并进行 IP 过滤
@@ -63,7 +73,16 @@
       After = [ "ollama.service" ];
     };
     Service = {
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:11433";
+      ExecStart = ''
+        ${pkgs.systemd}/lib/systemd/systemd-socket-proxyd \
+          # --exit-idle-time=600 \ # 可选：空闲10分钟后退出
+          127.0.0.1:11433
+      '';
     };
+  };
+  systemd.user.services = {
+    ollama.Install.WantedBy = lib.mkForce [ ];
+    ollama-omni-ocr.Install.WantedBy = lib.mkForce [ ];
+    ollama-pod-pod.Install.WantedBy = lib.mkForce [ ];
   };
 }
