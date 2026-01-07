@@ -21,7 +21,10 @@
         containerConfig = {
           image = "ghcr.io/wsdlly02/my-codes/mihomo-updater:latest";
           pod = config.virtualisation.quadlet.pods.mihomo-updater-pod.ref;
-          volumes = [ "${config.home.homeDirectory}/Documents/my-codes/SOPs/mihomo-updater/.env:/.env:ro" ];
+          volumes = [
+            "${config.home.homeDirectory}/Documents/my-codes/SOPs/mihomo-updater/.env:/.env:ro"
+            "${config.home.homeDirectory}/.config/mihomo/config.yaml:/config.yaml:ro"
+          ];
           autoUpdate = "registry";
         };
         serviceConfig = {
@@ -61,13 +64,16 @@
   systemd.user.sockets.mihomo-updater-proxy = {
     Unit.Description = "Socket for Mihomo Updater Proxy";
     Socket = {
-      ListenStream = "0.0.0.0:8088";
+      ListenStream = "[::]:8088";
       # 限制访问来源
       IPAddressAllow = [
         "127.0.0.1"
         "::1"
         "192.168.0.0/16"
+        "fd00::/8"
+        "fe80::/10"
         "100.64.16.0/24"
+        "fd7a:115c:a1e0::/48"
       ];
       IPAddressDeny = "any";
     };

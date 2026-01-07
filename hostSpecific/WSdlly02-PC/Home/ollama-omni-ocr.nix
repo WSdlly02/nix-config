@@ -27,13 +27,16 @@
   systemd.user.sockets.ollama-omni-ocr-proxy = {
     Unit.Description = "Socket for Ollama Omni OCR Proxy with IP Filtering";
     Socket = {
-      ListenStream = "0.0.0.0:7443";
+      ListenStream = "[::]:7443";
       # 限制访问来源：本地、LAN、Tailscale
       IPAddressAllow = [
         "127.0.0.1"
         "::1"
         "192.168.0.0/16"
+        "fd00::/8"
+        "fe80::/10"
         "100.64.16.0/24"
+        "fd7a:115c:a1e0::/48"
       ];
       IPAddressDeny = "any";
     };

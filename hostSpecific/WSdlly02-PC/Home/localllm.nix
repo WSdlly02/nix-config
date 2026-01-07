@@ -48,13 +48,16 @@
   systemd.user.sockets.ollama-proxy = {
     Unit.Description = "Socket for Ollama Proxy with IP Filtering";
     Socket = {
-      ListenStream = "0.0.0.0:11434";
+      ListenStream = "[::]:11434";
       # 限制访问来源：本地、LAN、Tailscale
       IPAddressAllow = [
         "127.0.0.1"
         "::1"
         "192.168.0.0/16"
+        "fd00::/8"
+        "fe80::/10"
         "100.64.16.0/24"
+        "fd7a:115c:a1e0::/48"
       ];
       IPAddressDeny = "any";
     };
