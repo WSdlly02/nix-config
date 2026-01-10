@@ -37,7 +37,6 @@
         fuse.userAllowOther = true;
         bandwhich.enable = true;
         usbtop.enable = true;
-        adb.enable = true;
       };
     })
     {
@@ -85,6 +84,7 @@
         with pkgs;
         [
           # Drivers and detection tools
+          android-tools
           aria2
           btop
           compsize
