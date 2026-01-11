@@ -79,7 +79,7 @@
       ];
       TimeoutStartSec = 300;
       ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "ollama-proxy";
-      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:11433";
+      ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:11433";
       ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "ollama-proxy";
     };
   };

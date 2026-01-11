@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    ./eye-care-reminder.nix
+    # ./eye-care-reminder.nix
     ./localllm.nix
     ./mihomo-updater.nix
     ./ollama-omni-ocr.nix
