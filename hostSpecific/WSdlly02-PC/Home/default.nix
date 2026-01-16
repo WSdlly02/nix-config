@@ -19,6 +19,7 @@
       # codex
       discord
       # gemini-cli
+      mihomo-updater-updater
       ncmdump
       ocs-desktop
       # qoder
