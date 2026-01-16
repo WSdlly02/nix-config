@@ -21,7 +21,11 @@ lib.mkIf enableDevEnv {
       stdenv.cc # gcc
       python3Env
       # python3FHSEnv
-      # Other pkgs
+      ffmpeg
+      go
+      nodejs
+      npm-check-updates
+      zig
     ];
     sessionVariables = {
       # RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
