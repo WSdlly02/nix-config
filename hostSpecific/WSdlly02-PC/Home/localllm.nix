@@ -19,7 +19,7 @@
     containerConfig = {
       image = "docker.io/ollama/ollama:rocm";
       pod = config.virtualisation.quadlet.pods.ollama-pod.ref;
-      volumes = [ "${config.home.homeDirectory}/.ollama:/root/.ollama" ];
+      volumes = [ "%h/.ollama:/root/.ollama" ];
       devices = [
         "/dev/kfd"
         "/dev/dri"
@@ -35,7 +35,7 @@
     };
     serviceConfig = {
       Delegate = true;
-      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${config.home.homeDirectory}/.ollama";
+      ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p %h/.ollama";
       Restart = "on-failure";
       TimeoutStartSec = "300";
     };

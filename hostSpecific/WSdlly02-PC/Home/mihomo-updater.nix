@@ -22,10 +22,12 @@
           image = "ghcr.io/wsdlly02/my-codes/mihomo-updater-resolver:latest";
           pod = config.virtualisation.quadlet.pods.mihomo-updater-resolver-pod.ref;
           volumes = [
-            "${config.home.homeDirectory}/Documents/my-codes/SOPs/mihomo-updater/resolver/.env:/app/.env:ro"
-            "${config.home.homeDirectory}/.config/mihomo/config.yaml:/app/config.yaml:ro"
+            "%h/.config/mihomo/config.yaml:/app/config.yaml:ro"
           ];
           autoUpdate = "registry";
+          environmentFiles = [
+            "%h/Documents/my-codes/SOPs/mihomo-updater/resolver/.env"
+          ];
         };
         serviceConfig = {
           Delegate = true;
