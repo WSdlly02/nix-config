@@ -20,6 +20,7 @@ in
   fonts = {
     packages = with pkgs; [
       sarasa-gothic
+      maple-mono.NF-CN-unhinted
     ];
     fontDir.enable = true;
     fontconfig = {
@@ -91,12 +92,13 @@ in
         vlc
         wechat
         wemeet
+        wl-clipboard-rs
         winboat
         wpsoffice-cn
       ]
       ++ [
         kdePackages.sddm-kcm
-        # kdePackages.wallpaper-engine-plugin
+        kdePackages.wallpaper-engine-plugin
         kdePackages.yakuake
         sddm-astronaut
       ];

@@ -16,9 +16,9 @@
     username = "wsdlly02";
     extraPackages = with pkgs; [
       # audio-relay
-      # codex
+      codex
       discord
-      # gemini-cli
+      gemini-cli
       mihomo-updater-updater
       ncmdump
       ocs-desktop
