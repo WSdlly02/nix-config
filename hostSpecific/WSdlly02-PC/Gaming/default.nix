@@ -2,8 +2,6 @@
 {
   imports = [
     ./gamescope.nix
-    ./openrazer.nix
-    ./openrgb.nix
   ];
   programs = {
     gamemode.enable = true;

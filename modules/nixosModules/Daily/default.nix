@@ -9,7 +9,6 @@
     linger = config.hostSystemSpecific.defaultUser.linger;
     extraGroups = [
       "${config.hostSystemSpecific.defaultUser.name}"
-      "adbusers"
       "audio"
       "networkmanager"
       "input"

@@ -17,11 +17,11 @@
     extraPackages = with pkgs; [
       # audio-relay
       codex
-      discord
+      # discord
       gemini-cli
       mihomo-updater-updater
-      ncmdump
-      ocs-desktop
+      # ncmdump
+      # ocs-desktop
       # qoder
       telegram-desktop
     ];

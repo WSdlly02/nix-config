@@ -15,7 +15,7 @@
     enablePythonRocmSupport = true;
     environment.extraSystemPackages = with pkgs; [
       amdgpu_top
-      distrobox
+      # distrobox
       lact # AMDGPU Fan Control
       libva-utils
       mesa-demos

@@ -43,7 +43,6 @@ in
       enable = true;
       openFirewall = true;
     };
-    noisetorch.enable = true;
     obs-studio = {
       enable = true;
       # enableVirtualCamera = true;
@@ -84,16 +83,14 @@ in
         helvum
         mpv
         ncdu
-        netease-cloud-music-gtk
         pass-wayland
         qbittorrent-enhanced
-        scrcpy
+        qtscrcpy
         sourcegit
         vlc
         wechat
-        wemeet
+        # wemeet
         wl-clipboard-rs
-        winboat
         wpsoffice-cn
       ]
       ++ [
