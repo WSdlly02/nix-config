@@ -28,6 +28,7 @@
       name = "wsdlly02";
       linger = true;
       extraGroups = [
+        "kvm"
         "libvirtd"
         "podman"
       ];

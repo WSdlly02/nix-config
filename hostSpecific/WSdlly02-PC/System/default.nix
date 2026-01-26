@@ -13,6 +13,7 @@
     ./nixpkgs-x86_64.nix
     ./plymouth.nix
     ##./remotefsmount.nix
+    ./samba.nix
     ./tpm.nix
     ./virtualisation.nix
   ];
