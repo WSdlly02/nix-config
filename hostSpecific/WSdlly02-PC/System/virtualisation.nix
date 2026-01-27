@@ -90,10 +90,26 @@
             "vfio_iommu_type1"
           ];
         };
-        systemd.tmpfiles.rules = [
-          "z /dev/kvmfr0 0660 root kvm -"
+        services.udev.extraRules = ''
+          SUBSYSTEM=="kvmfr", GROUP="kvm", MODE="0660"
+          KERNEL=="kvmfr0", OWNER="wsdlly02", GROUP="kvm", MODE="0660"
+        '';
+        systemd.user.services.scream-receiver = {
+          description = "Scream Audio Receiver";
+          after = [ "pipewire.service" ];
+          wantedBy = [ "graphical-session.target" ];
+          serviceConfig = {
+            # -i 指定接口，-u 指定单播模式(可选)，-v 详细日志
+            # 通常直接运行 scream 即可自动监听多播
+            ExecStart = "${pkgs.scream}/bin/scream -i virbr0";
+            Restart = "on-failure";
+            RestartSec = "5s";
+          };
+        };
+        environment.systemPackages = with pkgs; [
+          looking-glass-client
+          scream
         ];
-        environment.systemPackages = with pkgs; [ looking-glass-client ];
       };
   };
 }
