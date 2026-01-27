@@ -6,7 +6,7 @@
     ./System
   ];
   hostSystemSpecific = {
-    boot.kernel.sysctl."vm.swappiness" = 10;
+    boot.kernel.sysctl."vm.swappiness" = 100;
     enableBtrfsScrub = true;
     enableBluetooth = true;
     enableDevEnv = true;

@@ -67,10 +67,11 @@
       fsType = "btrfs";
       options = [
         "rw"
-        "relatime"
+        "noatime"
         "ssd"
         "discard=async"
         "space_cache=v2"
+        "compress=zstd"
         "subvol=@"
       ];
     };
@@ -87,10 +88,11 @@
       fsType = "btrfs";
       options = [
         "rw"
-        "relatime"
+        "noatime"
         "ssd"
         "discard=async"
         "space_cache=v2"
+        "compress=zstd"
         "subvol=@home"
       ];
     };
@@ -99,10 +101,11 @@
       fsType = "btrfs";
       options = [
         "rw"
-        "relatime"
+        "noatime"
         "ssd"
         "discard=async"
         "space_cache=v2"
+        "compress=zstd:1" # 缓存极速读写
         "subvol=@var-cache"
       ];
     };
@@ -111,10 +114,11 @@
       fsType = "btrfs";
       options = [
         "rw"
-        "relatime"
+        "noatime"
         "ssd"
         "discard=async"
         "space_cache=v2"
+        "compress=zstd"
         "subvol=@var-log"
       ];
     };
@@ -123,10 +127,11 @@
       fsType = "btrfs";
       options = [
         "rw"
-        "relatime"
+        "noatime"
         "ssd"
         "discard=async"
         "space_cache=v2"
+        "compress=zstd:1" # 缓存极速读写
         "subvol=@var-tmp"
       ];
     };
@@ -145,10 +150,17 @@
       ];
     };
   };
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50; # 占用内存上限 50%
+    priority = 100; # 优先级设为 100，确保先用它
+  };
   swapDevices = [
     {
       device = "/nix/swapfile";
       discardPolicy = "pages";
+      priority = 0;
     }
   ];
   hardware = {

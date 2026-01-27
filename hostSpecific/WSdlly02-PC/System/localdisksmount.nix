@@ -10,13 +10,12 @@
         "rw"
         "relatime"
         "nofail"
-        "users"
-        "exec"
-        "iocharset=utf8"
-        "umask=000"
         "uid=1000"
         "gid=1000"
-        "windows_names"
+        "umask=000"
+        "iocharset=utf8"
+        "discard"
+        "prealloc"
       ];
     };
 
@@ -29,13 +28,12 @@
         "rw"
         "relatime"
         "nofail"
-        "users"
-        "exec"
-        "iocharset=utf8"
-        "umask=000"
         "uid=1000"
         "gid=1000"
-        "windows_names"
+        "umask=000"
+        "iocharset=utf8"
+        "discard"
+        "prealloc"
       ];
     };
   };

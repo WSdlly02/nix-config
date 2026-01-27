@@ -50,5 +50,6 @@ lib.mkIf enableInfrastructure {
     # System
     "vm.max_map_count" = 2147483642;
     "vm.swappiness" = config.hostSystemSpecific.boot.kernel.sysctl."vm.swappiness";
+    "vm.watermark_boost_factor" = 15000;
   };
 }
