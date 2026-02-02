@@ -81,6 +81,7 @@ in
         fsearch
         gapless
         helvum
+        marktext
         mpv
         ncdu
         pass-wayland

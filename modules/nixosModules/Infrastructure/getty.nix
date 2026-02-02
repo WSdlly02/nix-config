@@ -5,7 +5,7 @@
   ...
 }:
 let
-  systemTags = lib.concatMapStringsSep " " (x: x) config.system.nixos.tags;
+  systemTags = lib.concatStringsSep " " config.system.nixos.tags;
 in
 lib.mkIf enableInfrastructure {
   services.getty = {

@@ -7,17 +7,16 @@
     gamemode.enable = true;
     java = {
       enable = true;
-      package = pkgs.zulu21;
+      package = pkgs.zulu25;
     };
   };
   environment.systemPackages = with pkgs; [
     (mindustry.override { jdk17 = zulu17; })
-    (prismlauncher.override rec {
-      jdk21 = zulu21; # Actually, it's useless, because Prismlauncher doesn't really need java.
-      jdk17 = zulu17;
+    (prismlauncher.override {
       jdks = [
-        jdk21
-        jdk17
+        zulu25
+        # zulu21
+        # zulu17
       ]; # Add JAVA_PATH for Prismlauncher
       textToSpeechSupport = false;
     })
