@@ -153,7 +153,7 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 50; # 占用内存上限 50%
+    memoryPercent = 100; # 全部可用内存
     priority = 100; # 优先级设为 100，确保先用它
   };
   swapDevices = [
