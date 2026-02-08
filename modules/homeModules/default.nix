@@ -36,7 +36,7 @@ in
       lazygit.enable = true;
       nh = {
         enable = true;
-        flake = "${config.home.homeDirectory}/Documents/nix-config";
+        flake = "$HOME/Documents/nix-config";
       };
     };
     home = {
@@ -55,9 +55,10 @@ in
           yazi
         ]
         ++ cfg.extraPackages;
+      sessionPath = [ "$HOME/.local/bin" ];
       sessionVariables = {
-        MY_CODES_PATH = "${config.home.homeDirectory}/Documents/my-codes";
-        NIX_CONFIG_PATH = "${config.home.homeDirectory}/Documents/nix-config";
+        MY_CODES_PATH = "$HOME/Documents/my-codes";
+        NIX_CONFIG_PATH = "$HOME/Documents/nix-config";
       };
     };
   };

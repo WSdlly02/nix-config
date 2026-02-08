@@ -16,9 +16,10 @@
     username = "wsdlly02";
     extraPackages = with pkgs; [
       # audio-relay
-      codex
+      # codex
       # discord
-      gemini-cli
+      ffmpeg # for video & audio processing
+      # gemini-cli
       mihomo-updater-updater
       # ncmdump
       # ocs-desktop
@@ -37,6 +38,12 @@
       };
     };
   };
-  home.stateVersion = "24.11";
+  home = {
+    sessionPath = [ "$HOME/.npm-global/bin" ];
+    sessionVariables = {
+      NODE_PATH = "$HOME/.npm-global/lib/node_modules";
+    };
+    stateVersion = "24.11";
+  };
   services.mpris-proxy.enable = true;
 }
