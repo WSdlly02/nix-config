@@ -46,12 +46,18 @@
     ];
     # extraModprobeConfig = "options snd-hda-intel dmic_detect=0 model=auto position_fix=1";
     kernelParams = [
+      # General
       "quiet"
       "nowatchdog"
       "udev.log_level=3"
+      # AMD P-State
       "amd_pstate=active"
+      # IOMMU
       "amd_iommu=on"
       "iommu=pt"
+      # Trust hardware timer
+      "tsc=reliable"
+      "clocksource=tsc"
     ];
     # blacklistedKernelModules = ["k10temp"];
     # resumeDevice = ""; No longer required by config.boot.initrd.systemd.enable

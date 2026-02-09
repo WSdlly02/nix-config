@@ -64,6 +64,11 @@
           kernelParams = [
             "video=efifb:off"
             ("vfio-pci.ids=" + lib.concatStringsSep "," pciIDs)
+            # 计算大页数量：
+            # 假设给虚拟机 12GB，每个大页 2MB。
+            # 12 * 1024 / 2 = 6144 个。
+            # 为了保险（防止开销溢出），我们预留 6200 个。
+            "hugepages=6200"
           ];
           kernelModules = [
             "kvm-amd"
