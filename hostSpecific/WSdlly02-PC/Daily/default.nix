@@ -87,6 +87,7 @@ in
         pass-wayland
         qbittorrent-enhanced
         qtscrcpy
+        scrcpy
         sourcegit
         vlc
         wechat

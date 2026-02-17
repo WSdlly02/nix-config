@@ -42,6 +42,7 @@
       # "snd-hda-intel"
     ];
     extraModulePackages = with config.boot.kernelPackages; [
+      v4l2loopback
       zenergy
     ];
     # extraModprobeConfig = "options snd-hda-intel dmic_detect=0 model=auto position_fix=1";
