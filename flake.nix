@@ -86,7 +86,6 @@
             inputs.self.nixosModules.default
             inputs.quadlet-nix.nixosModules.quadlet
             ./hostSpecific/WSdlly02-PC
-            # TODO: libvirt
           ];
         };
         "WSdlly02-RPi5" = inputs.nixos-raspberrypi.lib.nixosSystem {
