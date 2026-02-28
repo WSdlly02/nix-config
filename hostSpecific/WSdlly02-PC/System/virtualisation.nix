@@ -27,31 +27,93 @@
       };
       hooks.qemu = {
         hugepages = pkgs.writeShellScript "hugepages-hook.sh" ''
-          # 定义变量
+          set -euo pipefail
+
           VM_NAME="Windows 11"
-          HUGEPAGES=6200 # 2M * 6200 = 12GB 大页数量
+          CONFIG_FILE="/var/lib/libvirt/qemu/$VM_NAME.xml"
 
-          command=$2
+          guest_name="$1"
+          hook_action="$2"
 
-          if [ "$1" = "$VM_NAME" ]; then
-            case "$command" in
-              "prepare")
-                # 分配大页前尝试清理缓存，增加分配成功率
-                echo 3 > /proc/sys/vm/drop_caches
-                echo 1 > /proc/sys/vm/compact_memory
-                
-                # VM 启动前：分配大页
-                ${pkgs.procps}/bin/sysctl vm.nr_hugepages=$HUGEPAGES
-                ;;
-                
-              "release")
-                # VM 关闭后：释放大页
-                ${pkgs.procps}/bin/sysctl vm.nr_hugepages=0
-                
-                # 释放后再次整理内存
-                echo 1 > /proc/sys/vm/compact_memory
-                ;;
-            esac
+          get_current_memory_kib() {
+              local xml value unit
+
+              if [ ! -f "$CONFIG_FILE" ]; then
+                echo "Error: File not found $CONFIG_FILE!" >&2
+                exit 1
+              fi
+
+              xml=$(cat "$CONFIG_FILE")
+
+              value="$(
+                  printf '%s' "$xml" \
+                  | ${pkgs.libxml2}/bin/xmllint --xpath "string(/domain/currentMemory)" -
+              )"
+
+              unit="$(
+                  printf '%s' "$xml" \
+                  | ${pkgs.libxml2}/bin/xmllint --xpath "string(/domain/currentMemory/@unit)" -
+              )"
+
+              [ -n "$value" ] || {
+                  echo "Failed to read /domain/currentMemory from libvirt XML" >&2
+                  return 1
+              }
+
+              [ -n "$unit" ] || unit="KiB"
+
+              case "$unit" in
+                  KiB|k|KB)
+                      echo "$value"
+                      ;;
+                  MiB|M|MB)
+                      echo $(( value * 1024 ))
+                      ;;
+                  GiB|G|GB)
+                      echo $(( value * 1024 * 1024 ))
+                      ;;
+                  *)
+                      echo "Unsupported memory unit: $unit" >&2
+                      return 1
+                      ;;
+              esac
+          }
+
+          calc_hugepages_2m() {
+              local mem_kib="$1"
+              echo $(( (mem_kib + 2047) / 2048 ))
+          }
+
+          if [ "$guest_name" = "$VM_NAME" ]; then
+              case "$hook_action" in
+                  prepare)
+                      MEM_KIB="$(get_current_memory_kib)"
+                      HUGEPAGES="$(calc_hugepages_2m "$MEM_KIB")"
+
+                      echo "Preparing hugepages for $VM_NAME: $MEM_KIB KiB -> $HUGEPAGES x 2MiB" >&2
+
+                      echo 3 > /proc/sys/vm/drop_caches
+                      echo 1 > /proc/sys/vm/compact_memory
+
+                      ${pkgs.procps}/bin/sysctl -q "vm.nr_hugepages=$HUGEPAGES"
+
+                      ACTUAL_HUGEPAGES="$(${pkgs.coreutils}/bin/cat /proc/sys/vm/nr_hugepages)"
+                      if [ "$ACTUAL_HUGEPAGES" -lt "$HUGEPAGES" ]; then
+                          echo "Hugepage allocation failed: need $HUGEPAGES, got $ACTUAL_HUGEPAGES" >&2
+                          exit 1
+                      fi
+                      ;;
+
+                  release)
+                      echo "Releasing hugepages for $VM_NAME" >&2
+
+                      ${pkgs.procps}/bin/sysctl -q vm.nr_hugepages=0
+                      echo 1 > /proc/sys/vm/compact_memory
+                      ;;
+
+                  *)
+                      ;;
+              esac
           fi
         '';
       };
