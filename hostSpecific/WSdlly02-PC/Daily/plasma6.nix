@@ -5,18 +5,15 @@
       sddm = {
         enable = true;
         autoNumlock = true;
-        extraPackages = with pkgs; [
-          kdePackages.qtsvg
-          kdePackages.qtmultimedia
-          kdePackages.qtvirtualkeyboard
-          sddm-astronaut
-        ];
         wayland = {
           enable = true;
           compositor = "kwin";
         };
-        theme = "sddm-astronaut-theme";
-        settings.General.InputMethod = "qtvirtualkeyboard";
+        settings.Theme = {
+          Current = "breeze";
+          CursorTheme = "breeze_cursors";
+          Font = "Sarasa Gothic SC,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
+        };
       };
     };
     desktopManager.plasma6.enable = true;
@@ -29,9 +26,4 @@
       "kde"
     ];
   };
-  nixpkgs.overlays = [
-    (final: prev: {
-      sddm-astronaut = prev.sddm-astronaut.override { embeddedTheme = "purple_leaves"; };
-    })
-  ];
 }

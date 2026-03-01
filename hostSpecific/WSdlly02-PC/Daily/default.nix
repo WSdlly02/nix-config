@@ -99,7 +99,6 @@ in
         kdePackages.sddm-kcm
         kdePackages.wallpaper-engine-plugin
         kdePackages.yakuake
-        sddm-astronaut
       ];
   };
 }
