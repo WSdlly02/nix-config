@@ -105,6 +105,7 @@
           nmap
           pciutils
           psmisc
+          rclone
           ripgrep
           rsync
           sshfs
