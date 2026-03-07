@@ -69,19 +69,16 @@ in
       with pkgs;
       [
         (antigravity.override enableWayland)
-        (bilibili.override enableWayland)
-        (code-cursor.override enableWayland)
         (google-chrome.override enableWayland)
         (microsoft-edge.override enableWayland)
         (obsidian.override enableWayland)
         (qq.override enableWayland)
         (vscode.override enableWayland)
+        crosspipe
         ddcutil # Required to control the brightness
         fastfetch
         fsearch
         gapless
-        helvum
-        marktext
         mpv
         ncdu
         pass-wayland
