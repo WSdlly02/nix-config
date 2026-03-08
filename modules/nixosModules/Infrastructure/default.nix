@@ -11,6 +11,7 @@
     ./bluetooth.nix
     ##./ccache.nix
     ./dnsmasq.nix
+    ./easytier.nix
     ./getty.nix
     ##./gitDaemon.nix
     ./gnupg.nix
