@@ -1,20 +1,22 @@
 { pkgs, ... }:
 {
   services = {
-    displayManager = {
-      sddm = {
-        enable = true;
-        autoNumlock = true;
-        wayland = {
-          enable = true;
-          compositor = "kwin";
-        };
-        settings.Theme = {
-          Current = "breeze";
-          CursorTheme = "breeze_cursors";
-          Font = "Sarasa Gothic SC,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
-        };
-      };
+    # displayManager.sddm = {
+    #   enable = true;
+    #   autoNumlock = true;
+    #   wayland = {
+    #     enable = true;
+    #     compositor = "kwin";
+    #   };
+    #   settings.Theme = {
+    #     Current = "breeze";
+    #     CursorTheme = "breeze_cursors";
+    #     Font = "Sarasa Gothic SC,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1";
+    #   };
+    # };
+    displayManager.plasma-login-manager = {
+      enable = true;
+      # settings = { };
     };
     desktopManager.plasma6.enable = true;
   };

@@ -14,11 +14,12 @@ lib.mkIf enableDevEnv {
       cloc # counts blank lines, comment lines, and physical lines of source code
 
       # C/C++
-      # stdenv.cc # gcc
+      gcc
       zig # can also compile C/C++ code
 
       # Rust
       cargo
+      cargo-edit
       clippy
       rustc
       rustfmt
