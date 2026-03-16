@@ -4,6 +4,7 @@
 }:
 {
   imports = [
+    ./epson-maintenance.nix
     # ./eye-care-reminder.nix
     ./localllm.nix
     ./mihomo-updater.nix
