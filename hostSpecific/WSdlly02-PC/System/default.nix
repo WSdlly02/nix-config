@@ -45,7 +45,9 @@
       v4l2loopback
       zenergy
     ];
-    # extraModprobeConfig = "options snd-hda-intel dmic_detect=0 model=auto position_fix=1";
+    extraModprobeConfig = ''
+      options mt7921e disable_aspm=1
+    '';
     kernelParams = [
       # General
       "quiet"

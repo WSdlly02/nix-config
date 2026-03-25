@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   enableInfrastructure,
   ...
@@ -12,7 +11,7 @@ lib.mkIf enableInfrastructure {
     wifi = {
       macAddress = "stable-ssid";
       scanRandMacAddress = false;
-      powersave = lib.mkIf (config.system.name != "WSdlly02-PC") false;
+      powersave = false;
     };
     unmanaged = [
       "except:interface-name:enp14s0"
