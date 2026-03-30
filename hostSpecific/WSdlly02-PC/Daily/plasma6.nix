@@ -21,6 +21,12 @@
     desktopManager.plasma6.enable = true;
   };
   environment.plasma6.excludePackages = with pkgs.kdePackages; [ khelpcenter ];
+  environment.systemPackages = with pkgs.kdePackages; [
+    korganizer
+    sddm-kcm
+    wallpaper-engine-plugin
+    yakuake
+  ];
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;

@@ -65,37 +65,30 @@ in
   services.power-profiles-daemon.enable = true;
   # services.flatpak.enable = true;
   environment = {
-    systemPackages =
-      with pkgs;
-      [
-        (antigravity.override enableWayland)
-        (google-chrome.override enableWayland)
-        (microsoft-edge.override enableWayland)
-        (obsidian.override enableWayland)
-        (qq.override enableWayland)
-        (vscode.override enableWayland)
-        crosspipe
-        ddcutil # Required to control the brightness
-        fastfetch
-        fsearch
-        gapless
-        mpv
-        ncdu
-        pass-wayland
-        qbittorrent-enhanced
-        qtscrcpy
-        scrcpy
-        sourcegit
-        vlc
-        wechat
-        # wemeet
-        wl-clipboard-rs
-        wpsoffice-cn
-      ]
-      ++ [
-        kdePackages.sddm-kcm
-        kdePackages.wallpaper-engine-plugin
-        kdePackages.yakuake
-      ];
+    systemPackages = with pkgs; [
+      (antigravity.override enableWayland)
+      (google-chrome.override enableWayland)
+      (microsoft-edge.override enableWayland)
+      (obsidian.override enableWayland)
+      (qq.override enableWayland)
+      (vscode.override enableWayland)
+      crosspipe
+      ddcutil # Required to control the brightness
+      fastfetch
+      fsearch
+      gapless
+      mpv
+      ncdu
+      pass-wayland
+      qbittorrent-enhanced
+      qtscrcpy
+      scrcpy
+      sourcegit
+      vlc
+      wechat
+      # wemeet
+      wl-clipboard-rs
+      wpsoffice-cn
+    ];
   };
 }
