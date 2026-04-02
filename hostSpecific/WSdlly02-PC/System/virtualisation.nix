@@ -129,6 +129,7 @@
     };
   };
   programs.virt-manager.enable = true;
+  services.spice-vdagentd.enable = true;
 
   boot =
     let
