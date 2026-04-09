@@ -1,5 +1,8 @@
 {
+  ...
+}:
+{
   imports = [
-    ../../hostSpecific/WSdlly02-PC/Home
+    ../../profiles/home/workstation
   ];
 }

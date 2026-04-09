@@ -12,7 +12,7 @@
     timers.epson-maintenance = {
       Unit.Description = "Timer for Epson maintenance";
       Timer = {
-        OnCalendar = "Wed 19:00"; # 周三晚上7点
+        OnCalendar = "Wed 19:00";
         Persistent = true;
       };
       Install.WantedBy = [ "timers.target" ];

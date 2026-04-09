@@ -5,17 +5,12 @@
 }:
 {
   imports = [
-    ./bootloader.nix
-    ./cups.nix
-    ./gpu.nix
-    ./localdisksmount.nix
-    ./networking.nix
-    ./nixpkgs-x86_64.nix
-    ./plymouth.nix
-    ##./remotefsmount.nix
-    ./samba.nix
-    ./tpm.nix
-    ./virtualisation.nix
+    ./hardware-modules/bootloader.nix
+    ./hardware-modules/gpu.nix
+    ./hardware-modules/localdisksmount.nix
+    ./hardware-modules/nixpkgs-x86_64.nix
+    ./hardware-modules/plymouth.nix
+    ./hardware-modules/tpm.nix
   ];
 
   boot = {
@@ -70,6 +65,7 @@
       cleanOnBoot = true;
     };
   };
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
@@ -159,12 +155,14 @@
       ];
     };
   };
+
   zramSwap = {
     enable = true;
     algorithm = "zstd";
     memoryPercent = 100; # 全部可用内存
     priority = 100; # 优先级设为 100，确保先用它
   };
+
   swapDevices = [
     {
       device = "/nix/swapfile";
@@ -172,6 +170,7 @@
       priority = 0;
     }
   ];
+
   hardware = {
     enableRedistributableFirmware = true;
     # enableAllHardware = true;

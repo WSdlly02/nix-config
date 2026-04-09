@@ -47,7 +47,6 @@
         serviceConfig = {
           Delegate = true;
           Restart = "on-failure";
-          # 保证subconverter能访问网络
           ExecStartPre = pkgs.writeShellScript "wait-for-mihomo-up" ''
             until ${pkgs.iproute2}/bin/ip link show mihomo0; do
               ${pkgs.coreutils}/bin/sleep 1
@@ -62,12 +61,10 @@
       };
     };
   };
-  # 1. Systemd Socket 监听 8088 端口
   systemd.user.sockets.mihomo-updater-resolver-proxy = {
     Unit.Description = "Socket for Mihomo Updater Proxy";
     Socket = {
       ListenStream = "[::]:8088";
-      # 限制访问来源
       IPAddressAllow = [
         "127.0.0.1"
         "::1"
@@ -81,8 +78,6 @@
     };
     Install.WantedBy = [ "sockets.target" ];
   };
-
-  # 2. Socket Proxy 服务：转发流量并管理空闲退出
   systemd.user.services.mihomo-updater-resolver-proxy = {
     Unit = {
       Description = "Proxy for Mihomo Updater with Idle Timeout";
@@ -97,7 +92,6 @@
       TimeoutStartSec = 300;
       ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "mihomo-updater-resolver-proxy";
       ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:8087";
-      # 10分钟无流量则退出
       ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "mihomo-updater-resolver-proxy";
     };
   };
@@ -107,19 +101,3 @@
     mihomo-updater-resolver-pod-pod.Install.WantedBy = lib.mkForce [ ];
   };
 }
-/*
-  启动依赖说明：
-  只有socket服务自启动
-  mihomo-updater-resolver-proxy.socket
-    |-> mihomo-updater-resolver-proxy.service
-          |-> mihomo-updater-resolver-pod-pod.service
-          |-> subconverter.service
-          |-> mihomo-updater-resolver.service
-          |-> systemd-socket-proxyd
-
-  停止依赖说明：
-  mihomo-updater-resolver.service
-    |-> mihomo-updater-resolver.service
-    |-> subconverter.service
-    |-> mihomo-updater-resolver-pod-pod.service
-*/

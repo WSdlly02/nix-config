@@ -1,12 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-let
-  enableWayland = {
-    commandLineArgs = "--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true";
-  };
-in
+{ pkgs, ... }:
 {
   imports = [
     ./fcitx5.nix
@@ -14,9 +6,9 @@ in
     # ./paperless.nix
     ./plasma6.nix
     ./sunshine.nix
-    ##./wine.nix
+    # ./wine.nix
   ];
-  # Fonts
+
   fonts = {
     packages = with pkgs; [
       sarasa-gothic
@@ -35,9 +27,8 @@ in
       };
     };
   };
-  # Programs
+
   programs = {
-    # appimage.enable = true;
     kdeconnect.enable = true;
     localsend = {
       enable = true;
@@ -45,9 +36,7 @@ in
     };
     obs-studio = {
       enable = true;
-      # enableVirtualCamera = true;
       plugins = with pkgs.obs-studio-plugins; [
-        # droidcam-obs
         obs-vkcapture
         input-overlay
       ];
@@ -58,14 +47,20 @@ in
       policies = {
         DisableAppUpdate = true;
         DisableTelemetry = true;
-        # find more options here: https://mozilla.github.io/policy-templates/
       };
     };
   };
+
   services.power-profiles-daemon.enable = true;
-  # services.flatpak.enable = true;
-  environment = {
-    systemPackages = with pkgs; [
+
+  environment.systemPackages =
+    let
+      enableWayland = {
+        commandLineArgs = "--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true";
+      };
+    in
+    with pkgs;
+    [
       (antigravity.override enableWayland)
       (google-chrome.override enableWayland)
       (microsoft-edge.override enableWayland)
@@ -73,7 +68,7 @@ in
       (qq.override enableWayland)
       (vscode.override enableWayland)
       crosspipe
-      ddcutil # Required to control the brightness
+      ddcutil
       fastfetch
       fsearch
       gapless
@@ -86,9 +81,7 @@ in
       sourcegit
       vlc
       wechat
-      # wemeet
       wl-clipboard-rs
       wpsoffice-cn
     ];
-  };
 }

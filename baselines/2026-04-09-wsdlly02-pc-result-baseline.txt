@@ -19,4 +19,4 @@ Verification:
 Notes:
 - The previous DRV-based baseline was superseded because derivation hashes were sensitive to list ordering and module graph shape.
 - NixOS system output stability is enforced by sorting buildEnv inputs for `system-path`, `man-paths`, and `*_fish-completions` in [flake.nix](/home/wsdlly02/Documents/nix-config/flake.nix).
-- Home Manager output stability is preserved by assembling `home.sessionPath` from a single option path: base entries in [modules/homeModules/default.nix](/home/wsdlly02/Documents/nix-config/modules/homeModules/default.nix) plus host additions in [hostSpecific/WSdlly02-PC/Home/default.nix](/home/wsdlly02/Documents/nix-config/hostSpecific/WSdlly02-PC/Home/default.nix).
+- Home Manager output stability is preserved by assembling `home.sessionPath` from a single option path: base entries in [modules/homeModules/default.nix](/home/wsdlly02/Documents/nix-config/modules/homeModules/default.nix) plus workstation additions in [default.nix](/home/wsdlly02/Documents/nix-config/profiles/home/workstation/default.nix).

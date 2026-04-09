@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   imports = [
     ./epson-maintenance.nix
@@ -13,6 +10,7 @@
     ./sh.nix
     ./syncthing.nix
   ];
+
   hostUserSpecific = {
     username = "wsdlly02";
     extraSessionPath = [
@@ -21,34 +19,27 @@
       "$HOME/go/bin"
     ];
     extraPackages = with pkgs; [
-      # audio-relay
-      # codex
-      # discord
-      ffmpeg # for video & audio processing
-      # gemini-cli
+      ffmpeg
       mihomo-updater-updater
-      # ncmdump
-      # ocs-desktop
-      # qoder
       telegram-desktop
     ];
   };
-  programs = {
-    zen-browser = {
-      enable = true;
-      nativeMessagingHosts = [ pkgs.firefoxpwa ];
-      policies = {
-        DisableAppUpdate = true;
-        DisableTelemetry = true;
-        # find more options here: https://mozilla.github.io/policy-templates/
-      };
+
+  programs.zen-browser = {
+    enable = true;
+    nativeMessagingHosts = [ pkgs.firefoxpwa ];
+    policies = {
+      DisableAppUpdate = true;
+      DisableTelemetry = true;
     };
   };
+
   home = {
     sessionVariables = {
       NODE_PATH = "$HOME/.npm-global/lib/node_modules";
     };
     stateVersion = "24.11";
   };
+
   services.mpris-proxy.enable = true;
 }

@@ -5,5 +5,4 @@
     overrideDevices = false;
     overrideFolders = false;
   };
-  # systemd.user.services.syncthing.Install.WantedBy = lib.mkForce [ ]; # Auto start when logging in
 }

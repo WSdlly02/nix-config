@@ -7,8 +7,8 @@
 {
   virtualisation.quadlet.pods.ollama-pod = {
     podConfig.publishPorts = [
-      "127.0.0.1:11433:11434" # Ollama 主服务端口
-      "127.0.0.1:7442:443" # Ollama Omni OCR HTTPS 端口
+      "127.0.0.1:11433:11434"
+      "127.0.0.1:7442:443"
     ];
     unitConfig = {
       Description = "Pod for Ollama ROCm and Ollama Omni OCR";
@@ -28,7 +28,6 @@
         HSA_OVERRIDE_GFX_VERSION = "10.3.0";
         OLLAMA_ORIGINS = "*";
         OLLAMA_HOST = "0.0.0.0";
-        # Ollama configuration envs
         OLLAMA_FLASH_ATTENTION = "1";
       };
       autoUpdate = "registry";
@@ -44,12 +43,10 @@
       StopWhenUnneeded = true;
     };
   };
-  # 1. Systemd Socket 监听 11434 端口并进行 IP 过滤
   systemd.user.sockets.ollama-proxy = {
     Unit.Description = "Socket for Ollama Proxy with IP Filtering";
     Socket = {
       ListenStream = "[::]:11434";
-      # 限制访问来源：本地、LAN、Tailscale
       IPAddressAllow = [
         "127.0.0.1"
         "::1"
@@ -63,12 +60,9 @@
     };
     Install.WantedBy = [ "sockets.target" ];
   };
-
-  # 2. Socket Proxy 服务：转发流量到容器监听的 11435 端口
   systemd.user.services.ollama-proxy = {
     Unit = {
       Description = "Proxy for Ollama with IP Filtering";
-      # 确保容器服务在代理启动时也启动
       Requires = [ "ollama-proxy.socket" ];
       After = [ "ollama-proxy.socket" ];
     };
