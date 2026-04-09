@@ -10,9 +10,11 @@
     ./syncthing.nix
     ./tailscale.nix
   ];
-  hostUserSpecific = {
+  home = {
     username = "wsdlly02";
-    extraPackages = with pkgs; [ ];
+    homeDirectory = "/home/wsdlly02";
+    packages = with pkgs; [ ];
+    stateVersion = "25.05";
   };
   programs = {
     java = {
@@ -21,6 +23,5 @@
     };
   };
   services.mpris-proxy.enable = true;
-  home.stateVersion = "25.05";
   targets.genericLinux.enable = true;
 }

@@ -6,13 +6,14 @@
   imports = [
     ./sh.nix
   ];
-  hostUserSpecific = {
+  home = {
     username = "wsdlly02";
-    extraPackages = with pkgs; [
+    homeDirectory = "/home/wsdlly02";
+    packages = with pkgs; [
       codex
       gemini-cli
       ncmdump
     ];
+    stateVersion = "25.05";
   };
-  home.stateVersion = "25.05";
 }

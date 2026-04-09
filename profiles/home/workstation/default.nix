@@ -11,20 +11,6 @@
     ./syncthing.nix
   ];
 
-  hostUserSpecific = {
-    username = "wsdlly02";
-    extraSessionPath = [
-      "$HOME/.cargo/bin"
-      "$HOME/.npm-global/bin"
-      "$HOME/go/bin"
-    ];
-    extraPackages = with pkgs; [
-      ffmpeg
-      mihomo-updater-updater
-      telegram-desktop
-    ];
-  };
-
   programs.zen-browser = {
     enable = true;
     nativeMessagingHosts = [ pkgs.firefoxpwa ];
@@ -35,6 +21,18 @@
   };
 
   home = {
+    username = "wsdlly02";
+    homeDirectory = "/home/wsdlly02";
+    packages = with pkgs; [
+      ffmpeg
+      mihomo-updater-updater
+      telegram-desktop
+    ];
+    sessionPath = [
+      "$HOME/.cargo/bin"
+      "$HOME/.npm-global/bin"
+      "$HOME/go/bin"
+    ];
     sessionVariables = {
       NODE_PATH = "$HOME/.npm-global/lib/node_modules";
     };

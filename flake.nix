@@ -147,19 +147,19 @@
             args:
             let
               name = args.name or "";
-              # 精确匹配需要排序的三类 derivation
-              # 确保它们在最终的 system-path 中按照字母序排列，避免不必要的哈希变动
-              isSortTarget =
-                name == "system-path" || name == "man-paths" || lib.hasSuffix "_fish-completions" name;
+              # 匹配需要排序的三类 derivation
+              # 确保它们在最终的列表中按照字母序排列，避免不必要的哈希变动
+              isSortTarget = lib.any (s: lib.hasSuffix s name) [
+                "completions"
+                "path"
+                "paths"
+              ];
             in
             prev.buildEnv (
-              if isSortTarget then
-                args
-                // {
-                  paths = lib.sort (a: b: lib.getName a < lib.getName b) (args.paths or [ ]);
-                }
-              else
-                args
+              args
+              // lib.optionalAttrs isSortTarget {
+                paths = lib.sort (a: b: lib.getName a < lib.getName b) (args.paths or [ ]);
+              }
             );
           # Overlays here will be applied to all packages
         };

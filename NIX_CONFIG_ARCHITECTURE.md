@@ -10,7 +10,7 @@
 
 1. 顶层：Flake 入口与文档（`flake.nix` / `flake.lock` / `README.md` / `NIX_CONFIG_ARCHITECTURE.md`）
 2. 模块层：可复用的 NixOS / Home Manager 模块（`modules/`）
-3. 主机层：每台机器的特定组合与开关（`hostSpecific/`）
+3. 主机层：每台机器的组合入口与主机专属模块（`hosts/`，遗留结构仍在 `hostSpecific/`）
 4. 包与开发环境层：自定义包与开发 Shell（`pkgs/`）
 
 ### 顶层文件
@@ -27,19 +27,19 @@
   - `inputs`：
     - `nixpkgs-unstable`：主要包源。
     - `home-manager`：Home Manager flake，`inputs.nixpkgs` 跟随 `nixpkgs-unstable`。
-    - `nixos-hardware`：提供如 Raspberry Pi 5 等硬件配置模块。
+    - `nixos-raspberrypi`：提供 Raspberry Pi 5 的专用模块集合。
     - `nixos-wsl`：WSL 环境支持模块。
     - `my-codes`：个人代码仓库，提供 `overlays.exposedPackages`。
     - `zen-browser`：Zen 浏览器 flake，用于 Home 配置中的浏览器模块。
   - `outputs`（按功能分层）：
     - `lib.pkgs'`：封装 `nixpkgs` 导入逻辑，统一 overlay、配置和 `system`。
     - `nixosConfigurations`：为每台 NixOS 主机构建系统配置：
-      - `"WSdlly02-PC"`：x86_64 PC，模块为 `self.nixosModules.default` + `./hostSpecific/WSdlly02-PC`。
-      - `"WSdlly02-RPi5"`：aarch64 树莓派 5，额外引入 `nixos-hardware.nixosModules.raspberry-pi-5`。
+      - `"WSdlly02-PC"`：x86_64 PC，模块为 `self.nixosModules.default` + `./hosts/WSdlly02-PC`。
+      - `"WSdlly02-RPi5"`：aarch64 树莓派 5，额外引入 `nixos-raspberrypi` 提供的树莓派模块。
       - `"WSdlly02-WSL"`：x86_64 WSL，额外引入 `nixos-wsl.nixosModules.default`。
       - `"Lily-PC"`：x86_64 PC，额外设置 `{ system.name = "Lily-PC"; }`。
     - `homeConfigurations`：为每个用户/主机组合构建 Home Manager 配置：
-      - `"wsdlly02@WSdlly02-PC"`：`homeModules.default` + `zen-browser.homeModules.beta` + `./hostSpecific/WSdlly02-PC/Home`。
+      - `"wsdlly02@WSdlly02-PC"`：`homeModules.default` + `zen-browser.homeModules.beta` + `./hosts/WSdlly02-PC/home.nix`。
       - `"wsdlly02@WSdlly02-WSL"`：`homeModules.default` + `./hostSpecific/WSdlly02-WSL/Home`。
       - `"wsdlly02@WSdlly02-RPi5"`：`homeModules.default` + `./hostSpecific/WSdlly02-RPi5/Home`。
     - `homeModules.default`：将 `./modules/homeModules` 作为一个整体模块暴露，同时向模块传入 `inputs`。
@@ -79,7 +79,7 @@
 #### 输入 (Inputs)
 - `nixpkgs-unstable`: NixOS 不稳定频道，作为主要包源
 - `home-manager`: 用户环境管理工具
-- `nixos-hardware`: 硬件特定配置模块
+- `nixos-raspberrypi`: 树莓派硬件模块集合
 - `nixos-wsl`: WSL 支持模块
 - `my-codes`: 用户自定义代码仓库
 - `zen-browser`: Zen 浏览器 Flake
@@ -221,16 +221,12 @@ modules/homeModules/
   - `imports`：
     - `./direnv.nix`
     - `./sh.nix`
-  - 定义选项 `options.hostUserSpecific`：
-    - `username`：由主机 Home 配置设定的用户名（默认 `"wsdlly02"`）。
-    - `extraPackages`：额外安装到用户 Home 的包列表。
   - 在 `config` 中：
     - `programs.command-not-found`：启用并指定数据库路径 `${pkgs.path}/programs.sqlite`。
     - `programs.home-manager.enable = true`：让 Home Manager 管理自身。
     - `programs.lazygit.enable = true`：默认启用 `lazygit`。
     - `programs.nh`：启用 `nh` 并将 `flake` 指向 `~/Documents/nix-config`。
-    - `home.username` / `home.homeDirectory`：依据 `cfg.username` 生成。
-    - `home.packages`：安装常用工具，例如 `currentNixConfig`, `nixd`, `nixfmt`, `nix-diff`, `nix-output-monitor`, `nix-tree`, `yazi`，再拼接 `cfg.extraPackages`。
+    - `home.packages`：安装常用工具，例如 `currentNixConfig`, `nixd`, `nixfmt`, `nix-diff`, `nix-output-monitor`, `nix-tree`, `yazi`。
     - `home.sessionVariables`：
       - `MY_CODES_PATH`：指向 `~/Documents/my-codes`。
       - `NIX_CONFIG_PATH`：指向 `~/Documents/nix-config`。
@@ -308,76 +304,68 @@ hostSpecific/
   - 传统风格单文件配置（可能是早期配置/兼容用途）。  
   - 与 flake 中的模块化结构并行存在，可用于对比或迁移。
 
-### 2. WSdlly02-PC（hostSpecific/WSdlly02-PC）
+### 2. WSdlly02-PC（当前结构）
 
-- `hostSpecific/WSdlly02-PC/default.nix`  
-  - 类型：WSdlly02-PC 的 NixOS 主机入口模块。  
+- `hosts/WSdlly02-PC/default.nix`
+  - 类型：WSdlly02-PC 的 NixOS 主机入口模块。
   - `imports`：
-    - `./Daily`：日常桌面环境、输入法等。
-    - `./Gaming`：游戏相关 GPU / 外设支持。
-    - `./System`：系统级配置（boot、网络、虚拟化等）。
+    - `../../profiles/nixos/desktop`：桌面与日常工作负载。
+    - `../../profiles/nixos/gaming`：游戏相关配置。
+    - `./hardware.nix`：主机硬件、文件系统、boot、firmware。
+    - `./system.nix`：主机系统服务与网络策略。
   - `hostSystemSpecific`：
-    - `boot.kernel.sysctl."vm.swappiness" = 10`：将内核 swappiness 调低。
-    - `enableBtrfsScrub = true`：启用 Btrfs scrub。
-    - `enableBluetooth = true`：启用蓝牙。
-    - `enableDevEnv = true`：启用开发环境。
-    - `enableInfrastructure = true`：启用基础设施模块。
-    - `enableSmartd = true`：启用 smartd。
-    - `enablePythonRocmSupport = true`：为 Python 包启用 ROCm 支持 overlay。
-    - `environment.extraSystemPackages`：安装常见桌面/调试工具（`amdgpu_top`、`distrobox`、`lact`、`libva-utils`、`mesa-demos`、`ntfs3g`、`rar`、`vdpauinfo`、`vulkan-tools` 等）。
-    - `defaultUser`：
-      - `name = "wsdlly02"`，`linger = false`。
-      - `extraGroups = [ "libvirtd" "podman" ]`：加入虚拟机 / 容器相关组。
-    - `networking.firewall`：  
-      - `lanOnlyPorts = [ 5353 ]`。  
-      - `lanOnlyPortRanges = [{ from = 1714; to = 1764; }]`。  
-    - `nix.settings.max-jobs = 64`。
+    - 保留主机元数据与少量 feature flag，例如 `defaultUser`、`networking.firewall`、`nix.settings.max-jobs`、`environment.extraSystemPackages`。
 
-- `hostSpecific/WSdlly02-PC/System/*.nix`  
-  - `bootloader.nix`：引导加载器与内核相关配置。
-  - `gpu.nix`：GPU 驱动、加速相关配置。
-  - `nixpkgs-x86_64.nix`：为该主机指定 x86_64 的 `nixpkgs` 源/配置（可能添加 channel 或特定 overlay）。
-  - `networking.nix`：该主机的网络与防火墙策略定制（在 `hostSystemSpecific` 基础上进一步细化）。
-  - `tailscale.nix`：Tailscale VPN 配置。
-  - `virtualisation.nix`：虚拟化（libvirt、podman 等）配置。
-  - `cups.nix`：打印服务配置。
-  - `localdisksmount.nix` / `remotefsmount.nix`：本地/远程文件系统挂载。
-  - `plymouth.nix`：Plymouth 启动画面配置。
-  - `tpm.nix`：TPM 相关设置。
-  - `default.nix`：把上述 System 子模块全部导入并在此主机层做汇总。
+- `hosts/WSdlly02-PC/hardware.nix`
+  - 聚合 WSdlly02-PC 的纯硬件配置。
+  - 包含 `boot`、`fileSystems`、`swapDevices`、`zramSwap`、`hardware` 等。
+  - 子模块位于 `hosts/WSdlly02-PC/hardware-modules/`，如：
+    - `bootloader.nix`
+    - `gpu.nix`
+    - `localdisksmount.nix`
+    - `nixpkgs-x86_64.nix`
+    - `plymouth.nix`
+    - `tpm.nix`
 
-- `hostSpecific/WSdlly02-PC/Daily/*.nix`  
-  - `default.nix`：Daily 子模块入口，导入该目录其他文件。  
-  - `fcitx5.nix`：输入法配置。  
-  - `plasma6.nix`：Plasma 6 桌面环境配置。  
-  - `lact.nix`：AMD GPU 风扇控制工具集成。  
-  - `paperless.nix`：paperless 文档管理服务。  
-  - `sunshine.nix`：Sunshine 游戏串流。  
-  - `wine.nix`：Wine 环境配置。
+- `hosts/WSdlly02-PC/system.nix`
+  - 聚合 WSdlly02-PC 的系统服务层配置。
+  - 子模块位于 `hosts/WSdlly02-PC/system-modules/`，如：
+    - `cups.nix`
+    - `networking.nix`
+    - `samba.nix`
+    - `virtualisation.nix`
+    - `remotefsmount.nix`（当前保留为未启用备用模块）
 
-- `hostSpecific/WSdlly02-PC/Gaming/*.nix`  
-  - `default.nix`：Gaming 子模块入口。  
-  - `gamescope.nix`：Gamescope 相关配置。  
-  - `openrazer.nix`：Razer 外设支持。  
-  - `openrgb.nix`：RGB 灯光控制。
+- `profiles/nixos/desktop/*.nix`
+  - WSdlly02-PC 的桌面 profile。
+  - 已承接原先 Daily 目录中的配置：
+    - `fcitx5.nix`
+    - `plasma6.nix`
+    - `lact.nix`
+    - `paperless.nix`（备用）
+    - `sunshine.nix`
+    - `wine.nix`（备用）
 
-- `hostSpecific/WSdlly02-PC/Home/*.nix`（Home Manager 部分）  
-  - `default.nix`：
-    - `imports`：  
-      - `./eye-care-reminder.nix`  
-      - `./sh.nix`  
-      - `./syncthing.nix`  
-      - （可选）`./roc-sink.nix`（目前注释掉）。  
-    - `hostUserSpecific`：  
-      - `username = "wsdlly02"`。  
-      - `extraPackages`：Home 级别安装的应用，如 `codex`、`discord`、`gemini-cli`、`ncmdump`、`ocs-desktop`、`qoder`、`telegram-desktop` 等。  
-    - `programs.zen-browser`：为 Home 配置 Zen Browser，使用 `pkgs.firefoxpwa` 作为 Native Messaging host，并关闭自动更新和 telemetry。  
-    - `home.stateVersion = "24.11"`：Home 配置版本。  
-    - `services.mpris-proxy.enable = true`：启用 MPRIS 代理。
-  - `sh.nix`：用户 Shell 相关配置（补充/覆盖 `modules/homeModules/sh.nix` 提供的通用设置）。  
-  - `syncthing.nix`：Syncthing 同步服务配置。  
-  - `eye-care-reminder.nix`：护眼提醒相关配置。  
-  - `roc-sink.nix`：ROC 音频 sink 相关设置（目前在 `imports` 中注释）。
+- `profiles/nixos/gaming/*.nix`
+  - WSdlly02-PC 的 gaming profile。
+  - 当前包含 `default.nix` 和 `gamescope.nix`，承接 Steam、Java、PrismLauncher、Heroic 等配置。
+
+- `hosts/WSdlly02-PC/home.nix`
+  - WSdlly02-PC 的 Home Manager 主机入口。
+  - 当前仅导入 `../../profiles/home/workstation`。
+
+- `profiles/home/workstation/*.nix`
+  - WSdlly02-PC 的 workstation Home profile。
+  - 当前包含：
+    - `epson-maintenance.nix`
+    - `eye-care-reminder.nix`（备用）
+    - `localllm.nix`
+    - `mihomo-updater.nix`
+    - `ollama-omni-ocr.nix`
+    - `roc-sink.nix`（备用）
+    - `sh.nix`
+    - `syncthing.nix`
+  - `default.nix` 中集中定义 `home.username`、`home.homeDirectory`、`home.packages`、`programs.zen-browser`、`home.stateVersion`、`services.mpris-proxy` 等 Home 级组合。
 
 ### 3. WSdlly02-RPi5（hostSpecific/WSdlly02-RPi5）
 
@@ -420,8 +408,8 @@ hostSpecific/
       - `./syncthing.nix`  
       - `./tailscale.nix`  
       - （可选）`./roc-source.nix`（目前注释）。  
-    - `hostUserSpecific`：
-      - `username = "wsdlly02"`，`extraPackages = [ ]`（树莓派 Home 尽量精简）。  
+    - `home.username = "wsdlly02"`，`home.homeDirectory = "/home/wsdlly02"`。  
+    - `home.packages = [ ]`（树莓派 Home 尽量精简）。  
     - `programs.java`：启用 Java，指定 `pkgs.zulu21` 作为包。  
     - `services.mpris-proxy.enable = true`。  
     - `home.stateVersion = "25.05"`。  
@@ -459,8 +447,8 @@ hostSpecific/
   - `default.nix`：
     - `imports`：  
       - `./sh.nix`。  
-    - `hostUserSpecific`：
-      - `username = "wsdlly02"`，`extraPackages` 包含 `codex`、`gemini-cli`、`ncmdump` 等 CLI 工具。  
+    - `home.username = "wsdlly02"`，`home.homeDirectory = "/home/wsdlly02"`。  
+    - `home.packages` 包含 `codex`、`gemini-cli`、`ncmdump` 等 CLI 工具。  
     - `home.stateVersion = "25.05"`。
   - `sh.nix`：WSL 环境下的 Shell 定制。
 
@@ -547,7 +535,7 @@ pkgs/
   - `enableBluetooth` / `enableSmartd` / `enableBtrfsScrub` / `enablePythonRocmSupport` 等进一步细化功能。
 
 - 主机驱动的选项系统  
-  - 所有通用模块通过 `config.hostSystemSpecific` / `config.hostUserSpecific` 获取主机特定参数，避免在模块内部硬编码主机名称或路径。
+  - NixOS 通用模块仍通过 `config.hostSystemSpecific` 获取部分主机特定参数；Home Manager 侧已经改为由各 profile 或主机入口直接声明 `home.*` 选项。
 
 - 自定义包与 overlays  
   - 利用 `overlays` 和 `legacyPackages` 机制将自定义包（打印机驱动、ROCm FHS、Minecraft 服务器等）自然注入到系统。  

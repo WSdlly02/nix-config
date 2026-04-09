@@ -1,38 +1,10 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-let
-  cfg = config.hostUserSpecific;
-in
+{ pkgs, ... }:
+
 {
   imports = [
     ./direnv.nix
     ./sh.nix
   ];
-  options.hostUserSpecific = {
-    username = lib.mkOption {
-      default = "wsdlly02";
-      type = lib.types.str;
-      description = "user managed by home-manager";
-    };
-    extraSessionPath = lib.mkOption {
-      default = [ ];
-      type = lib.types.listOf lib.types.str;
-      description = ''
-        Additional PATH entries appended after the base user PATH entries.
-      '';
-    };
-    extraPackages = lib.mkOption {
-      default = [ ];
-      type = lib.types.listOf lib.types.package;
-      description = ''
-        The set of packages that appear in home
-      '';
-    };
-  };
   config = {
     programs = {
       command-not-found = {
@@ -47,24 +19,19 @@ in
       };
     };
     home = {
-      username = cfg.username;
-      homeDirectory = "/home/${cfg.username}";
-      packages =
-        with pkgs;
-        [
-          fastfetch
-          # currentNixConfig !!!
-          nixd
-          nixfmt
-          nix-diff
-          nix-output-monitor
-          nix-tree
-          yazi
-        ]
-        ++ cfg.extraPackages;
+      packages = with pkgs; [
+        fastfetch
+        # currentNixConfig !!!
+        nixd
+        nixfmt
+        nix-diff
+        nix-output-monitor
+        nix-tree
+        yazi
+      ];
       sessionPath = [
         "$HOME/.local/bin"
-      ] ++ cfg.extraSessionPath;
+      ];
       sessionVariables = {
         MY_CODES_PATH = "$HOME/Documents/my-codes";
         NIX_CONFIG_PATH = "$HOME/Documents/nix-config";

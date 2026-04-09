@@ -136,15 +136,15 @@ nix-config/
 
     桌面环境 (profiles/nixos/desktop)：
 
-        从 hostSpecific/WSdlly02-PC/Daily/plasma6.nix 提取 Plasma 6 配置。
+        已提取到 `profiles/nixos/desktop/plasma6.nix`。
 
-        从 hostSpecific/WSdlly02-PC/Daily/fcitx5.nix 提取输入法配置。
+        已提取到 `profiles/nixos/desktop/fcitx5.nix`。
 
         组合成 profiles/nixos/desktop/plasma.nix。
 
     游戏能力 (profiles/nixos/gaming)：
 
-        整合 hostSpecific/WSdlly02-PC/Gaming/ 下的内容 (Steam, Gamescope, OpenRazer) 到 profiles/nixos/gaming/default.nix。
+        已整合到 `profiles/nixos/gaming/`，其中 Steam/Gamescope 已迁移完成。
 
     虚拟化与容器 (profiles/nixos/virt)：
 
