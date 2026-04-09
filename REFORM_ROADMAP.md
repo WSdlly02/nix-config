@@ -1,5 +1,38 @@
 Nix-Config 2.0 重构路线图：面向功能的架构演进
 
+0. 前置约束：先冻结当前结果基线 (Baseline Freeze)
+
+在开始任何结构性改造之前，先采集当前仍在使用的机器对应配置产物的 `drv` 路径，作为“结果不漂移”的对照基线。
+
+当前纳入基线的机器：
+
+    WSdlly02-PC
+
+当前明确排除：
+
+    WSdlly02-RPi5（半废弃，不作为本轮重构的兼容目标）
+    WSdlly02-WSL（半废弃，不作为本轮重构的兼容目标）
+    WSdlly02-SRV（半废弃，不作为本轮重构的兼容目标）
+    Lily-PC（基本弃用，不作为本轮重构的兼容目标）
+
+需要记录的目标：
+
+    NixOS 主机：`nixosConfigurations.<host>.config.system.build.toplevel.drvPath`
+    Home 配置：`homeConfigurations.<user@host>.activationPackage.drvPath`
+
+建议在改造前执行并落盘保存，例如保存到 `baselines/<date>-drv.txt`：
+
+    nix eval .#nixosConfigurations.WSdlly02-PC.config.system.build.toplevel.drvPath --accept-flake-config
+    nix eval .#homeConfigurations."wsdlly02@WSdlly02-PC".activationPackage.drvPath --accept-flake-config
+
+验收原则：
+
+    重构过程中允许源码布局变化，不允许在“未声明变更”的前提下发生结果漂移。
+
+    每完成一个阶段，都应该重新采集相同目标的 `drv`，与基线逐项对比。
+
+    若某台机器的 `drv` 变化，必须能明确解释为“有意功能变更”或“输入/依赖变化”；否则视为回归。
+
 1. 核心理念 (Core Philosophy)
 
 我们正在从 “以主机为中心 (Host-Centric)” 转向 “以功能为中心 (Feature-Oriented)”。
@@ -61,6 +94,20 @@ nix-config/
 3. 实施步骤 (Execution Steps)
 
 这是一场“开着飞机换引擎”的操作。我们将分阶段进行，确保每一步都是可验证的。
+
+第零阶段：冻结基线 (Baseline Freeze)
+
+目标：在任何重构发生前，先拿到当前维护目标 `WSdlly02-PC` 的 `drv` 基线。
+
+    采集 `WSdlly02-PC` 的 NixOS `toplevel.drvPath`
+
+    采集 `wsdlly02@WSdlly02-PC` 的 Home `activationPackage.drvPath`
+
+    将结果写入版本库内的基线文件，后续每次阶段性重构后重新对比
+
+    如果当前环境无法直接 `nix eval`，则优先解决评估环境问题，再开始改造
+
+只有这一阶段完成后，才进入真正的结构迁移。
 
 第一阶段：地基建设 (Foundation)
 

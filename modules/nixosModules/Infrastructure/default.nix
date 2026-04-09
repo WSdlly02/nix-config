@@ -90,7 +90,7 @@
           btop
           compsize
           cryptsetup
-          currentNixConfig
+          # currentNixConfig !!!
           dnsutils
           fzf
           iperf

@@ -46,7 +46,7 @@ in
         with pkgs;
         [
           fastfetch
-          currentNixConfig
+          # currentNixConfig !!!
           nixd
           nixfmt
           nix-diff
