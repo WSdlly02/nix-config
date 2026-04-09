@@ -40,7 +40,12 @@
     };
   };
   home = {
-    sessionPath = [ "$HOME/.npm-global/bin" ];
+    sessionPath = [
+      "$HOME/.cargo/bin"
+      "$HOME/.npm-global/bin"
+      "$HOME/go/bin"
+      # $HOME/.local/bin has been added in homeModules/default.nix, so no need to add it here
+    ];
     sessionVariables = {
       NODE_PATH = "$HOME/.npm-global/lib/node_modules";
     };

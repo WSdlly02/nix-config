@@ -22,11 +22,14 @@
   };
   environment.plasma6.excludePackages = with pkgs.kdePackages; [ khelpcenter ];
   environment.systemPackages = with pkgs.kdePackages; [
-    korganizer
     sddm-kcm
     wallpaper-engine-plugin
     yakuake
   ];
+  programs.kde-pim = {
+    enable = true;
+    merkuro = true;
+  };
   xdg.portal = {
     enable = true;
     xdgOpenUsePortal = true;
