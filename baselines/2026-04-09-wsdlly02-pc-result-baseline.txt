@@ -1,0 +1,22 @@
+WSdlly02-PC result baseline
+Date: 2026-04-09
+
+Scope:
+- nixosConfigurations.WSdlly02-PC.config.system.build.toplevel.outPath
+- homeConfigurations."wsdlly02@WSdlly02-PC".activationPackage outPath
+
+Current result:
+- system: /nix/store/a9p265nhd4pk2ri7kyfndsn95pzn7166-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
+- home: /nix/store/rfrvpba039cz59iaw0dmj97pa1k4szzf-home-manager-generation
+
+Verification:
+- Compared current repo entry (`./hosts/WSdlly02-PC`) against a temporary direct-entry copy that points back to `./hostSpecific/WSdlly02-PC`.
+- system outPath matched in both cases:
+  /nix/store/a9p265nhd4pk2ri7kyfndsn95pzn7166-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
+- home outPath matched in both cases:
+  /nix/store/rfrvpba039cz59iaw0dmj97pa1k4szzf-home-manager-generation
+
+Notes:
+- The previous DRV-based baseline was superseded because derivation hashes were sensitive to list ordering and module graph shape.
+- NixOS system output stability is enforced by sorting buildEnv inputs for `system-path`, `man-paths`, and `*_fish-completions` in [flake.nix](/home/wsdlly02/Documents/nix-config/flake.nix).
+- Home Manager output stability is preserved by assembling `home.sessionPath` from a single option path: base entries in [modules/homeModules/default.nix](/home/wsdlly02/Documents/nix-config/modules/homeModules/default.nix) plus host additions in [hostSpecific/WSdlly02-PC/Home/default.nix](/home/wsdlly02/Documents/nix-config/hostSpecific/WSdlly02-PC/Home/default.nix).

@@ -18,6 +18,13 @@ in
       type = lib.types.str;
       description = "user managed by home-manager";
     };
+    extraSessionPath = lib.mkOption {
+      default = [ ];
+      type = lib.types.listOf lib.types.str;
+      description = ''
+        Additional PATH entries appended after the base user PATH entries.
+      '';
+    };
     extraPackages = lib.mkOption {
       default = [ ];
       type = lib.types.listOf lib.types.package;
@@ -55,7 +62,9 @@ in
           yazi
         ]
         ++ cfg.extraPackages;
-      sessionPath = [ "$HOME/.local/bin" ];
+      sessionPath = [
+        "$HOME/.local/bin"
+      ] ++ cfg.extraSessionPath;
       sessionVariables = {
         MY_CODES_PATH = "$HOME/Documents/my-codes";
         NIX_CONFIG_PATH = "$HOME/Documents/nix-config";

@@ -15,6 +15,11 @@
   ];
   hostUserSpecific = {
     username = "wsdlly02";
+    extraSessionPath = [
+      "$HOME/.cargo/bin"
+      "$HOME/.npm-global/bin"
+      "$HOME/go/bin"
+    ];
     extraPackages = with pkgs; [
       # audio-relay
       # codex
@@ -40,12 +45,6 @@
     };
   };
   home = {
-    sessionPath = [
-      "$HOME/.cargo/bin"
-      "$HOME/.npm-global/bin"
-      "$HOME/go/bin"
-      # $HOME/.local/bin has been added in homeModules/default.nix, so no need to add it here
-    ];
     sessionVariables = {
       NODE_PATH = "$HOME/.npm-global/lib/node_modules";
     };
