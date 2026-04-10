@@ -124,7 +124,7 @@ nix-config/
 
     提取基础系统层 (profiles/nixos/base)：
 
-        分析 modules/nixosModules/Infrastructure/。
+        分析当前已迁移到 profiles/nixos/{base,infrastructure}/ 的基础系统实现。
 
         将 nix.nix (Nix 设置), sudo.nix, openssh.nix, i18n.nix 等所有机器都通用的配置，合并/整理到 profiles/nixos/base/default.nix 或分拆为几个文件。
 

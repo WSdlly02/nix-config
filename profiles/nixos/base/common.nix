@@ -5,14 +5,6 @@
   ...
 }:
 {
-  imports = [
-    ./i18n.nix
-    ./neovim.nix
-    ./nix.nix
-    ./sudo.nix
-    ./tmux.nix
-  ];
-
   config = {
     programs = {
       command-not-found = {

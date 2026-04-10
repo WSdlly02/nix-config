@@ -139,8 +139,6 @@ modules/nixosModules/
   - 定义通用选项 `options.hostSystemSpecific`，由各主机在 `hostSpecific/*/default.nix` 中填充：
     - `boot.kernel.sysctl."vm.swappiness"`：内核参数默认值（整数）。
     - `enableBtrfsScrub`：是否启用 Btrfs scrub。
-    - `enableDevEnv`：是否启用开发环境相关模块（暴露给 `_module.args.enableDevEnv`）。
-    - `enableInfrastructure`：是否启用基础设施相关模块（暴露给 `_module.args.enableInfrastructure`）。
     - `enableBluetooth`：控制蓝牙模块。
     - `enableSmartd`：控制 smartd 守护进程。
     - `enablePythonRocmSupport`：控制 Python 包是否启用 ROCm 支持（通过 overlay 修改 `python3`）。  
@@ -157,53 +155,52 @@ modules/nixosModules/
     - `nix.settings.max-jobs`：Nix 并行构建的最大任务数。
     - `services.pipewire.socketActivation`：是否启用 PipeWire socket 激活。
   - 在 `config` 中：
-    - 将 `enableDevEnv` / `enableInfrastructure` 注入 `_module.args`，便于子模块条件化启用。
     - 当 `enablePythonRocmSupport` 为真时，对 `python3` 和 `python3Packages` 做 overlay，将所有 `rocmSupport = true` 的 Python 包改为带 ROCm 支持的版本。
 
-- `modules/nixosModules/Daily/default.nix`  
-  - 类型：日常使用相关的 NixOS 配置。  
-  - 常见职责：  
-    - 创建默认用户 `users.users."${config.hostSystemSpecific.defaultUser.name}"`。  
-    - 使用 `hostSystemSpecific.defaultUser.linger` 和 `extraGroups` 设置用户行为和用户组。  
-    - 安装一定的常用系统工具等。  
-  - 与主机的关系：通过 `hostSystemSpecific.defaultUser` 从主机层获取具体用户名与组。
+- `profiles/nixos/base/default.nix`  
+  - 类型：所有主机可复用的基础 profile 入口。  
+  - 当前通过 `imports` 组合 `common.nix`、`user.nix`、`i18n.nix`、`neovim.nix`、`nix.nix`、`sudo.nix`、`tmux.nix`。
 
-- `modules/nixosModules/Development/default.nix`  
-  - 类型：开发环境相关配置。  
-  - 常见职责：  
-    - 根据 `_module.args.enableDevEnv` 决定是否启用开发工具（如 compiler、debugger、language server 等）。  
-  - 被所有 `nixosConfigurations.*` 的系统通过 `nixosModules.default` 间接导入。
+- `profiles/nixos/base/*.nix` 细分模块（每个文件一个功能域）：
+  - `common.nix`：通用程序、日志、磁盘维护和基础命令行工具。
+  - `user.nix`：默认用户、用户组和 SSH authorized keys。
+  - `i18n.nix`：语言、本地化和时区。
+  - `neovim.nix`：Neovim 编辑器配置。
+  - `nix.nix`：Nix 包管理器系统级配置：
+    - 使用 `config.hostSystemSpecific.defaultUser.name` 作为可信用户。  
+    - 使用 `config.hostSystemSpecific.nix.settings.max-jobs` 控制构建并行度。
+  - `sudo.nix`：sudo 行为配置。
+  - `tmux.nix`：tmux 终端复用器配置。
 
-- `modules/nixosModules/Infrastructure/default.nix`  
-  - 类型：基础设施模块的总入口。  
-  - `imports` 所有 `Infrastructure/*.nix` 文件：网络、SSH、音频、编辑器等。  
-  - 根据 `hostSystemSpecific.enableInfrastructure`、`enableSmartd`、`enableBtrfsScrub` 等开关选择性启用具体服务。
+- `profiles/nixos/development/default.nix`  
+  - 类型：开发环境 profile。  
+  - 常见职责：启用 compiler、runtime、language tooling 等开发工具。  
+  - 由需要开发环境的主机显式导入。
 
-- `modules/nixosModules/Infrastructure/*.nix` 细分模块（每个文件一个功能域）：
+- `profiles/nixos/infrastructure/default.nix`  
+  - 类型：基础设施 profile 的总入口。  
+  - `imports` 所有 `profiles/nixos/infrastructure/*.nix` 文件。  
+  - 仅在需要网络服务、代理、远程访问、音频栈等基础设施能力的主机上显式导入。
+
+- `profiles/nixos/infrastructure/*.nix` 细分模块（每个文件一个功能域）：
   - `avahi.nix`：Avahi / mDNS 相关配置。
   - `bluetooth.nix`：蓝牙服务配置，读取 `config.hostSystemSpecific.enableBluetooth`。
   - `ccache.nix`：启用和配置 ccache。
   - `getty.nix`：TTY 登录服务相关。
   - `gitDaemon.nix`：Git 守护进程服务。
   - `gnupg.nix`：GnuPG / gpg agent 配置。
-  - `i18n.nix`：语言与本地化设置。
   - `mihomo.nix`：mihomo 代理/服务配置，使用默认用户 home 目录等路径。
-  - `neovim.nix`：Neovim 编辑器配置（plugins、默认设置等）。
   - `networking.nix`：网络相关配置；包括防火墙设置，利用 `hostSystemSpecific.networking.firewall` 扩展/限制端口。  
   - `networkmanager.nix`：NetworkManager 相关配置。
-  - `nix.nix`：Nix 包管理器的系统级配置：
-    - 使用 `config.hostSystemSpecific.defaultUser.name` 作为可信用户/守护进程用户。  
-    - 使用 `config.hostSystemSpecific.nix.settings.max-jobs` 控制构建并行度。
   - `openssh.nix`：OpenSSH 服务配置。
   - `pipewire.nix`：PipeWire 音频服务配置：
     - 使用 `config.hostSystemSpecific.services.pipewire.socketActivation` 调整 Socket 激活。  
   - `samba.nix`：Samba / SMB 文件共享配置。
   - `smartdns.nix`：SmartDNS 服务配置。
   - `static-web-server.nix`：静态 Web 服务器配置。
-  - `sudo.nix`：sudo 行为配置。
   - `sysctl.nix`：内核 sysctl 参数设置：
     - 使用 `config.hostSystemSpecific.boot.kernel.sysctl."vm.swappiness"` 写入系统参数。
-  - `tmux.nix`：tmux 终端复用器配置。
+  - `tailscale.nix`：Tailscale 相关配置。
 
 ### 2. Home Base Profile (profiles/home/base/)
 
