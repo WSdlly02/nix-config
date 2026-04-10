@@ -16,20 +16,17 @@
 
   boot.kernel.sysctl."vm.swappiness" = 100;
   nix.settings.max-jobs = 64;
-
-  hostSystemSpecific = {
-    environment.extraSystemPackages = with pkgs; [
-      amdgpu_top
-      # distrobox
-      lact # AMDGPU Fan Control
-      libva-utils
-      mesa-demos
-      ntfs3g
-      rar # ark required
-      vdpauinfo
-      vulkan-tools
-    ];
-  };
+  environment.systemPackages = with pkgs; [
+    amdgpu_top
+    # distrobox
+    lact # AMDGPU Fan Control
+    libva-utils
+    mesa-demos
+    ntfs3g
+    rar # ark required
+    vdpauinfo
+    vulkan-tools
+  ];
 
   users.users.wsdlly02.extraGroups = [
     "kvm"

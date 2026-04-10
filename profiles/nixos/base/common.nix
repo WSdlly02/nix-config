@@ -69,8 +69,7 @@
         tree
         usbutils
         wget
-      ]
-      ++ config.hostSystemSpecific.environment.extraSystemPackages;
+      ];
     # system.etc.overlay = {
     #   enable = true;
     #   mutable = true;

@@ -11,10 +11,7 @@
   ];
 
   nix.settings.max-jobs = 32;
-
-  hostSystemSpecific = {
-    environment.extraSystemPackages = with pkgs; [
-      ntfs3g
-    ];
-  };
+  environment.systemPackages = with pkgs; [
+    ntfs3g
+  ];
 }

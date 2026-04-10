@@ -11,14 +11,11 @@
   ];
 
   nix.settings.max-jobs = 32;
-
-  hostSystemSpecific = {
-    environment.extraSystemPackages = with pkgs; [
-      libraspberrypi
-      i2c-tools
-      raspberrypi-eeprom
-    ];
-  };
+  environment.systemPackages = with pkgs; [
+    libraspberrypi
+    i2c-tools
+    raspberrypi-eeprom
+  ];
 
   users.users.wsdlly02.extraGroups = [
     "i2c"

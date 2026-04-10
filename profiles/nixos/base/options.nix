@@ -4,14 +4,6 @@
 }:
 {
   options = {
-    hostSystemSpecific.environment.extraSystemPackages = lib.mkOption {
-      default = [ ];
-      type = lib.types.listOf lib.types.package;
-      description = ''
-        The set of packages that appear in
-        /run/current-system/sw
-      '';
-    };
     my.mainUser.name = lib.mkOption {
       default = "root";
       type = lib.types.str;

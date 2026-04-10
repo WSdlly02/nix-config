@@ -9,8 +9,5 @@
   ];
 
   nix.settings.max-jobs = 64;
-
-  hostSystemSpecific = {
-    environment.extraSystemPackages = with pkgs; [ wsl-open ];
-  };
+  environment.systemPackages = with pkgs; [ wsl-open ];
 }

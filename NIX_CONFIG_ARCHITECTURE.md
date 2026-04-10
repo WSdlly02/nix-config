@@ -34,7 +34,7 @@
   - `outputs`（按功能分层）：
     - `lib.pkgs'`：封装 `nixpkgs` 导入逻辑，统一 overlay、配置和 `system`。
     - `nixosConfigurations`：为每台 NixOS 主机构建系统配置：
-      - `"WSdlly02-PC"`：x86_64 PC，模块为 `self.nixosModules.default` + `./hosts/WSdlly02-PC`。
+      - `"WSdlly02-PC"`：x86_64 PC，模块为 `./hosts/WSdlly02-PC`。
       - `"WSdlly02-RPi5"`：aarch64 树莓派 5，额外引入 `nixos-raspberrypi` 提供的树莓派模块。
       - `"WSdlly02-WSL"`：x86_64 WSL，额外引入 `nixos-wsl.nixosModules.default`。
       - `"Lily-PC"`：x86_64 PC，额外设置 `{ system.name = "Lily-PC"; }`。
@@ -43,7 +43,6 @@
       - `"wsdlly02@WSdlly02-WSL"`：`./profiles/home/base` + `./hostSpecific/WSdlly02-WSL/Home`。
       - `"wsdlly02@WSdlly02-RPi5"`：`./profiles/home/base` + `./hostSpecific/WSdlly02-RPi5/Home`。
     - `homeModules.default`：兼容性暴露入口，当前内部转发到 `./profiles/home/base`。
-    - `nixosModules.default`：将 `./modules/nixosModules` 作为一个整体模块暴露，同时向模块传入 `inputs`。
     - `overlays`：
       - `default`：预留的全局 overlay（目前为空，占位）。
       - `exposedPackages`：从 `legacyPackages.${system}.exposedPackages` 中暴露包。
@@ -95,7 +94,7 @@
 
 ## 模块层：modules/
 
-### 1. NixOS 模块 (modules/nixosModules/)
+### 1. NixOS Profiles (profiles/nixos/)
 
 目录结构：
 
@@ -509,8 +508,8 @@ pkgs/
 
 ### 系统配置流程
 1. Flake 定义系统配置 (`nixosConfigurations`)
-2. 引入默认 NixOS 模块 (`nixosModules.default`)
-3. 加载主机特定配置 (`hostSpecific/{HOSTNAME}`)
+2. 加载主机特定配置 (`hosts/{HOSTNAME}` 或仍未迁移完的 `hostSpecific/{HOSTNAME}`)
+3. 由主机入口显式组合 `profiles/nixos/*`
 4. 应用硬件特定模块（如 Raspberry Pi 5）
 
 ### 用户配置流程
