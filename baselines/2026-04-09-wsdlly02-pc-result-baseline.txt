@@ -7,14 +7,14 @@ Scope:
 
 Current result:
 - system: /nix/store/zaxqnsv2bl3b4156cgi65fr7kzx7l45y-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
-- home: /nix/store/nyw3yxzmfvmhiqig91rhmszzhn9iykp7-home-manager-generation
+- home: /nix/store/1j39w80d9b82imf32q8nk44qhb1x54a0-home-manager-generation
 
 Verification:
 - Compared current repo entry (`./hosts/WSdlly02-PC`) against a temporary direct-entry copy that points back to `./hostSpecific/WSdlly02-PC`.
 - system outPath currently resolves to:
   /nix/store/zaxqnsv2bl3b4156cgi65fr7kzx7l45y-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
 - home outPath currently resolves to:
-  /nix/store/nyw3yxzmfvmhiqig91rhmszzhn9iykp7-home-manager-generation
+  /nix/store/1j39w80d9b82imf32q8nk44qhb1x54a0-home-manager-generation
 
 Notes:
 - The previous DRV-based baseline was superseded because derivation hashes were sensitive to list ordering and module graph shape.

@@ -1,5 +1,35 @@
+{ pkgs, ... }:
 {
   imports = [
-    ../../hostSpecific/WSdlly02-RPi5
+    ../../profiles/nixos/base
+    ../../profiles/nixos/base/user-wsdlly02.nix
+    ../../profiles/nixos/infrastructure
+    ../../profiles/nixos/infrastructure/bluetooth.nix
+    ./system.nix
   ];
+
+  nix.settings.max-jobs = 32;
+  environment.systemPackages = with pkgs; [
+    fastfetch
+    ncdu
+
+    # Raspberry Pi specific packages
+    libraspberrypi
+    i2c-tools
+    raspberrypi-eeprom
+  ];
+
+  users.users.wsdlly02.extraGroups = [
+    "i2c"
+    "video"
+  ];
+
+  my.networking.firewall = {
+    extraAllowedPorts = [
+      8080
+    ];
+    extraAllowedPortRanges = [ ];
+    lanOnlyPorts = [ 5353 ];
+    lanOnlyPortRanges = [ ];
+  };
 }

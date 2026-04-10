@@ -2,22 +2,20 @@
 {
   xdg.configFile = {
     "net-failover.sh" = pkgs.writeShellScript "net-failover.sh" ''
-      ETH="end0"        # 有线网卡名
-      WLAN="wlan0"      # WiFi 网卡名
-      HOST_IP="10.42.0.1"   # 主机IP
+      ETH="end0"
+      WLAN="wlan0"
+      HOST_IP="10.42.0.1"
 
-      # 检测 carrier
       if [[ $(cat /sys/class/net/$ETH/carrier) -eq 1 ]]; then
-          # 物理链路存在，再试着 ping 主机
           if ping -c1 -W1 $HOST_IP &>/dev/null; then
-              echo "Ethernet up, host reachable → 使用有线"
+              echo "Ethernet up, host reachable -> use wired"
               ip route replace default dev $ETH metric 100
           else
-              echo "Ethernet link up but host unreachable → 切换 WiFi"
+              echo "Ethernet link up but host unreachable -> switch WiFi"
               ip route replace default dev $WLAN metric 200
           fi
       else
-          echo "Ethernet link down → 切换 WiFi"
+          echo "Ethernet link down -> switch WiFi"
           ip route replace default dev $WLAN metric 200
       fi
     '';

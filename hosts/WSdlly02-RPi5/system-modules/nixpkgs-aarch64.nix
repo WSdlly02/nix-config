@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   nixpkgs = {
     /*
@@ -20,10 +19,6 @@
       #     argsOverride.defconfig = "bcm2712_defconfig";
       #   };
       # })
-      inputs.my-codes.overlays.exposedPackages
-      inputs.self.overlays.default
-      inputs.self.overlays.exposedPackages
-      inputs.self.overlays.libraryPackages
     ];
   };
   /*
