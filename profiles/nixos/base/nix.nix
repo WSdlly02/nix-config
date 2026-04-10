@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -66,7 +67,7 @@ in
       */
       fsync-metadata = false;
       http-connections = 0;
-      max-jobs = config.hostSystemSpecific.nix.settings.max-jobs;
+      max-jobs = lib.mkDefault 32;
       substituters = [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"

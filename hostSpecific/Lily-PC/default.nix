@@ -2,14 +2,16 @@
 {
   imports = [
     ../../profiles/nixos/base
+    ../../profiles/nixos/base/smartd.nix
     ./Daily
     ./Gaming
     ../../profiles/nixos/infrastructure
     ./System
   ];
+
+  nix.settings.max-jobs = 32;
+
   hostSystemSpecific = {
-    enableBluetooth = false;
-    enableSmartd = true;
     environment.extraSystemPackages = with pkgs; [
       ntfs3g
     ];
@@ -18,7 +20,6 @@
       linger = true;
       extraGroups = [ ];
     };
-    nix.settings.max-jobs = 32;
     services.pipewire.socketActivation = false;
   };
 }

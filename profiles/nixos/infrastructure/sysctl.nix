@@ -1,5 +1,5 @@
 {
-  config,
+  lib,
   ...
 }:
 {
@@ -47,7 +47,7 @@
     "kernel.dmesg_restrict" = 1;
     # System
     "vm.max_map_count" = 2147483642;
-    "vm.swappiness" = config.hostSystemSpecific.boot.kernel.sysctl."vm.swappiness";
+    "vm.swappiness" = lib.mkDefault 20;
     "vm.watermark_boost_factor" = 15000;
   };
 }

@@ -6,6 +6,9 @@
     ./Daily
     ./System
   ];
+
+  nix.settings.max-jobs = 64;
+
   hostSystemSpecific = {
     environment.extraSystemPackages = with pkgs; [ wsl-open ];
     defaultUser = {
@@ -13,6 +16,5 @@
       linger = false;
       extraGroups = [ ];
     };
-    nix.settings.max-jobs = 64;
   };
 }

@@ -2,19 +2,21 @@
 {
   imports = [
     ../../profiles/nixos/base
+    ../../profiles/nixos/base/smartd.nix
+    ../../profiles/nixos/base/btrfs-scrub.nix
     ../../profiles/nixos/development
     ../../profiles/nixos/desktop
     ../../profiles/nixos/gaming
     ../../profiles/nixos/infrastructure
+    ../../profiles/nixos/infrastructure/bluetooth.nix
     ./hardware.nix
     ./system.nix
   ];
 
+  boot.kernel.sysctl."vm.swappiness" = 100;
+  nix.settings.max-jobs = 64;
+
   hostSystemSpecific = {
-    boot.kernel.sysctl."vm.swappiness" = 100;
-    enableBtrfsScrub = true;
-    enableBluetooth = true;
-    enableSmartd = true;
     enablePythonRocmSupport = true;
     environment.extraSystemPackages = with pkgs; [
       amdgpu_top
@@ -47,6 +49,5 @@
         }
       ];
     };
-    nix.settings.max-jobs = 64;
   };
 }

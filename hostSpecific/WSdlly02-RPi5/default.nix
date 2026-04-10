@@ -5,10 +5,13 @@
     ./Daily
     ./Gaming
     ../../profiles/nixos/infrastructure
+    ../../profiles/nixos/infrastructure/bluetooth.nix
     ./System
   ];
+
+  nix.settings.max-jobs = 32;
+
   hostSystemSpecific = {
-    enableBluetooth = true;
     environment.extraSystemPackages = with pkgs; [
       libraspberrypi
       i2c-tools
@@ -30,7 +33,6 @@
       lanOnlyPorts = [ 5353 ];
       lanOnlyPortRanges = [ ];
     };
-    nix.settings.max-jobs = 32;
     services.pipewire.socketActivation = false;
   };
 }

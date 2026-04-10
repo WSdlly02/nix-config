@@ -1,7 +1,6 @@
 {
   imports = [
     ./avahi.nix
-    ./bluetooth.nix
     ##./ccache.nix
     ./dnsmasq.nix
     ./easytier.nix

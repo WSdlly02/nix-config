@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -23,15 +22,7 @@
     security.apparmor.enable = true;
     services = {
       atd.enable = true;
-      smartd.enable = config.hostSystemSpecific.enableSmartd;
       fstrim.enable = true;
-      btrfs.autoScrub = lib.mkIf config.hostSystemSpecific.enableBtrfsScrub {
-        enable = true;
-        interval = "monthly";
-        fileSystems = [
-          "/"
-        ];
-      };
       dbus.implementation = "broker";
       journald = {
         storage = "auto";

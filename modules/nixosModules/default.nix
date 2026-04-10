@@ -8,16 +8,6 @@ let
 in
 {
   options.hostSystemSpecific = {
-    boot.kernel.sysctl."vm.swappiness" = lib.mkOption {
-      default = 20;
-      type = lib.types.int;
-      description = ''
-        This option defines the value of vm.swappiness
-      '';
-    };
-    enableBtrfsScrub = lib.mkEnableOption "Enable Btrfs scrub";
-    enableBluetooth = lib.mkEnableOption "Enable bluetooth";
-    enableSmartd = lib.mkEnableOption "Enable smart daemon";
     enablePythonRocmSupport = lib.mkEnableOption "Enable Python Rocm Support";
     environment.extraSystemPackages = lib.mkOption {
       default = [ ];
@@ -73,14 +63,6 @@ in
           A range of ports will be excluded from allowedPortRanges
         '';
       };
-    };
-    nix.settings.max-jobs = lib.mkOption {
-      default = 32;
-      type = lib.types.int;
-      description = ''
-        This option defines the maximum number of jobs that Nix will try to
-        build in parallel.
-      '';
     };
     services.pipewire.socketActivation = lib.mkOption {
       default = true;

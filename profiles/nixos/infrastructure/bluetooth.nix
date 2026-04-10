@@ -1,10 +1,6 @@
 {
-  config,
-  ...
-}:
-{
   hardware.bluetooth = {
-    enable = config.hostSystemSpecific.enableBluetooth;
+    enable = true;
     settings = {
       General = {
         JustWorksRepairing = "always";
