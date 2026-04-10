@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.networking.firewall;
-  cfgHS = config.hostSystemSpecific.networking.firewall;
+  cfgHS = config.my.networking.firewall;
   expandRanges = ranges: lib.concatLists (map (r: lib.range r.from r.to) ranges);
 
   allowedPortsFull = lib.unique (cfg.allowedUDPPorts ++ expandRanges cfg.allowedUDPPortRanges);

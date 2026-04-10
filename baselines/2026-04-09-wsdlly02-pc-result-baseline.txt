@@ -6,13 +6,13 @@ Scope:
 - homeConfigurations."wsdlly02@WSdlly02-PC".activationPackage outPath
 
 Current result:
-- system: /nix/store/zzag1xidmqscyhyxb1w7833kfsalsl8w-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
+- system: /nix/store/zaxqnsv2bl3b4156cgi65fr7kzx7l45y-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
 - home: /nix/store/nyw3yxzmfvmhiqig91rhmszzhn9iykp7-home-manager-generation
 
 Verification:
 - Compared current repo entry (`./hosts/WSdlly02-PC`) against a temporary direct-entry copy that points back to `./hostSpecific/WSdlly02-PC`.
 - system outPath currently resolves to:
-  /nix/store/zzag1xidmqscyhyxb1w7833kfsalsl8w-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
+  /nix/store/zaxqnsv2bl3b4156cgi65fr7kzx7l45y-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
 - home outPath currently resolves to:
   /nix/store/nyw3yxzmfvmhiqig91rhmszzhn9iykp7-home-manager-generation
 
@@ -22,3 +22,5 @@ Notes:
 - Home Manager output stability is preserved by assembling `home.sessionPath` from a single option path: base entries in [modules/homeModules/default.nix](/home/wsdlly02/Documents/nix-config/modules/homeModules/default.nix) plus workstation additions in [default.nix](/home/wsdlly02/Documents/nix-config/profiles/home/workstation/default.nix).
 - The Home baseline was updated after accepting a new `PATH` ordering produced by the broader `buildEnv` sorting rule.
 - The current system baseline also reflects an accepted semantic change: removing Tailscale's previously opened firewall port from the generated `iptables-router` rules.
+- The current system baseline also reflects an accepted semantic change: setting PipeWire `socketActivation = false` globally in [pipewire.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/infrastructure/pipewire.nix).
+- The current system baseline also reflects an accepted non-functional change: reordering `NIX_PATH` entries after migrating user-specific Nix settings into explicit user profiles.

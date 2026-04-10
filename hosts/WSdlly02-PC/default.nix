@@ -2,6 +2,7 @@
 {
   imports = [
     ../../profiles/nixos/base
+    ../../profiles/nixos/base/user-wsdlly02.nix
     ../../profiles/nixos/base/smartd.nix
     ../../profiles/nixos/base/btrfs-scrub.nix
     ../../profiles/nixos/development
@@ -28,25 +29,23 @@
       vdpauinfo
       vulkan-tools
     ];
-    defaultUser = {
-      name = "wsdlly02";
-      linger = true;
-      extraGroups = [
-        "kvm"
-        "libvirtd"
-        "podman"
-      ];
-    };
-    networking.firewall = {
-      extraAllowedPorts = [ ];
-      extraAllowedPortRanges = [ ];
-      lanOnlyPorts = [ 5353 ];
-      lanOnlyPortRanges = [
-        {
-          from = 1714;
-          to = 1764;
-        }
-      ];
-    };
+  };
+
+  users.users.wsdlly02.extraGroups = [
+    "kvm"
+    "libvirtd"
+    "podman"
+  ];
+
+  my.networking.firewall = {
+    extraAllowedPorts = [ ];
+    extraAllowedPortRanges = [ ];
+    lanOnlyPorts = [ 5353 ];
+    lanOnlyPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+    ];
   };
 }

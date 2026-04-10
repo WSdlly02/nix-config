@@ -2,6 +2,7 @@
 {
   imports = [
     ../../profiles/nixos/base
+    ../../profiles/nixos/base/user-wsdlly02.nix
     ../../profiles/nixos/development
     ./Daily
     ./System
@@ -11,10 +12,5 @@
 
   hostSystemSpecific = {
     environment.extraSystemPackages = with pkgs; [ wsl-open ];
-    defaultUser = {
-      name = "wsdlly02";
-      linger = false;
-      extraGroups = [ ];
-    };
   };
 }

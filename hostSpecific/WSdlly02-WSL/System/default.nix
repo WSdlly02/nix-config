@@ -11,7 +11,7 @@
   ];
   wsl = {
     enable = true;
-    defaultUser = config.hostSystemSpecific.defaultUser.name;
+    defaultUser = config.my.mainUser.name;
     startMenuLaunchers = true;
     interop.register = true;
     useWindowsDriver = true;

@@ -5,7 +5,7 @@
 }:
 let
   cfg = config.networking.firewall;
-  cfgHS = config.hostSystemSpecific.networking.firewall;
+  cfgHS = config.my.networking.firewall;
 in
 {
   networking = {

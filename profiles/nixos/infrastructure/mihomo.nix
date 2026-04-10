@@ -4,7 +4,7 @@
   ...
 }:
 let
-  user = config.hostSystemSpecific.defaultUser.name;
+  user = config.my.mainUser.name;
 in
 {
   virtualisation.quadlet.containers.mihomo = {

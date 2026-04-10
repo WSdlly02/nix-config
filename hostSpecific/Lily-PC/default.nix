@@ -2,6 +2,7 @@
 {
   imports = [
     ../../profiles/nixos/base
+    ../../profiles/nixos/base/user-lily.nix
     ../../profiles/nixos/base/smartd.nix
     ./Daily
     ./Gaming
@@ -15,10 +16,5 @@
     environment.extraSystemPackages = with pkgs; [
       ntfs3g
     ];
-    defaultUser = {
-      name = "lily";
-      linger = true;
-      extraGroups = [ ];
-    };
   };
 }

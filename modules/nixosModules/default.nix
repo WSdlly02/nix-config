@@ -3,8 +3,8 @@
   ...
 }:
 {
-  options.hostSystemSpecific = {
-    environment.extraSystemPackages = lib.mkOption {
+  options = {
+    hostSystemSpecific.environment.extraSystemPackages = lib.mkOption {
       default = [ ];
       type = lib.types.listOf lib.types.package;
       description = ''
@@ -12,20 +12,12 @@
         /run/current-system/sw
       '';
     };
-    defaultUser = {
-      name = lib.mkOption {
-        default = "wsdlly02";
-        type = lib.types.str;
-        description = "default user to operate system";
-      };
-      linger = lib.mkEnableOption "set enable-linger in logind";
-      extraGroups = lib.mkOption {
-        default = [ ];
-        type = lib.types.listOf lib.types.str;
-        description = "The user's auxiliary groups.";
-      };
+    my.mainUser.name = lib.mkOption {
+      default = "root";
+      type = lib.types.str;
+      description = "Primary interactive user name for modules that need a canonical per-host username.";
     };
-    networking.firewall = {
+    my.networking.firewall = {
       extraAllowedPorts = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.port;

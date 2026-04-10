@@ -5,17 +5,14 @@
   pkgs,
   ...
 }:
-let
-  defaultUsername = config.hostSystemSpecific.defaultUser.name;
-in
 {
   nix = {
     channel.enable = false;
     nixPath = [
       "home-manager=${inputs.home-manager}"
-      "my-codes=/home/${defaultUsername}/Documents/my-codes"
-      "nix-config=/home/${defaultUsername}/Documents/nix-config"
       "nixpkgs=${config.nixpkgs.flake.source}"
+      "my-codes=/home/${config.my.mainUser.name}/Documents/my-codes"
+      "nix-config=/home/${config.my.mainUser.name}/Documents/nix-config"
     ];
     registry = {
       "home-manager" = {
@@ -28,13 +25,17 @@ in
           type = "path";
         };
       };
+      "nixpkgs".to = {
+        path = "${config.nixpkgs.flake.source}";
+        type = "path";
+      };
       "my-codes" = {
         from = {
           id = "my-codes";
           type = "indirect";
         };
         to = {
-          path = "/home/${defaultUsername}/Documents/my-codes";
+          path = "/home/${config.my.mainUser.name}/Documents/my-codes";
           type = "path";
         };
       };
@@ -44,13 +45,9 @@ in
           type = "indirect";
         };
         to = {
-          path = "/home/${defaultUsername}/Documents/nix-config";
+          path = "/home/${config.my.mainUser.name}/Documents/nix-config";
           type = "path";
         };
-      };
-      "nixpkgs".to = {
-        path = "${config.nixpkgs.flake.source}";
-        type = "path";
       };
     };
     settings = {
@@ -72,9 +69,7 @@ in
         "https://mirrors.ustc.edu.cn/nix-channels/store"
         "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       ];
-      trusted-users = [
-        config.hostSystemSpecific.defaultUser.name
-      ];
+      trusted-users = [ config.my.mainUser.name ];
     };
     package = pkgs.lixPackageSets.git.lix;
   };
