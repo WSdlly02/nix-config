@@ -8,7 +8,6 @@
     ./hardware-modules/bootloader.nix
     ./hardware-modules/gpu.nix
     ./hardware-modules/localdisksmount.nix
-    ./hardware-modules/nixpkgs-x86_64.nix
     ./hardware-modules/plymouth.nix
     ./hardware-modules/tpm.nix
   ];
