@@ -1,5 +1,5 @@
-{ lib, enableInfrastructure, ... }:
-lib.mkIf enableInfrastructure {
+{ ... }:
+{
   services.gitDaemon = {
     enable = true;
     port = 19418;

@@ -1,5 +1,4 @@
-{ lib, enableInfrastructure, ... }:
-lib.mkIf enableInfrastructure {
+{
   services.static-web-server = {
     enable = true;
     listen = "[::]:18787";

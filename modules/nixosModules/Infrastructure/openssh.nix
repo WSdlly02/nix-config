@@ -1,5 +1,4 @@
-{ lib, enableInfrastructure, ... }:
-lib.mkIf enableInfrastructure {
+{
   services.openssh = {
     enable = true;
     ports = [ 10022 ];

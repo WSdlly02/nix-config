@@ -1,13 +1,11 @@
 {
   config,
-  lib,
-  enableInfrastructure,
   ...
 }:
 let
   user = config.hostSystemSpecific.defaultUser.name;
 in
-lib.mkIf enableInfrastructure {
+{
   virtualisation.quadlet.containers.easytier = {
     containerConfig = {
       image = "docker.io/easytier/easytier:v2.5.0";

@@ -1,13 +1,12 @@
 {
   config,
   lib,
-  enableInfrastructure,
   ...
 }:
 let
   systemTags = lib.concatStringsSep " " config.system.nixos.tags;
 in
-lib.mkIf enableInfrastructure {
+{
   services.getty = {
     greetingLine = ''
       ${config.system.name} (\m)

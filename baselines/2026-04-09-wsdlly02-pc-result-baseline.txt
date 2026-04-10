@@ -6,13 +6,13 @@ Scope:
 - homeConfigurations."wsdlly02@WSdlly02-PC".activationPackage outPath
 
 Current result:
-- system: /nix/store/apmpn4fp5xzzli4pap9zr6qpl6lgcal2-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
+- system: /nix/store/zzag1xidmqscyhyxb1w7833kfsalsl8w-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
 - home: /nix/store/nyw3yxzmfvmhiqig91rhmszzhn9iykp7-home-manager-generation
 
 Verification:
 - Compared current repo entry (`./hosts/WSdlly02-PC`) against a temporary direct-entry copy that points back to `./hostSpecific/WSdlly02-PC`.
 - system outPath currently resolves to:
-  /nix/store/apmpn4fp5xzzli4pap9zr6qpl6lgcal2-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
+  /nix/store/zzag1xidmqscyhyxb1w7833kfsalsl8w-nixos-system-WSdlly02-PC-with-iGPUPassthr-26.05.20260405.68d8aa3
 - home outPath currently resolves to:
   /nix/store/nyw3yxzmfvmhiqig91rhmszzhn9iykp7-home-manager-generation
 
@@ -21,3 +21,4 @@ Notes:
 - NixOS and Home Manager output stability are improved by sorting `buildEnv` inputs for derivation names ending in `path`, `paths`, and `completions` in [flake.nix](/home/wsdlly02/Documents/nix-config/flake.nix).
 - Home Manager output stability is preserved by assembling `home.sessionPath` from a single option path: base entries in [modules/homeModules/default.nix](/home/wsdlly02/Documents/nix-config/modules/homeModules/default.nix) plus workstation additions in [default.nix](/home/wsdlly02/Documents/nix-config/profiles/home/workstation/default.nix).
 - The Home baseline was updated after accepting a new `PATH` ordering produced by the broader `buildEnv` sorting rule.
+- The current system baseline also reflects an accepted semantic change: removing Tailscale's previously opened firewall port from the generated `iptables-router` rules.

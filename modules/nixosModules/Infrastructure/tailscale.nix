@@ -1,16 +1,8 @@
 {
-  lib,
   pkgs,
-  enableInfrastructure,
   ...
 }:
-lib.mkIf enableInfrastructure {
-  networking.firewall = {
-    trustedInterfaces = [ "tun-tailscale" ];
-    allowedUDPPorts = [ 41641 ];
-    checkReversePath = "loose";
-  };
-
+{
   virtualisation.quadlet.containers.tailscale = {
     containerConfig = {
       image = "docker.io/tailscale/tailscale:latest";

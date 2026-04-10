@@ -1,14 +1,14 @@
 { pkgs, ... }:
 {
   imports = [
+    ../../profiles/nixos/base
     ./Daily
     ./Gaming
+    ../../profiles/nixos/infrastructure
     ./System
   ];
   hostSystemSpecific = {
     enableBluetooth = true;
-    enableDevEnv = false;
-    enableInfrastructure = true;
     environment.extraSystemPackages = with pkgs; [
       libraspberrypi
       i2c-tools

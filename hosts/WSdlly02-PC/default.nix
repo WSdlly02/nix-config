@@ -1,8 +1,11 @@
 { pkgs, ... }:
 {
   imports = [
+    ../../profiles/nixos/base
+    ../../profiles/nixos/development
     ../../profiles/nixos/desktop
     ../../profiles/nixos/gaming
+    ../../profiles/nixos/infrastructure
     ./hardware.nix
     ./system.nix
   ];
@@ -11,8 +14,6 @@
     boot.kernel.sysctl."vm.swappiness" = 100;
     enableBtrfsScrub = true;
     enableBluetooth = true;
-    enableDevEnv = true;
-    enableInfrastructure = true;
     enableSmartd = true;
     enablePythonRocmSupport = true;
     environment.extraSystemPackages = with pkgs; [

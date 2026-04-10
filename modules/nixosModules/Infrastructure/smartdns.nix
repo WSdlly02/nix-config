@@ -1,5 +1,4 @@
-{ lib, enableInfrastructure, ... }:
-lib.mkIf enableInfrastructure {
+{
   services.smartdns = {
     enable = true;
     bindPort = 60;

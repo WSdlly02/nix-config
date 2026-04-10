@@ -3,12 +3,10 @@
   pkgs.rustPlatform.buildRustPackage = pkgs.rust.packages.stable.rustPlatform.buildRustPackage
 */
 {
-  lib,
   pkgs,
-  enableDevEnv,
   ...
 }:
-lib.mkIf enableDevEnv {
+{
   environment = {
     systemPackages = with pkgs; [
       cloc # counts blank lines, comment lines, and physical lines of source code

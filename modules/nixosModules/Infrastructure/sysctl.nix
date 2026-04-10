@@ -1,10 +1,8 @@
 {
   config,
-  lib,
-  enableInfrastructure,
   ...
 }:
-lib.mkIf enableInfrastructure {
+{
   boot.kernel.sysctl = {
     # Network performance
     "net.core.netdev_max_backlog" = 16384;

@@ -1,7 +1,5 @@
 {
-  lib,
   pkgs,
-  enableInfrastructure,
   ...
 }:
 let
@@ -20,7 +18,7 @@ let
     exec ${pkgs.pinentry-curses}/bin/pinentry-curses "$@"
   '';
 in
-lib.mkIf enableInfrastructure {
+{
   programs.gnupg = {
     agent = {
       enable = true;

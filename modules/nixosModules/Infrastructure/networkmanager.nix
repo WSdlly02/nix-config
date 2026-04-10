@@ -1,9 +1,4 @@
 {
-  lib,
-  enableInfrastructure,
-  ...
-}:
-lib.mkIf enableInfrastructure {
   networking.networkmanager = {
     enable = true;
     dns = "none";

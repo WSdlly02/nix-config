@@ -1,7 +1,5 @@
 {
-  lib,
   pkgs,
-  enableInfrastructure,
   ...
 }:
 let
@@ -43,7 +41,7 @@ let
     no-dhcp-interface=*
   '';
 in
-lib.mkIf enableInfrastructure {
+{
   # 确保防火墙允许 DNS 流量
   networking.firewall.allowedTCPPorts = [ 53 ];
   networking.firewall.allowedUDPPorts = [ 53 ];

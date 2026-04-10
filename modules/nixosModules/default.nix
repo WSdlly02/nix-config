@@ -7,11 +7,6 @@ let
   cfg = config.hostSystemSpecific;
 in
 {
-  imports = [
-    ./Daily
-    ./Development
-    ./Infrastructure
-  ];
   options.hostSystemSpecific = {
     boot.kernel.sysctl."vm.swappiness" = lib.mkOption {
       default = 20;
@@ -21,8 +16,6 @@ in
       '';
     };
     enableBtrfsScrub = lib.mkEnableOption "Enable Btrfs scrub";
-    enableDevEnv = lib.mkEnableOption "Install development softwares";
-    enableInfrastructure = lib.mkEnableOption "Install infrastructure softwares";
     enableBluetooth = lib.mkEnableOption "Enable bluetooth";
     enableSmartd = lib.mkEnableOption "Enable smart daemon";
     enablePythonRocmSupport = lib.mkEnableOption "Enable Python Rocm Support";
@@ -98,11 +91,6 @@ in
     };
   };
   config = {
-    _module.args = {
-      # Add configs to specialArgs in order to accelerate eval
-      enableDevEnv = cfg.enableDevEnv;
-      enableInfrastructure = cfg.enableInfrastructure;
-    };
     nixpkgs.overlays = lib.optionals cfg.enablePythonRocmSupport [
       (final: prev: {
         python3 = prev.python3.override {

@@ -2,10 +2,9 @@
   config,
   lib,
   pkgs,
-  enableInfrastructure,
   ...
 }:
-lib.mkIf enableInfrastructure {
+{
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

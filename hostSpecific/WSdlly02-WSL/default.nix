@@ -1,12 +1,12 @@
 { pkgs, ... }:
 {
   imports = [
+    ../../profiles/nixos/base
+    ../../profiles/nixos/development
     ./Daily
     ./System
   ];
   hostSystemSpecific = {
-    enableDevEnv = true;
-    enableInfrastructure = false;
     environment.extraSystemPackages = with pkgs; [ wsl-open ];
     defaultUser = {
       name = "wsdlly02";

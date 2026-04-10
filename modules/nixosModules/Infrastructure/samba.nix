@@ -1,5 +1,4 @@
-{ lib, enableInfrastructure, ... }:
-lib.mkIf enableInfrastructure {
+{
   services.samba = {
     enable = true;
     openFirewall = true;

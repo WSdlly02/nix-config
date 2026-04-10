@@ -1,14 +1,12 @@
 {
   config,
-  lib,
   pkgs,
-  enableInfrastructure,
   ...
 }:
 let
   user = config.hostSystemSpecific.defaultUser.name;
 in
-lib.mkIf enableInfrastructure {
+{
   virtualisation.quadlet.containers.mihomo = {
     containerConfig = {
       image = "docker.io/metacubex/mihomo:latest";

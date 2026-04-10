@@ -1,14 +1,13 @@
 {
   config,
   lib,
-  enableInfrastructure,
   ...
 }:
 let
   cfg = config.networking.firewall;
   cfgHS = config.hostSystemSpecific.networking.firewall;
 in
-lib.mkIf enableInfrastructure {
+{
   networking = {
     hostName = config.system.name;
     resolvconf = {

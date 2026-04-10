@@ -1,14 +1,14 @@
 { pkgs, ... }:
 {
   imports = [
+    ../../profiles/nixos/base
     ./Daily
     ./Gaming
+    ../../profiles/nixos/infrastructure
     ./System
   ];
   hostSystemSpecific = {
     enableBluetooth = false;
-    enableDevEnv = false;
-    enableInfrastructure = true;
     enableSmartd = true;
     environment.extraSystemPackages = with pkgs; [
       ntfs3g
