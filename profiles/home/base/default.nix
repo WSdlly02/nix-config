@@ -1,10 +1,10 @@
 { pkgs, ... }:
-
 {
   imports = [
     ./direnv.nix
     ./sh.nix
   ];
+
   config = {
     programs = {
       command-not-found = {
@@ -18,6 +18,7 @@
         flake = "$HOME/Documents/nix-config";
       };
     };
+
     home = {
       packages = with pkgs; [
         fastfetch

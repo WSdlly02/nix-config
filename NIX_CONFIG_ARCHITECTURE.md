@@ -39,10 +39,10 @@
       - `"WSdlly02-WSL"`：x86_64 WSL，额外引入 `nixos-wsl.nixosModules.default`。
       - `"Lily-PC"`：x86_64 PC，额外设置 `{ system.name = "Lily-PC"; }`。
     - `homeConfigurations`：为每个用户/主机组合构建 Home Manager 配置：
-      - `"wsdlly02@WSdlly02-PC"`：`homeModules.default` + `zen-browser.homeModules.beta` + `./hosts/WSdlly02-PC/home.nix`。
-      - `"wsdlly02@WSdlly02-WSL"`：`homeModules.default` + `./hostSpecific/WSdlly02-WSL/Home`。
-      - `"wsdlly02@WSdlly02-RPi5"`：`homeModules.default` + `./hostSpecific/WSdlly02-RPi5/Home`。
-    - `homeModules.default`：将 `./modules/homeModules` 作为一个整体模块暴露，同时向模块传入 `inputs`。
+      - `"wsdlly02@WSdlly02-PC"`：`./profiles/home/base` + `zen-browser.homeModules.beta` + `./hosts/WSdlly02-PC/home.nix`。
+      - `"wsdlly02@WSdlly02-WSL"`：`./profiles/home/base` + `./hostSpecific/WSdlly02-WSL/Home`。
+      - `"wsdlly02@WSdlly02-RPi5"`：`./profiles/home/base` + `./hostSpecific/WSdlly02-RPi5/Home`。
+    - `homeModules.default`：兼容性暴露入口，当前内部转发到 `./profiles/home/base`。
     - `nixosModules.default`：将 `./modules/nixosModules` 作为一个整体模块暴露，同时向模块传入 `inputs`。
     - `overlays`：
       - `default`：预留的全局 overlay（目前为空，占位）。
@@ -205,19 +205,19 @@ modules/nixosModules/
     - 使用 `config.hostSystemSpecific.boot.kernel.sysctl."vm.swappiness"` 写入系统参数。
   - `tmux.nix`：tmux 终端复用器配置。
 
-### 2. Home Manager 模块 (modules/homeModules/)
+### 2. Home Base Profile (profiles/home/base/)
 
 目录结构：
 
 ```
-modules/homeModules/
+profiles/home/base/
 ├── default.nix
 ├── direnv.nix
 └── sh.nix
 ```
 
-- `modules/homeModules/default.nix`  
-  - 类型：Home Manager 顶层模块。  
+- `profiles/home/base/default.nix`  
+  - 类型：Home Manager 基础 profile。  
   - `imports`：
     - `./direnv.nix`
     - `./sh.nix`
@@ -231,10 +231,10 @@ modules/homeModules/
       - `MY_CODES_PATH`：指向 `~/Documents/my-codes`。
       - `NIX_CONFIG_PATH`：指向 `~/Documents/nix-config`。
 
-- `modules/homeModules/direnv.nix`  
+- `profiles/home/base/direnv.nix`  
   - Direnv 和相关集成配置（如 `nix-direnv`、shell hook 等）。
 
-- `modules/homeModules/sh.nix`  
+- `profiles/home/base/sh.nix`  
   - 终端 Shell 配置（例如 `fish` / `bash` / `zsh` 等的别名、prompt、通用环境变量等）。
 
 > 注：`direnv.nix` 和 `sh.nix` 的具体内容可以根据需要进一步细看，这里主要说明在整体层级中的位置和作用。
@@ -518,7 +518,7 @@ pkgs/
 
 ### 用户配置流程
 1. Flake 定义用户配置 (`homeConfigurations`)
-2. 引入默认 Home Manager 模块 (`homeModules.default`)
+2. 引入共享 Home base profile (`profiles/home/base`)
 3. 加载主机特定用户配置 (`hostSpecific/{HOSTNAME}/Home`)
 4. 应用浏览器等额外模块
 

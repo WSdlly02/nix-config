@@ -156,7 +156,7 @@ nix-config/
 
     用户环境 (profiles/home)：
 
-        将 modules/homeModules 下的 Shell 配置 (Fish, TMUX, Git) 迁移到 profiles/home/shell/。
+        已将共享 Home 基础配置迁移到 `profiles/home/base/`；后续可继续把 shell 细分到更窄的 profile。
 
 第三阶段：重构主机定义 (Host Definition)
 

@@ -75,7 +75,7 @@
       };
       homeModules.default = {
         _module.args = { inherit inputs; };
-        imports = [ ./modules/homeModules ];
+        imports = [ ./profiles/home/base ];
       };
       lib = import ./lib { inherit lib inputs; };
       nixosConfigurations = {
