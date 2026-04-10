@@ -1,14 +1,10 @@
 { config, ... }:
 {
   imports = [
-    #./i18n.nix
-    #./neovim.nix
-    ./networking.nix
-    #./nix.nix
-    ./nixpkgs-x86_64.nix
-    #./sudo.nix
-    #./tmux.nix
+    ./system-modules/networking.nix
+    ./system-modules/nixpkgs-x86_64.nix
   ];
+
   wsl = {
     enable = true;
     defaultUser = config.my.mainUser.name;
@@ -16,5 +12,6 @@
     interop.register = true;
     useWindowsDriver = true;
   };
+
   environment.etc."resolv.conf".source = ./.;
 }

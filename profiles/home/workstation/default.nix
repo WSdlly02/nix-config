@@ -4,6 +4,7 @@
   ];
 
   home = {
+    # packages = with pkgs; [ ncmdump ];
     sessionPath = [
       "$HOME/.cargo/bin"
       "$HOME/.npm-global/bin"
