@@ -6,6 +6,5 @@
     ./neovim.nix
     ./nix.nix
     ./sudo.nix
-    ./tmux.nix
   ];
 }
