@@ -50,8 +50,8 @@
     {
       homeConfigurations = {
         "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
+          extraSpecialArgs = { inherit inputs; };
           modules = [
-            inputs.self.homeModules.default
             inputs.quadlet-nix.homeManagerModules.quadlet
             inputs.zen-browser.homeModules.beta
             ./hosts/WSdlly02-PC/home.nix
@@ -59,31 +59,27 @@
           pkgs = pkgs' { system = "x86_64-linux"; };
         };
         "wsdlly02@WSdlly02-WSL" = inputs.home-manager.lib.homeManagerConfiguration {
+          extraSpecialArgs = { inherit inputs; };
           modules = [
-            inputs.self.homeModules.default
-            ./hostSpecific/WSdlly02-WSL/Home
+            ./hosts/WSdlly02-WSL/home.nix
           ];
           pkgs = pkgs' { system = "x86_64-linux"; };
         };
         "wsdlly02@WSdlly02-RPi5" = inputs.home-manager.lib.homeManagerConfiguration {
+          extraSpecialArgs = { inherit inputs; };
           modules = [
-            inputs.self.homeModules.default
-            ./hostSpecific/WSdlly02-RPi5/Home
+            ./hosts/WSdlly02-RPi5/home.nix
           ];
           pkgs = pkgs' { system = "aarch64-linux"; };
         };
       };
-      homeModules.default = {
-        _module.args = { inherit inputs; };
-        imports = [ ./profiles/home/base ];
-      };
       lib = import ./lib { inherit lib inputs; };
       nixosConfigurations = {
         "WSdlly02-PC" = lib.nixosSystem rec {
+          specialArgs = { inherit inputs; };
           system = "x86_64-linux";
           pkgs = pkgs' { inherit system; };
           modules = [
-            inputs.self.nixosModules.default
             inputs.quadlet-nix.nixosModules.quadlet
             ./hosts/WSdlly02-PC
           ];
@@ -95,42 +91,37 @@
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.bluetooth
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
             inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
-            inputs.self.nixosModules.default
             inputs.quadlet-nix.nixosModules.quadlet
-            ./hostSpecific/WSdlly02-RPi5
+            ./hosts/WSdlly02-RPi5
           ];
         };
         "WSdlly02-WSL" = lib.nixosSystem rec {
+          specialArgs = { inherit inputs; };
           system = "x86_64-linux";
           pkgs = pkgs' { inherit system; };
           modules = [
             inputs.nixos-wsl.nixosModules.default
-            inputs.self.nixosModules.default
-            ./hostSpecific/WSdlly02-WSL
+            ./hosts/WSdlly02-WSL
           ];
         };
         "WSdlly02-SRV" = lib.nixosSystem rec {
+          specialArgs = { inherit inputs; };
           system = "x86_64-linux";
           pkgs = pkgs' { inherit system; };
           modules = [
             { system.name = "WSdlly02-SRV"; }
-            inputs.self.nixosModules.default
-            ./hostSpecific/WSdlly02-SRV
+            ./hosts/WSdlly02-SRV
           ];
         };
         "Lily-PC" = lib.nixosSystem rec {
+          specialArgs = { inherit inputs; };
           system = "x86_64-linux";
           pkgs = pkgs' { inherit system; };
           modules = [
             { system.name = "Lily-PC"; }
-            inputs.self.nixosModules.default
-            ./hostSpecific/Lily-PC
+            ./hosts/Lily-PC
           ];
         };
-      };
-      nixosModules.default = {
-        _module.args = { inherit inputs; };
-        imports = [ ./modules/nixosModules ];
       };
       overlays = {
         default = final: prev: {

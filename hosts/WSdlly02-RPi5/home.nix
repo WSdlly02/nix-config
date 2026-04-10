@@ -1,9 +1,6 @@
 {
-  ...
-}:
-{
   imports = [
     ../../profiles/home/base
-    ../../profiles/home/workstation
+    ../../hostSpecific/WSdlly02-RPi5/Home
   ];
 }
