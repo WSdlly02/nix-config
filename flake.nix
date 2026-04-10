@@ -119,6 +119,7 @@
           pkgs = pkgs' { inherit system; };
           modules = [
             { system.name = "Lily-PC"; }
+            inputs.quadlet-nix.nixosModules.quadlet
             ./hosts/Lily-PC
           ];
         };
