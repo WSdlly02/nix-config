@@ -17,7 +17,6 @@
   nix.settings.max-jobs = 64;
 
   hostSystemSpecific = {
-    enablePythonRocmSupport = true;
     environment.extraSystemPackages = with pkgs; [
       amdgpu_top
       # distrobox

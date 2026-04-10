@@ -33,6 +33,5 @@
       lanOnlyPorts = [ 5353 ];
       lanOnlyPortRanges = [ ];
     };
-    services.pipewire.socketActivation = false;
   };
 }

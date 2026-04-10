@@ -20,6 +20,5 @@
       linger = true;
       extraGroups = [ ];
     };
-    services.pipewire.socketActivation = false;
   };
 }
