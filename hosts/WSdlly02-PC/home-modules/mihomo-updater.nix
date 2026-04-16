@@ -26,7 +26,7 @@
           ];
           autoUpdate = "registry";
           environmentFiles = [
-            "%h/Documents/my-codes/SOPs/mihomo-updater/resolver/.env"
+            "%h/Documents/my-codes/SOPs/mihomo-updater/.env"
           ];
         };
         serviceConfig = {

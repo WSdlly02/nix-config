@@ -16,7 +16,7 @@
   home = {
     packages = with pkgs; [
       ffmpeg
-      mihomo-updater-updater
+      mihomo-updater
       telegram-desktop
     ];
     stateVersion = "24.11";
