@@ -39,7 +39,6 @@
         # };
       };
     };
-    socketActivation = false;
     extraConfig = {
       pipewire."92-low-latency" = {
         "context.properties" = {
