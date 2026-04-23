@@ -11,8 +11,8 @@
     nixPath = [
       "home-manager=${inputs.home-manager}"
       "nixpkgs=${config.nixpkgs.flake.source}"
-      "my-codes=/home/${config.my.mainUser.name}/Documents/my-codes"
-      "nix-config=/home/${config.my.mainUser.name}/Documents/nix-config"
+      "my-codes=git+file:///home/${config.my.mainUser.name}/Documents/my-codes"
+      "nix-config=git+file:///home/${config.my.mainUser.name}/Documents/nix-config"
     ];
     registry = {
       "home-manager" = {
@@ -35,8 +35,8 @@
           type = "indirect";
         };
         to = {
-          path = "/home/${config.my.mainUser.name}/Documents/my-codes";
-          type = "path";
+          type = "git";
+          url = "file:///home/${config.my.mainUser.name}/Documents/my-codes";
         };
       };
       "nix-config" = {
@@ -45,8 +45,8 @@
           type = "indirect";
         };
         to = {
-          path = "/home/${config.my.mainUser.name}/Documents/nix-config";
-          type = "path";
+          type = "git";
+          url = "file:///home/${config.my.mainUser.name}/Documents/nix-config";
         };
       };
     };
