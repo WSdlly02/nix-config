@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -8,7 +9,7 @@
     programs = {
       command-not-found = {
         enable = true;
-        dbPath = "${config.nixpkgs.flake.source}/programs.sqlite";
+        dbPath = lib.mkForce "${config.nixpkgs.flake.source}/programs.sqlite";
       };
       fish.enable = true;
       git = {
@@ -19,7 +20,7 @@
       lazygit.enable = true;
       nix-ld.enable = true;
     };
-    security.apparmor.enable = true;
+    # security.apparmor.enable = true; # disable for now, as it causes some issues with docker and flatpak
     services = {
       atd.enable = true;
       fstrim.enable = true;
