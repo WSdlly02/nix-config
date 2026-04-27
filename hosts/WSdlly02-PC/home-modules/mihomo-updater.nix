@@ -23,6 +23,7 @@
           pod = config.virtualisation.quadlet.pods.mihomo-updater-resolver-pod.ref;
           volumes = [
             "%h/.config/mihomo/config.yaml:/app/config.yaml:ro"
+            "%h/Documents/my-codes/SOPs/mihomo-updater/vps-configs:/app/vps-configs" # directory
           ];
           autoUpdate = "registry";
           environmentFiles = [
