@@ -66,7 +66,6 @@
       http-connections = 0;
       max-jobs = lib.mkDefault 32;
       substituters = [
-        "https://mirror.sjtu.edu.cn/nix-channels/store"
         "https://mirrors.ustc.edu.cn/nix-channels/store"
       ];
       trusted-users = [ config.my.mainUser.name ];
