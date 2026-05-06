@@ -27,7 +27,6 @@
 
       # Python
       python3Env
-      # python3FHSEnv
 
       # Golang
       go

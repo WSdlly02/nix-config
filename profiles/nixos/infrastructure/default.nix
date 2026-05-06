@@ -16,7 +16,7 @@
     ##./smartdns.nix
     ##./static-web-server.nix
     ./sysctl.nix
-    ./tailscale.nix
+    # ./tailscale.nix # easytier has replaced tailscale
   ];
 
   config.programs = {
