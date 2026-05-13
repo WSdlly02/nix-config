@@ -7,6 +7,9 @@
   ...
 }:
 {
+  imports = [
+    ./code-server.nix
+  ];
   environment = {
     systemPackages = with pkgs; [
       cloc # counts blank lines, comment lines, and physical lines of source code
@@ -19,6 +22,7 @@
       cargo
       cargo-edit
       clippy
+      rust-analyzer
       rustc
       rustfmt
 
