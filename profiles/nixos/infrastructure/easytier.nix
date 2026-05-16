@@ -8,7 +8,7 @@ in
 {
   virtualisation.quadlet.containers.easytier = {
     containerConfig = {
-      image = "docker.io/easytier/easytier:v2.6.3";
+      image = "docker.io/easytier/easytier:latest";
       networks = [ "host" ];
       volumes = [
         "/home/${user}/.config/easytier:/etc/easytier"
