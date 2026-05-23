@@ -29,7 +29,8 @@
       systemd.enable = true; # Hibernate Required
     };
     consoleLogLevel = 3;
-    kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest; # pkgs.linuxPackages_xanmod_latest is the equivalent
+    kernelPackages = pkgs.linuxPackages;
+    # kernelPackages = pkgs.linuxKernel.packages.linux_xanmod_latest; # pkgs.linuxPackages_xanmod_latest is the equivalent
     # Notice: pkgs.linuxKernel.packages."..." is an attribute set, pkgs.linuxKernel.kernels."..." is the real kernel package
     kernelModules = [
       "kvm-amd"
