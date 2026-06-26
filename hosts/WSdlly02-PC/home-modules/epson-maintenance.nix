@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 {
   systemd.user = {
     services.epson-maintenance = {
@@ -6,7 +5,7 @@
       Service = {
         Type = "oneshot";
         EnvironmentFile = "%h/Documents/my-codes/SOPs/epson-maintenance/.env";
-        ExecStart = "${pkgs.python3Env}/bin/python3 %h/Documents/my-codes/SOPs/epson-maintenance/remote-printing.py";
+        ExecStart = "%h/Documents/my-codes/SOPs/epson-maintenance/epson-maintenance";
       };
     };
     timers.epson-maintenance = {
