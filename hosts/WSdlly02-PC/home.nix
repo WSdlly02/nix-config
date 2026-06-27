@@ -15,8 +15,11 @@
   ];
   home = {
     packages = with pkgs; [
-      ffmpeg
+      # pkgs from my-codes.exposedPackages overlay
+      duplicate-file-finder
       mihomo-updater
+
+      ffmpeg
       telegram-desktop
     ];
     stateVersion = "24.11";

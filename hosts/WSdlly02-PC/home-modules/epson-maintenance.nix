@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   systemd.user = {
     services.epson-maintenance = {
@@ -5,7 +6,7 @@
       Service = {
         Type = "oneshot";
         EnvironmentFile = "%h/Documents/my-codes/SOPs/epson-maintenance/.env";
-        ExecStart = "%h/Documents/my-codes/SOPs/epson-maintenance/epson-maintenance";
+        ExecStart = "${pkgs.epson-maintenance}/bin/epson-maintenance";
       };
     };
     timers.epson-maintenance = {
