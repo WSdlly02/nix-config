@@ -18,7 +18,6 @@
       };
       htop.enable = true;
       lazygit.enable = true;
-      nix-ld.enable = true;
     };
     # security.apparmor.enable = true; # disable for now, as it causes some issues with docker and flatpak
     services = {

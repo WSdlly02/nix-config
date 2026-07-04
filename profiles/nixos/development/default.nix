@@ -9,6 +9,7 @@
 {
   imports = [
     ./code-server.nix
+    ./nix-ld.nix
   ];
   environment = {
     systemPackages = with pkgs; [
@@ -19,17 +20,13 @@
       zig # can also compile C/C++ code
 
       # Rust
-      cargo
-      cargo-edit
-      clippy
-      rust-analyzer
-      rustc
-      rustfmt
+      rustup
 
       # Haskell
       # haskellEnv
 
       # Python
+      uv
       python3Env
 
       # Golang
@@ -39,8 +36,5 @@
       nodejs
       npm-check-updates
     ];
-    sessionVariables = {
-      RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
-    };
   };
 }
