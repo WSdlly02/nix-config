@@ -8,7 +8,7 @@
 }:
 {
   imports = [
-    ./code-server.nix
+    # ./code-server.nix
     ./nix-ld.nix
   ];
   environment = {
@@ -36,5 +36,9 @@
       nodejs
       npm-check-updates
     ];
+    etc."uv/uv.toml".text = ''
+      # Only use managed Python versions
+      python-preference = "only-managed"
+    '';
   };
 }
