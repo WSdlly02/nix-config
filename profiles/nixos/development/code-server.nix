@@ -15,9 +15,6 @@
     userDataDir = "/home/${config.my.mainUser.name}/.config/code-server";
     extensionsDir = "/home/${config.my.mainUser.name}/.local/share/code-server/extensions";
     extraPackages = with pkgs; [
-      rust-analyzer
-      rustfmt
-      clippy
       gcc
       pkg-config
     ];

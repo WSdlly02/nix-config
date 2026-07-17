@@ -19,7 +19,7 @@
       gcc
       zig # can also compile C/C++ code
 
-      # Rust
+      # Rust toolchain manager; Rust components are installed through rustup.
       rustup
 
       # Haskell
