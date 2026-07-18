@@ -11,7 +11,6 @@
 
   nix.settings.max-jobs = 32;
   environment.systemPackages = with pkgs; [
-    fastfetch
     mcrcon
     ntfs3g
   ];

@@ -69,11 +69,9 @@
       (vscode.override enableWayland)
       crosspipe
       ddcutil
-      fastfetch
       fsearch
       gapless
       mpv
-      ncdu
       pass-wayland
       qbittorrent-enhanced
       qtscrcpy

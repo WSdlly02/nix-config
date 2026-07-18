@@ -10,9 +10,6 @@
 
   nix.settings.max-jobs = 32;
   environment.systemPackages = with pkgs; [
-    fastfetch
-    ncdu
-
     # Raspberry Pi specific packages
     libraspberrypi
     i2c-tools

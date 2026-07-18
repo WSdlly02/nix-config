@@ -46,9 +46,11 @@
       cryptsetup
       # currentNixConfig !!!
       dnsutils
+      fastfetch
       fzf
       iperf
       iptables
+      jq
       lm_sensors
       lsof
       # nixd
@@ -56,6 +58,7 @@
       # nix-diff
       # nix-output-monitor
       # nix-tree
+      ncdu
       net-tools
       nmap
       pciutils

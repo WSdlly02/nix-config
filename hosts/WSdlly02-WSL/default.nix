@@ -9,8 +9,6 @@
 
   nix.settings.max-jobs = 64;
   environment.systemPackages = with pkgs; [
-    fastfetch
-    ncdu
     wsl-open
   ];
 }
