@@ -17,7 +17,7 @@
     fontDir.enable = true;
     fontconfig = {
       allowBitmaps = false;
-      useEmbeddedBitmaps = true; # Display emoji required
+      includeUserConf = false;
       subpixel.rgba = "rgb";
       defaultFonts = {
         serif = [ "Sarasa UI SC" ];
@@ -27,6 +27,14 @@
       };
     };
   };
+  nixpkgs.overlays = [
+    (final: prev: {
+      # Keep following nixpkgs' default font package set, but avoid the
+      # variable CJK TTCs that Chromium currently maps to the wrong weight.
+      noto-fonts-cjk-sans = prev.noto-fonts-cjk-sans-static;
+      noto-fonts-cjk-serif = prev.noto-fonts-cjk-serif-static;
+    })
+  ];
 
   programs = {
     kdeconnect.enable = true;
