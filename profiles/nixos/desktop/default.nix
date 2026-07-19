@@ -69,7 +69,6 @@
     in
     with pkgs;
     [
-      (antigravity.override enableWayland)
       (google-chrome.override enableWayland)
       (microsoft-edge.override enableWayland)
       (obsidian.override enableWayland)
@@ -89,5 +88,6 @@
       wechat
       wl-clipboard-rs
       wpsoffice-cn
+      zed-editor
     ];
 }
