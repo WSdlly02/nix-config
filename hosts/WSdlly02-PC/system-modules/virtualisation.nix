@@ -187,7 +187,6 @@
   };
   environment.systemPackages = with pkgs; [
     looking-glass-client
-    scream
   ];
   system.nixos.tags = [ "with-iGPUPassthr" ];
 }
