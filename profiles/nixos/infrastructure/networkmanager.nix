@@ -2,7 +2,7 @@
   networking.networkmanager = {
     enable = true;
     dns = "none";
-    ethernet.macAddress = "stable";
+    ethernet.macAddress = "permanent"; # Wake-on-LAN requires a stable MAC address for the ethernet interface
     wifi = {
       macAddress = "stable-ssid";
       scanRandMacAddress = false;
