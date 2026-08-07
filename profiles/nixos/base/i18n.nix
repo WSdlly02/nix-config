@@ -1,9 +1,9 @@
 {
   i18n = {
-    defaultLocale = "C.UTF-8";
-    supportedLocales = [
-      "C.UTF-8/UTF-8"
-      "en_US.UTF-8/UTF-8"
+    defaultLocale = "en_US.UTF-8";
+    extraLocales = [
+      # "C.UTF-8/UTF-8" is already included
+      # "en_US.UTF-8/UTF-8" is already included
       "zh_CN.UTF-8/UTF-8"
     ];
     # extraLocaleSettings = {};
