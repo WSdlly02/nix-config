@@ -74,6 +74,7 @@
       (obsidian.override enableWayland)
       (qq.override enableWayland)
       (vscode.override enableWayland)
+      anki
       crosspipe
       ddcutil
       fsearch
