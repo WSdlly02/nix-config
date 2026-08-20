@@ -176,10 +176,7 @@
     # enableAllHardware = true;
     # enableAllFirmware = true;
     firmwareCompression = "zstd";
-    cpu.amd = {
-      ryzen-smu.enable = true;
-      updateMicrocode = true;
-    };
+    cpu.amd.updateMicrocode = true;
     i2c.enable = true;
     # uinput.enable = true; # Enable /dev/uinput
     xone.enable = true;
