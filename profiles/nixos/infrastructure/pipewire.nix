@@ -27,54 +27,35 @@
             "bluetooth.autoswitch-to-headset-profile" = false;
           };
         };
-        # "50-alsa-config" = {
-        #   "monitor.alsa.properties" = {
-        #     # 使用 ALSA-Card-Profile 设备。他们使用UCM或配置文件
-        #     # 配置配置设备和混音器设置。
-        #     "alsa.use-acp" = true;
-        #     # 使用 UCM 而不是配置文件(可用时 ) 。可禁用
-        #     # 跳过尝试使用 UCM 配置文件。
-        #     "alsa.use-ucm" = false;
-        #   };
-        # };
-      };
-    };
-    extraConfig = {
-      pipewire."92-low-latency" = {
-        "context.properties" = {
-          "default.clock.rate" = 48000;
-          "default.clock.quantum" = 32;
-          "default.clock.min-quantum" = 32;
-          "default.clock.max-quantum" = 32;
-        };
-      };
-      pipewire-pulse."92-low-latency" = {
-        "context.properties" = [
-          {
-            name = "libpipewire-module-protocol-pulse";
-            args = { };
-          }
-        ];
-        "pulse.properties" = {
-          "pulse.min.req" = "32/48000";
-          "pulse.default.req" = "32/48000";
-          "pulse.max.req" = "32/48000";
-          "pulse.min.quantum" = "32/48000";
-          "pulse.max.quantum" = "32/48000";
-        };
-        "stream.properties" = {
-          "node.latency" = "32/48000";
-          "resample.quality" = 1;
-        };
       };
     };
   };
-  systemd.user.services = lib.mkIf (config.system.name == "WSdlly02-RPi5") {
-    pipewire = {
-      preStart = "${pkgs.networkmanager}/bin/nm-online -q"; # Fix up
-      wantedBy = [ "default.target" ];
-    };
-    pipewire-pulse.wantedBy = [ "default.target" ];
-    wireplumber.wantedBy = [ "default.target" ];
-  };
+  systemd.user.services = lib.mkMerge [
+    (lib.mkIf (config.system.name == "WSdlly02-PC") {
+      gigabyte-usb-audio-profile = {
+        description = "Enable Gigabyte USB audio profile";
+        after = [ "wireplumber.service" ];
+        wantedBy = [ "wireplumber.service" ];
+        script = ''
+          # WirePlumber's Type=simple starts before its profile policy settles.
+          ${pkgs.coreutils}/bin/sleep 1
+          for _ in {1..50}; do
+            if ${pkgs.pulseaudio}/bin/pactl set-card-profile alsa_card.usb-Generic_USB_Audio-00 HiFi; then
+              exit 0
+            fi
+            ${pkgs.coreutils}/bin/sleep 0.1
+          done
+          exit 1
+        '';
+      };
+    })
+    (lib.mkIf (config.system.name == "WSdlly02-RPi5") {
+      pipewire = {
+        preStart = "${pkgs.networkmanager}/bin/nm-online -q"; # Fix up
+        wantedBy = [ "default.target" ];
+      };
+      pipewire-pulse.wantedBy = [ "default.target" ];
+      wireplumber.wantedBy = [ "default.target" ];
+    })
+  ];
 }
