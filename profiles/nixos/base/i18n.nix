@@ -8,7 +8,7 @@
     ];
     # extraLocaleSettings = {};
   };
-  time.timeZone = "Asia/Shanghai";
+  time.timeZone = "Asia/Singapore";
   # Select internationalisation properties.
   /*
     console = {
