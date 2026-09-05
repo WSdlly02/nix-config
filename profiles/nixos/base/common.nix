@@ -26,15 +26,10 @@
       dbus.implementation = "broker";
       journald = {
         storage = "auto";
-        extraConfig =
-          let
-            systemLogsMaxUse =
-              if ("${pkgs.stdenv.hostPlatform.system}" == "x86_64-linux") then "512M" else "256M";
-          in
-          ''
-            Compress=true
-            SystemMaxUse=${systemLogsMaxUse}
-          '';
+        settings.Journal = {
+          Compress = true;
+          SystemMaxUse = if ("${pkgs.stdenv.hostPlatform.system}" == "x86_64-linux") then "512M" else "256M";
+        };
       };
     };
     environment.systemPackages = with pkgs; [
