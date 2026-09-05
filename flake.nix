@@ -127,6 +127,7 @@
       overlays = {
         default = final: prev: {
           # Overlays here will be applied to all packages
+          looking-glass-client-dev = final.callPackage ./pkgs/looking-glass-client-dev.nix { };
         };
         exposedPackages =
           # Packages here will be exposed and used as libraries in other parts of the flake

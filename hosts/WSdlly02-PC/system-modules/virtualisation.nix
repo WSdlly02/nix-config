@@ -186,7 +186,7 @@
     };
   };
   environment.systemPackages = with pkgs; [
-    looking-glass-client
+    looking-glass-client-dev
   ];
   system.nixos.tags = [ "with-iGPUPassthr" ];
 }
