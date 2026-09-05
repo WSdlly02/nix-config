@@ -25,9 +25,9 @@
       fstrim.enable = true;
       dbus.implementation = "broker";
       journald = {
-        storage = "auto";
         settings.Journal = {
           Compress = true;
+          Storage = "auto";
           SystemMaxUse = if ("${pkgs.stdenv.hostPlatform.system}" == "x86_64-linux") then "512M" else "256M";
         };
       };
