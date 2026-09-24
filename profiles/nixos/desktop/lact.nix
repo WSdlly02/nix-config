@@ -4,8 +4,10 @@
   # LACT expects the fan curve's temperature keys to be YAML integers.
   # `services.lact.settings` uses a Nix attrset, whose keys are always strings,
   # so pkgs.formats.yaml would serialize these as '40', '50', etc.
+  # Schema 7 only migrates NVIDIA V/F curves; these AMD settings are unchanged.
+  # Keep the version current to avoid migration writes to this read-only file.
   environment.etc."lact/config.yaml".text = ''
-    version: 6
+    version: 7
     daemon:
       log_level: info
       admin_group: wheel
