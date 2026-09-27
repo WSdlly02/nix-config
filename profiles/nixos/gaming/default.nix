@@ -13,7 +13,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    (mindustry.override { jdk17 = zulu17; })
+    mindustry-wayland
     (prismlauncher.override {
       jdks = [
         zulu25
