@@ -25,7 +25,7 @@
   ];
   system = {
     name = "WSdlly02-WSL";
-    # nixos.tag = [];
+    # nixos.tag = [ ];
     stateVersion = "25.05";
   };
 }

@@ -8,12 +8,6 @@
 {
   nix = {
     channel.enable = false;
-    nixPath = [
-      "home-manager=${inputs.home-manager}"
-      "nixpkgs=${config.nixpkgs.flake.source}"
-      "my-codes=git+file:///home/${config.my.mainUser.name}/Documents/my-codes"
-      "nix-config=git+file:///home/${config.my.mainUser.name}/Documents/nix-config"
-    ];
     registry = {
       "home-manager" = {
         from = {
@@ -62,9 +56,13 @@
           config.programs.ccache.cacheDir
         ];
       */
-      fsync-metadata = false;
-      http-connections = 0;
       max-jobs = lib.mkDefault 32;
+      nix-path = [
+        "home-manager=${inputs.home-manager}"
+        "nixpkgs=${config.nixpkgs.flake.source}"
+        "my-codes=git+file:///home/${config.my.mainUser.name}/Documents/my-codes"
+        "nix-config=git+file:///home/${config.my.mainUser.name}/Documents/nix-config"
+      ];
       substituters = [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
       ];
