@@ -10,6 +10,7 @@
     connect-timeout = 5;
   };
   inputs = {
+    codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

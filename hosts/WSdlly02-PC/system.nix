@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ./system-modules/codex-desktop.nix
     ./system-modules/cups.nix
     ./system-modules/networking.nix
     ./system-modules/nixpkgs-x86_64.nix
