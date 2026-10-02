@@ -2,8 +2,6 @@
 
 个人多机器 NixOS / Home Manager Flake 配置仓库。
 
-当前结构已经完成从旧的 `hostSpecific/` / `modules/` 方案迁移到 `hosts/` + `profiles/`：
-
 - `hosts/`：每台机器的入口与主机专属模块
 - `profiles/nixos/`：系统级可复用 profile
 - `profiles/home/`：Home Manager 可复用 profile
@@ -32,4 +30,4 @@ home-manager build --flake .#wsdlly02@WSdlly02-PC
 nix flake check
 ```
 
-更详细的结构说明见 [NIX_CONFIG_ARCHITECTURE.md](/home/wsdlly02/Documents/nix-config/NIX_CONFIG_ARCHITECTURE.md)。
+更详细的结构说明见 [NIX_CONFIG_ARCHITECTURE.md](NIX_CONFIG_ARCHITECTURE.md)。
