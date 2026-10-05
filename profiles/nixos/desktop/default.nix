@@ -61,34 +61,30 @@
 
   services.power-profiles-daemon.enable = true;
 
-  environment.systemPackages =
-    let
-      enableWayland = {
-        commandLineArgs = "--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true";
-      };
-    in
-    with pkgs;
-    [
-      (google-chrome.override enableWayland)
-      (microsoft-edge.override enableWayland)
-      (obsidian.override enableWayland)
-      (qq.override enableWayland)
-      (vscode.override enableWayland)
-      anki
-      crosspipe
-      ddcutil
-      fsearch
-      gapless
-      mpv
-      pass-wayland
-      qbittorrent-enhanced
-      qtscrcpy
-      scrcpy
-      sourcegit
-      vlc
-      wechat
-      wl-clipboard-rs
-      wpsoffice-cn
-      zed-editor
-    ];
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+  environment.systemPackages = with pkgs; [
+    anki
+    bilibili
+    crosspipe
+    ddcutil
+    fsearch
+    gapless
+    google-chrome
+    microsoft-edge
+    mpv
+    obsidian
+    pass-wayland
+    qbittorrent-enhanced
+    qq
+    qtscrcpy
+    scrcpy
+    sourcegit
+    vlc
+    vscode
+    wechat
+    wl-clipboard-rs
+    wpsoffice-cn
+    zed-editor
+  ];
 }
