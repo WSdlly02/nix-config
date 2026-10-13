@@ -16,8 +16,9 @@
   home = {
     packages = with pkgs; [
       # pkgs from my-codes.exposedPackages overlay
-      duplicate-file-finder
-      mihomo-updater
+      # !! Already installed via cargo
+      # duplicate-file-finder
+      # mihomo-updater
 
       ffmpeg
       telegram-desktop
