@@ -33,6 +33,7 @@
         "192.168.0.0/16"
         "fd00::/8"
         "fe80::/10"
+        "10.144.144.0/24"
         "100.64.16.0/24"
         "fd7a:115c:a1e0::/48"
       ];
@@ -43,18 +44,29 @@
   systemd.user.services.ollama-omni-ocr-proxy = {
     Unit = {
       Description = "Proxy for Ollama with IP Filtering";
-      Requires = [ "ollama-omni-ocr-proxy.socket" ];
-      After = [ "ollama-omni-ocr-proxy.socket" ];
+      # Shared backends stay needed while either proxy is active.
+      Requires = [
+        "ollama-omni-ocr-proxy.socket"
+        "ollama-pod-pod.service"
+        "ollama.service"
+        "ollama-omni-ocr.service"
+      ];
+      After = [
+        "ollama-omni-ocr-proxy.socket"
+        "ollama-pod-pod.service"
+        "ollama.service"
+        "ollama-omni-ocr.service"
+      ];
     };
     Service = {
-      Environment = [
-        "SERVICES_START_ORDER=\"ollama-pod-pod.service ollama.service ollama-omni-ocr.service\""
-        "SERVICES_STOP_ORDER=\"ollama-omni-ocr.service\""
-      ];
       TimeoutStartSec = 300;
-      ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "ollama-omni-ocr-proxy";
+      # Probe the backend directly; keep incoming connections queued on the socket.
+      ExecStartPre = pkgs.utils.systemd-user-waitHTTP {
+        name = "omni-ocr";
+        url = "https://127.0.0.1:7442/ollama/api/version";
+        insecure = true; # Caddy uses its internal CA on this loopback endpoint.
+      };
       ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:7442";
-      ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "ollama-omni-ocr-proxy";
     };
   };
 }

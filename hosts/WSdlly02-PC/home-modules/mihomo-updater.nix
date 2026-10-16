@@ -32,6 +32,7 @@
         };
         unitConfig = {
           Description = "Mihomo Updater in Podman container";
+          StopWhenUnneeded = true;
         };
       };
     };
@@ -57,18 +58,22 @@
   systemd.user.services.mihomo-updater-resolver-proxy = {
     Unit = {
       Description = "Proxy for Mihomo Updater with Idle Timeout";
-      Requires = [ "mihomo-updater-resolver-proxy.socket" ];
-      After = [ "mihomo-updater-resolver-proxy.socket" ];
+      Requires = [
+        "mihomo-updater-resolver-proxy.socket"
+        "mihomo-updater-resolver.service"
+      ];
+      After = [
+        "mihomo-updater-resolver-proxy.socket"
+        "mihomo-updater-resolver.service"
+      ];
     };
     Service = {
-      Environment = [
-        "SERVICES_START_ORDER=\"mihomo-updater-resolver.service\""
-        "SERVICES_STOP_ORDER=\"mihomo-updater-resolver.service\""
-      ];
       TimeoutStartSec = 300;
-      ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "mihomo-updater-resolver-proxy";
+      ExecStartPre = pkgs.utils.systemd-user-waitHTTP {
+        name = "mihomo-resolver";
+        url = "http://127.0.0.1:8087/health";
+      };
       ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd --exit-idle-time=600 127.0.0.1:8087";
-      ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "mihomo-updater-resolver-proxy";
     };
   };
   systemd.user.services.mihomo-updater-resolver.Install.WantedBy = lib.mkForce [ ];

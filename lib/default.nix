@@ -61,38 +61,23 @@ rec {
   };
   utilsSelfOverlay =
     final: prev: with prev; {
-      utils-self = {
-        systemd-user-serializedStarter =
-          name:
-          writeShellScript "${name}-systemd-serialized-starter" ''
+      utils = {
+        # The outer service's TimeoutStartSec bounds startup, including these probes.
+        systemd-user-waitHTTP =
+          {
+            name,
+            url,
+            insecure ? false,
+          }:
+          writeShellScript "${name}-wait-http" ''
             set -euo pipefail
-            if [ -z "''${SERVICES_START_ORDER:-}" ]; then
-              echo "Error: SERVICES_START_ORDER environment variable not set."
-              exit 1
-            fi
-            echo "Starting services in order..."
-
-            for srv in $SERVICES_START_ORDER; do
-              echo "Starting $srv..."
-              systemctl --user start "$srv"
+            echo "Waiting for HTTP backend: ${url}" >&2
+            until ${curl}/bin/curl --silent --show-error --fail \
+                --noproxy '*' --connect-timeout 1 --max-time 2 \
+                ${lib.optionalString insecure "--insecure"} \
+                --output /dev/null ${lib.escapeShellArg url}; do
+              ${coreutils}/bin/sleep 0.2
             done
-            echo "All services started."
-          '';
-        systemd-user-serializedStopper =
-          name:
-          writeShellScript "${name}-systemd-serialized-stopper" ''
-            set -euo pipefail
-            if [ -z "''${SERVICES_STOP_ORDER:-}" ]; then
-              echo "Error: SERVICES_STOP_ORDER environment variable not set."
-              exit 1
-            fi
-            echo "Stopping services in order..."
-
-            for srv in $SERVICES_STOP_ORDER; do
-              echo "Stopping $srv..."
-              systemctl --user stop "$srv"
-            done
-            echo "All services stopped."
           '';
       };
     };

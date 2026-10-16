@@ -53,6 +53,7 @@
         "192.168.0.0/16"
         "fd00::/8"
         "fe80::/10"
+        "10.144.144.0/24"
         "100.64.16.0/24"
         "fd7a:115c:a1e0::/48"
       ];
@@ -63,18 +64,26 @@
   systemd.user.services.ollama-proxy = {
     Unit = {
       Description = "Proxy for Ollama with IP Filtering";
-      Requires = [ "ollama-proxy.socket" ];
-      After = [ "ollama-proxy.socket" ];
+      # Shared backends stay needed while either proxy is active.
+      Requires = [
+        "ollama-proxy.socket"
+        "ollama-pod-pod.service"
+        "ollama.service"
+      ];
+      After = [
+        "ollama-proxy.socket"
+        "ollama-pod-pod.service"
+        "ollama.service"
+      ];
     };
     Service = {
-      Environment = [
-        "SERVICES_START_ORDER=\"ollama-pod-pod.service ollama.service\""
-        "SERVICES_STOP_ORDER=\"ollama.service ollama-pod-pod.service\""
-      ];
       TimeoutStartSec = 300;
-      ExecStartPre = pkgs.utils-self.systemd-user-serializedStarter "ollama-proxy";
+      # Probe the backend directly; keep incoming connections queued on the socket.
+      ExecStartPre = pkgs.utils.systemd-user-waitHTTP {
+        name = "ollama";
+        url = "http://127.0.0.1:11433/api/version";
+      };
       ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:11433";
-      ExecStopPost = pkgs.utils-self.systemd-user-serializedStopper "ollama-proxy";
     };
   };
   systemd.user.services = {
