@@ -61,7 +61,8 @@ rec {
   };
   utilsSelfOverlay =
     final: prev: with prev; {
-      utils = {
+      # Keep a project-specific name: callPackage injects matching pkgs attributes.
+      utils-self = {
         # The outer service's TimeoutStartSec bounds startup, including these probes.
         systemd-user-waitHTTP =
           {

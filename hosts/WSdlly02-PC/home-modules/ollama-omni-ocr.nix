@@ -61,7 +61,7 @@
     Service = {
       TimeoutStartSec = 300;
       # Probe the backend directly; keep incoming connections queued on the socket.
-      ExecStartPre = pkgs.utils.systemd-user-waitHTTP {
+      ExecStartPre = pkgs.utils-self.systemd-user-waitHTTP {
         name = "omni-ocr";
         url = "https://127.0.0.1:7442/ollama/api/version";
         insecure = true; # Caddy uses its internal CA on this loopback endpoint.

@@ -79,7 +79,7 @@
     Service = {
       TimeoutStartSec = 300;
       # Probe the backend directly; keep incoming connections queued on the socket.
-      ExecStartPre = pkgs.utils.systemd-user-waitHTTP {
+      ExecStartPre = pkgs.utils-self.systemd-user-waitHTTP {
         name = "ollama";
         url = "http://127.0.0.1:11433/api/version";
       };

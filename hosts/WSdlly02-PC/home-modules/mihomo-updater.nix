@@ -69,7 +69,7 @@
     };
     Service = {
       TimeoutStartSec = 300;
-      ExecStartPre = pkgs.utils.systemd-user-waitHTTP {
+      ExecStartPre = pkgs.utils-self.systemd-user-waitHTTP {
         name = "mihomo-resolver";
         url = "http://127.0.0.1:8087/health";
       };
