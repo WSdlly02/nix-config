@@ -16,12 +16,13 @@
   home = {
     packages = with pkgs; [
       # pkgs from my-codes.exposedPackages overlay
-      # !! Already installed via cargo
+      # !! Already installed in $HOME/.local/bin
       # duplicate-file-finder
       # mihomo-updater
 
       ffmpeg
       telegram-desktop
+      yt-dlp
     ];
     stateVersion = "24.11";
   };

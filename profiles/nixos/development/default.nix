@@ -13,11 +13,11 @@
   ];
   environment = {
     systemPackages = with pkgs; [
+      gh # GitHub CLI
       cloc # counts blank lines, comment lines, and physical lines of source code
 
       # C/C++
       gcc
-      zig # can also compile C/C++ code
 
       # Rust toolchain manager
       # rustup # installed maually

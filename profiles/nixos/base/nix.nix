@@ -68,6 +68,6 @@
       ];
       trusted-users = [ config.my.mainUser.name ];
     };
-    package = pkgs.lixPackageSets.git.lix;
+    package = pkgs.lix;
   };
 }
