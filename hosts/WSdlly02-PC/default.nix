@@ -6,6 +6,7 @@
     ../../profiles/nixos/base/smartd.nix
     ../../profiles/nixos/base/btrfs-scrub.nix
     ../../profiles/nixos/development
+    ../../profiles/nixos/development/codex-desktop.nix
     ../../profiles/nixos/desktop
     ../../profiles/nixos/gaming
     ../../profiles/nixos/infrastructure

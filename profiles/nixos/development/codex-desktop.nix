@@ -11,6 +11,7 @@
       "computer-use-linux"
       "global-dictation"
       "codex-micro"
+      "pet-overlay"
       "remote-control-ui"
       "remote-mobile-control"
     ];
