@@ -41,22 +41,32 @@ rec {
       这就是为什么哈希变了但内容没变的情况。
     */
     buildEnv =
-      args:
+      argsOrFn:
       let
-        name = args.name or "";
-        # 匹配需要排序的三类 derivation
-        # 确保它们在最终的列表中按照字母序排列，避免不必要的哈希变动
-        isSortTarget = lib.any (s: lib.hasSuffix s name) [
-          "completions"
-          "path"
-          "paths"
-        ];
+        sortPaths =
+          args:
+          let
+            name = args.name or "";
+            # 匹配需要排序的三类 derivation
+            # 确保它们在最终的列表中按照字母序排列，避免不必要的哈希变动
+            isSortTarget = lib.any (s: lib.hasSuffix s name) [
+              "completions"
+              "path"
+              "paths"
+            ];
+          in
+          args
+          // lib.optionalAttrs isSortTarget {
+            paths = lib.sort (a: b: lib.getName a < lib.getName b) (args.paths or [ ]);
+          };
       in
       prev.buildEnv (
-        args
-        // lib.optionalAttrs isSortTarget {
-          paths = lib.sort (a: b: lib.getName a < lib.getName b) (args.paths or [ ]);
-        }
+        if
+          lib.isFunction argsOrFn # 如果是函数，先求值再排序
+        then
+          finalAttrs: sortPaths (argsOrFn finalAttrs)
+        else
+          sortPaths argsOrFn
       );
   };
   utilsSelfOverlay =

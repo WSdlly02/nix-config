@@ -22,6 +22,17 @@
 
       ffmpeg
       telegram-desktop
+
+      (texliveMedium.withPackages (
+        f: with f; [
+          ctex
+          latexmk
+          biblatex
+          biber
+        ]
+      ))
+      texlab
+
       yt-dlp
     ];
     stateVersion = "24.11";
