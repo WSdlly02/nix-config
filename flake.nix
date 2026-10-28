@@ -158,6 +158,7 @@
           my-codes-exposedPackages = inputs.my-codes.legacyPackages."${system}".exposedPackages; # For convenience
           nixpkgs-unstable = pkgs' { inherit system; };
         };
+        packages."${system}".pkg-in-env = callPackage ./lib/pkg-in-env.nix { inherit inputs; };
       }
     );
 }
