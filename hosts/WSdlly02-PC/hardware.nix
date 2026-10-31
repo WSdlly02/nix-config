@@ -24,9 +24,7 @@
         "ahci"
         "usbhid"
       ];
-      verbose = false;
       kernelModules = [ ];
-      systemd.enable = true; # Hibernate Required
     };
     consoleLogLevel = 3;
     kernelPackages = pkgs.linuxPackages_latest; # Use the latest stable kernel packages
@@ -46,23 +44,17 @@
     kernelParams = [
       # General
       "quiet"
-      "nowatchdog"
       "udev.log_level=3"
       # AMD P-State
       "amd_pstate=active"
       # IOMMU
-      "amd_iommu=on"
       "iommu=pt"
-      # Trust hardware timer
-      "tsc=reliable"
-      "clocksource=tsc"
     ];
     # blacklistedKernelModules = ["k10temp"];
     # resumeDevice = ""; No longer required by config.boot.initrd.systemd.enable
     tmp = {
       useTmpfs = true;
-      tmpfsSize = "100%";
-      cleanOnBoot = true;
+      tmpfsSize = "50%";
     };
   };
 
@@ -110,7 +102,7 @@
         "ssd"
         "discard=async"
         "space_cache=v2"
-        "compress=zstd:1" # 缓存极速读写
+        "compress=zstd"
         "subvol=@var-cache"
       ];
     };
@@ -136,7 +128,7 @@
         "ssd"
         "discard=async"
         "space_cache=v2"
-        "compress=zstd:1" # 缓存极速读写
+        "compress=zstd"
         "subvol=@var-tmp"
       ];
     };
