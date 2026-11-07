@@ -8,13 +8,13 @@
 }:
 
 looking-glass-client.overrideAttrs (old: rec {
-  version = "B7-829-cdba29f2";
+  version = "B7-895-432f4a0c";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
-    rev = "cdba29f2f6bcae3ded26369fc231a067cbca3752";
-    hash = "sha256-/QE1Hre4Q7YplkudZZ7DSzmosY/MJc1XiAy69xcBXg4=";
+    rev = "432f4a0c9a227d9ab0fd968d95b51fbb4d84ee91";
+    hash = "sha256-ropEJC9+Gg85DS9XRuTb2IRGNNmUcA09Sy/cN6DTvZE=";
     fetchSubmodules = true;
   };
 

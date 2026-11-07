@@ -16,17 +16,33 @@
         "type": "github"
       }
     },
+    "atrust-rs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793977013,
+        "narHash": "sha256-q0wZ9mQ0xMZjxnO76CdMwWSzpDimPPFJhUqPHlgdRvU=",
+        "ref": "refs/heads/main",
+        "rev": "731ee400c7e60bd12f14f5fe940f2ecc71b3d207",
+        "revCount": 33,
+        "type": "git",
+        "url": "ssh://git@github.com/WSdlly02/atrust-rs.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/WSdlly02/atrust-rs.git"
+      }
+    },
     "codex-desktop-linux": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1794038970,
-        "narHash": "sha256-Bg336pPOLkQG3DtrP4ZjSeTjP4uV1kzEBvczlzjnwNQ=",
+        "lastModified": 1794062526,
+        "narHash": "sha256-/VwL+2bNmj3S8zDt5hb93nlyWXrC3vHWQnqVIRPyppU=",
         "owner": "ilysenko",
         "repo": "codex-desktop-linux",
-        "rev": "0c89d132ef41a24de47b70d036910f4a00e23a84",
+        "rev": "b4034632bb2663f80242a394ed73d7ad6b4041f9",
         "type": "github"
       },
       "original": {
@@ -235,11 +251,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1793726008,
-        "narHash": "sha256-iNjybNORi/2+shilhMlkNr01UHWKOHRGzQyIyvobs9o=",
-        "rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
+        "lastModified": 1793876309,
+        "narHash": "sha256-Q62pssAT9r01POiSyXW0IPXBWhntiKqMhzlsp3bsl5I=",
+        "rev": "f9a75f41be3a74eab55d3a7679d34ad6cc0da977",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1107793.1d060086d60c/nixexprs.tar.xz?lastModified=1793726008&rev=1d060086d60cb76a40cf37109f979d88a5bd6396"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1108983.f9a75f41be3a/nixexprs.tar.xz?lastModified=1793876309&rev=f9a75f41be3a74eab55d3a7679d34ad6cc0da977"
       },
       "original": {
         "type": "tarball",
@@ -279,6 +295,7 @@
     },
     "root": {
       "inputs": {
+        "atrust-rs": "atrust-rs",
         "codex-desktop-linux": "codex-desktop-linux",
         "home-manager": "home-manager",
         "my-codes": "my-codes",

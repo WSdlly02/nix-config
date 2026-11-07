@@ -10,6 +10,10 @@
     connect-timeout = 5;
   };
   inputs = {
+    atrust-rs = {
+      url = "git+ssh://git@github.com/WSdlly02/atrust-rs.git";
+      flake = false;
+    };
     codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -128,7 +132,6 @@
       overlays = {
         default = final: prev: {
           # Overlays here will be applied to all packages
-          looking-glass-client-dev = final.callPackage ./pkgs/looking-glass-client-dev.nix { };
         };
         exposedPackages =
           # Packages here will be exposed and used as libraries in other parts of the flake
@@ -150,9 +153,9 @@
         formatter."${system}" = nixfmt-tree;
         legacyPackages."${system}" = {
           exposedPackages = {
+            atrust-rs = rustPlatform.callPackage ./pkgs/atrust-rs.nix { inherit inputs; };
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
-            epson-inkjet-printer-201601w = callPackage ./pkgs/epson-inkjet-printer-201601w.nix { };
-            fabric-survival = callPackage ./pkgs/fabric-survival.nix { };
+            looking-glass-client-dev = callPackage ./pkgs/looking-glass-client-dev.nix { };
           };
           libraryPackages = { };
           my-codes-exposedPackages = inputs.my-codes.legacyPackages."${system}".exposedPackages; # For convenience
