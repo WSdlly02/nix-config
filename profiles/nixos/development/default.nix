@@ -18,6 +18,8 @@
 
       # C/C++
       gcc
+      clang-tools
+      cmake
 
       # Rust toolchain manager
       # rustup # installed maually
