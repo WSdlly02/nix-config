@@ -11,7 +11,7 @@
       ppfeaturemask = "0xffffffff";
     };
     # opencl.enable = true; # Add ROCm support for opencl driver
-    # zluda.enable = true; # Add support for AMD GPUs to the CUDA driver
+    zluda.enable = true; # Add support for AMD GPUs to the CUDA driver
   };
   environment.sessionVariables = {
     HSA_OVERRIDE_GFX_VERSION = "10.3.0";
