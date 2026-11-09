@@ -23,7 +23,7 @@
     lact # AMDGPU Fan Control
     libva-utils
     mesa-demos
-    ntfsprogs-plus
+    ntfsprogs
     rar # ark required
     vdpauinfo
     vulkan-tools
