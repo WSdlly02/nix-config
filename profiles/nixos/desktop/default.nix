@@ -37,8 +37,9 @@
     obs-studio = {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [
-        obs-vkcapture
-        input-overlay
+        obs-pipewire-audio-capture # Capture audio from PipeWire
+        obs-vkcapture # Capture Vulkan applications
+        input-overlay # Display keystrokes and mouse clicks on screen
       ];
     };
     partition-manager.enable = true;
