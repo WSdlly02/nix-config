@@ -12,6 +12,7 @@
     ./home-modules/localllm.nix
     ./home-modules/mihomo-updater.nix
     ./home-modules/ollama-omni-ocr.nix
+    ./home-modules/prismagentd.nix
     ./home-modules/sh.nix
   ];
   home = {

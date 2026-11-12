@@ -34,6 +34,10 @@
     };
     nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
+    prismagent = {
+      url = "git+ssh://git@github.com/WSdlly02/PrismAgent.git";
+      flake = false;
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -156,6 +160,7 @@
             atrust-rs = rustPlatform.callPackage ./pkgs/atrust-rs.nix { inherit inputs; };
             currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
             looking-glass-client-dev = callPackage ./pkgs/looking-glass-client-dev.nix { };
+            prismagent = rustPlatform.callPackage ./pkgs/prismagent.nix { inherit inputs; };
           };
           libraryPackages = { };
           my-codes-exposedPackages = inputs.my-codes.legacyPackages."${system}".exposedPackages; # For convenience
