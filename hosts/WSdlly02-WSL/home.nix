@@ -4,8 +4,7 @@
 }:
 {
   imports = [
-    ../../profiles/home/base
-    ../../profiles/home/workstation
+    ../../profiles/home/base.nix
     ./home-modules/sh.nix
   ];
 

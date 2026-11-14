@@ -113,26 +113,9 @@ PC 和 RPi5 共用同一组网络、防火墙、DNS、代理、组网、SSH、�
 
 ## Home Manager 层
 
-### 1. 共享 Home profile：`profiles/home/`
+### 1. 共享 Home 配置
 
-当前 Home 侧主要分为：
-
-- `profiles/home/base/`
-- `profiles/home/workstation/`
-
-#### `profiles/home/base/`
-
-提供所有 Home 配置共享的基础能力，包括：
-
-- `direnv`
-- shell 基础配置
-- `home-manager` 自管理
-- `nh`
-- `nixd`、`nixfmt`、`nix-diff`、`nix-tree`、`yazi` 等常用工具
-
-#### `profiles/home/workstation/`
-
-提供偏工作站环境的 Home 配置，供桌面主机复用。
+PC、WSL 和 RPi5 都导入 [base.nix](profiles/home/base.nix)，共用账户、Bash、Fish、direnv、常用工具以及 Cargo、npm 和 Go 的用户环境路径。
 
 ### 2. 主机 Home 入口
 
@@ -142,7 +125,7 @@ PC 和 RPi5 共用同一组网络、防火墙、DNS、代理、组网、SSH、�
 - [hosts/WSdlly02-WSL/home.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-WSL/home.nix)
 - [hosts/WSdlly02-RPi5/home.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-RPi5/home.nix)
 
-三个入口共用 `profiles/home/base/default.nix` 中的 `home.username = "wsdlly02"` 和 `home.homeDirectory = "/home/wsdlly02"`。
+Syncthing 用户服务只在 PC 的 Home 入口启用，管理界面监听 `127.0.0.1:8384`。
 
 ## 当前设计原则
 
@@ -164,7 +147,7 @@ PC 和 RPi5 共用同一组网络、防火墙、DNS、代理、组网、SSH、�
 已经完成的变化：
 
 - 旧的 `hostSpecific/` 主入口已经全部迁出
-- 旧的 `modules/homeModules` 已迁入 `profiles/home/base/`
+- 旧的 `modules/homeModules` 已迁入 `profiles/home/base.nix`
 - 旧的 NixOS 聚合逻辑已迁入 `profiles/nixos/*`
 - `flake.nix` 不再依赖旧式默认模块导出
 - 迁移期使用过的结果基准与一致性脚本已经移除

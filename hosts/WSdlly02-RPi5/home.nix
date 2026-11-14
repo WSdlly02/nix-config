@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    ../../profiles/home/base
+    ../../profiles/home/base.nix
     ./home-modules/network-autoswitch.nix
     ./home-modules/sh.nix
   ];
@@ -18,6 +18,4 @@
     enable = true;
     package = pkgs.zulu25;
   };
-
-  services.syncthing.guiAddress = "0.0.0.0:8384";
 }

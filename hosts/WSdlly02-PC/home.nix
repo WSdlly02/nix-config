@@ -4,8 +4,7 @@
 }:
 {
   imports = [
-    ../../profiles/home/base
-    ../../profiles/home/workstation
+    ../../profiles/home/base.nix
     ./home-modules/atrust.nix
     ./home-modules/epson-maintenance.nix
     ./home-modules/localllm.nix
@@ -47,4 +46,11 @@
     };
   };
   services.mpris-proxy.enable = true;
+
+  services.syncthing = {
+    enable = true;
+    guiAddress = "127.0.0.1:8384";
+    overrideDevices = false;
+    overrideFolders = false;
+  };
 }
