@@ -1,10 +1,11 @@
 { pkgs, ... }:
 {
-  imports = [
-    ./gamescope.nix
-  ];
-
   programs = {
+    steam = {
+      enable = true;
+      localNetworkGameTransfers.openFirewall = true;
+      protontricks.enable = true;
+    };
     gamemode.enable = true;
     java = {
       enable = true;

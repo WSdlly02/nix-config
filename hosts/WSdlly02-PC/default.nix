@@ -1,22 +1,34 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     ../../profiles/nixos/base.nix
-    ../../profiles/nixos/development
-    ../../profiles/nixos/development/codex-desktop.nix
-    ../../profiles/nixos/desktop
-    ../../profiles/nixos/gaming
+    ../../profiles/nixos/development.nix
+    ../../profiles/nixos/desktop.nix
+    ../../profiles/nixos/gaming.nix
     ../../profiles/nixos/infrastructure.nix
     ./hardware.nix
     ./system.nix
+    inputs.codex-desktop-linux.nixosModules.default
   ];
+
+  programs.codexDesktopLinux = {
+    enable = true;
+    linuxFeatures = [
+      "appshots"
+      "computer-use-linux"
+      "global-dictation"
+      "codex-micro"
+      "pet-overlay"
+      "remote-control-ui"
+      "remote-mobile-control"
+    ];
+  };
 
   boot.kernel.sysctl."vm.swappiness" = 100;
   nix.settings.max-jobs = 64;
   environment.systemPackages = with pkgs; [
     amdgpu_top
     # distrobox
-    lact # AMDGPU Fan Control
     libva-utils
     mesa-demos
     ntfsprogs

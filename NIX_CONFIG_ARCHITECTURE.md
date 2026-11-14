@@ -61,9 +61,9 @@ nix-config/
 以 [hosts/WSdlly02-PC/default.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-PC/default.nix) 为例，它导入：
 
 - `profiles/nixos/base.nix`
-- `profiles/nixos/development`
-- `profiles/nixos/desktop`
-- `profiles/nixos/gaming`
+- `profiles/nixos/development.nix`
+- `profiles/nixos/desktop.nix`
+- `profiles/nixos/gaming.nix`
 - `profiles/nixos/infrastructure.nix`
 - 若干本机模块
 
@@ -72,9 +72,9 @@ nix-config/
 当前主要 profile：
 
 - `profiles/nixos/base.nix`
-- `profiles/nixos/development/`
-- `profiles/nixos/desktop/`
-- `profiles/nixos/gaming/`
+- `profiles/nixos/development.nix`
+- `profiles/nixos/desktop.nix`
+- `profiles/nixos/gaming.nix`
 - `profiles/nixos/infrastructure.nix`
 
 它们的职责划分如下。
@@ -83,11 +83,11 @@ nix-config/
 
 PC、RPi5 和 WSL 共用本文件中的账户、sudo、Nix、本地化、Neovim、基础服务和工具配置。PC 的 SMART 监测和 Btrfs 定期 scrub 在其主机入口中设置。
 
-#### `profiles/nixos/development/`
+#### `profiles/nixos/development.nix`
 
-开发环境 profile，提供编译器、语言工具链与相关环境变量。
+PC 和 WSL 共用编译器、语言工具链、uv 配置和 nix-ld 运行库。Codex Desktop 由 PC 入口单独导入并配置。
 
-#### `profiles/nixos/desktop/`
+#### `profiles/nixos/desktop.nix`
 
 桌面体验 profile，负责：
 
@@ -97,11 +97,13 @@ PC、RPi5 和 WSL 共用本文件中的账户、sudo、Nix、本地化、Neovim�
 - 字体
 - 桌面常用 GUI 应用
 
-#### `profiles/nixos/gaming/`
+PC 的 LACT 显卡风扇和功耗配置位于 `hosts/WSdlly02-PC/hardware-modules/gpu.nix`。
+
+#### `profiles/nixos/gaming.nix`
 
 游戏相关 profile，负责：
 
-- Gamescope
+- Steam、局域网游戏传输和 Protontricks
 - Gamemode
 - Minecraft / Heroic / MangoHud 等游戏相关程序
 

@@ -1,16 +1,5 @@
-/*
-  pkgs.rust.packages.stable.rustc = pkgs.rustc
-  pkgs.rustPlatform.buildRustPackage = pkgs.rust.packages.stable.rustPlatform.buildRustPackage
-*/
+{ pkgs, ... }:
 {
-  pkgs,
-  ...
-}:
-{
-  imports = [
-    # ./code-server.nix
-    ./nix-ld.nix
-  ];
   environment = {
     systemPackages = with pkgs; [
       gh # GitHub CLI
@@ -42,5 +31,29 @@
       # Only use managed Python versions
       python-preference = "only-managed"
     '';
+  };
+
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      gcc.cc.lib
+
+      zlib
+      zstd
+      bzip2
+      xz
+
+      openssl
+      libffi
+      sqlite
+      readline
+      ncurses
+
+      libxml2
+      libxslt
+      curl
+      icu
+    ];
   };
 }

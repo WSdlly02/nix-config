@@ -2,7 +2,7 @@
 {
   imports = [
     ../../profiles/nixos/base.nix
-    ../../profiles/nixos/development
+    ../../profiles/nixos/development.nix
     ./system.nix
   ];
 
