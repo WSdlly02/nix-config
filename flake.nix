@@ -14,6 +14,11 @@
       url = "git+ssh://git@github.com/WSdlly02/atrust-rs.git";
       flake = false;
     };
+    prismagent = {
+      url = "git+ssh://git@github.com/WSdlly02/PrismAgent.git";
+      flake = false;
+    };
+
     codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -23,21 +28,13 @@
       url = "github:WSdlly02/my-codes/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi/develop";
-      # inputs.nixpkgs.url = "github:nvmd/nixpkgs/modules-with-keys-unstable"; # Use custom nixpkgs with Raspberry Pi modules
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/develop";
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nixpkgs-unstable.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
-    prismagent = {
-      url = "git+ssh://git@github.com/WSdlly02/PrismAgent.git";
-      flake = false;
-    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -57,12 +54,13 @@
       forExposedSystems = f: lib.foldl' lib.recursiveUpdate { } (map f exposedSystems);
     in
     {
+      lib = import ./lib { inherit lib inputs; };
+
       homeConfigurations = {
         "wsdlly02@WSdlly02-PC" = import ./hosts/WSdlly02-PC/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/home.nix { inherit inputs pkgs'; };
       };
-      lib = import ./lib { inherit lib inputs; };
       nixosConfigurations = {
         "WSdlly02-PC" = import ./hosts/WSdlly02-PC/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
