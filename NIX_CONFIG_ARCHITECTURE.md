@@ -109,8 +109,6 @@ PC、RPi5 和 WSL 共用本文件中的账户、sudo、Nix、本地化、Neovim�
 
 PC 和 RPi5 共用同一组网络、防火墙、DNS、代理、组网、SSH、蓝牙与音频配置，以及 GnuPG、getty 和内核参数。防火墙扩展选项与使用它们的配置都在本文件中。两台主机各自的 PipeWire 用户服务设置位于各自的主机入口。
 
-`profiles/nixos/infrastructure/` 中保留了当前未导入的可选模块。
-
 ## Home Manager 层
 
 ### 1. 共享 Home profile：`profiles/home/`
