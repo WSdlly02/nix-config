@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ../../profiles/nixos/base
+    ../../profiles/nixos/base.nix
     ../../profiles/nixos/development
     ./system.nix
   ];

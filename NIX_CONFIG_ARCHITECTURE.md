@@ -58,42 +58,30 @@ nix-config/
 - 导入本机 `hardware.nix` / `system.nix`
 - 放置极少量本机特有覆写，例如磁盘、驱动、网卡、打印机、特定服务参数
 
-以 [hosts/WSdlly02-PC/default.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-PC/default.nix) 为例，它只组合：
+以 [hosts/WSdlly02-PC/default.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-PC/default.nix) 为例，它导入：
 
-- `profiles/nixos/base`
+- `profiles/nixos/base.nix`
 - `profiles/nixos/development`
 - `profiles/nixos/desktop`
 - `profiles/nixos/gaming`
-- `profiles/nixos/infrastructure`
+- `profiles/nixos/infrastructure.nix`
 - 若干本机模块
 
 ### 2. 系统级共享 profile：`profiles/nixos/`
 
 当前主要 profile：
 
-- `profiles/nixos/base/`
+- `profiles/nixos/base.nix`
 - `profiles/nixos/development/`
 - `profiles/nixos/desktop/`
 - `profiles/nixos/gaming/`
-- `profiles/nixos/infrastructure/`
+- `profiles/nixos/infrastructure.nix`
 
 它们的职责划分如下。
 
-#### `profiles/nixos/base/`
+#### `profiles/nixos/base.nix`
 
-提供所有主机都可复用的基础能力，包括：
-
-- [options.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/options.nix)：定义少量保留下来的窄接口
-- [common.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/common.nix)：基础工具与通用系统配置
-- [i18n.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/i18n.nix)：时区、本地化、输入法基础
-- [neovim.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/neovim.nix)：Neovim
-- [nix.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/nix.nix)：Nix 本身的系统级配置
-- [sudo.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/sudo.nix)：sudo 行为
-- [smartd.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/smartd.nix)：smartd
-- [btrfs-scrub.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/btrfs-scrub.nix)：Btrfs scrub
-- [user-wsdlly02.nix](profiles/nixos/base/user-wsdlly02.nix) 定义 PC、RPi5 和 WSL 共用的日常账户，由 base 直接导入。
-
-自定义选项 `my.networking.firewall.*` 描述防火墙的端口与范围。
+PC、RPi5 和 WSL 共用本文件中的账户、sudo、Nix、本地化、Neovim、基础服务和工具配置。PC 的 SMART 监测和 Btrfs 定期 scrub 在其主机入口中设置。
 
 #### `profiles/nixos/development/`
 
@@ -117,22 +105,11 @@ nix-config/
 - Gamemode
 - Minecraft / Heroic / MangoHud 等游戏相关程序
 
-#### `profiles/nixos/infrastructure/`
+#### `profiles/nixos/infrastructure.nix`
 
-基础设施 profile，负责网络、远程访问、代理、音频和共享服务等能力，包含：
+PC 和 RPi5 共用同一组网络、防火墙、DNS、代理、组网、SSH、蓝牙与音频配置，以及 GnuPG、getty 和内核参数。防火墙扩展选项与使用它们的配置都在本文件中。两台主机各自的 PipeWire 用户服务设置位于各自的主机入口。
 
-- Avahi
-- dnsmasq
-- EasyTier
-- GnuPG
-- Mihomo
-- 基础 networking / NetworkManager
-- OpenSSH
-- PipeWire
-- sysctl
-- Tailscale
-
-该 profile 的语义是“导入即启用”，不再依赖布尔开关驱动。
+`profiles/nixos/infrastructure/` 中保留了当前未导入的可选模块。
 
 ## Home Manager 层
 

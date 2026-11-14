@@ -1,15 +1,12 @@
 { pkgs, ... }:
 {
   imports = [
-    ../../profiles/nixos/base
-    ../../profiles/nixos/base/smartd.nix
-    ../../profiles/nixos/base/btrfs-scrub.nix
+    ../../profiles/nixos/base.nix
     ../../profiles/nixos/development
     ../../profiles/nixos/development/codex-desktop.nix
     ../../profiles/nixos/desktop
     ../../profiles/nixos/gaming
-    ../../profiles/nixos/infrastructure
-    ../../profiles/nixos/infrastructure/bluetooth.nix
+    ../../profiles/nixos/infrastructure.nix
     ./hardware.nix
     ./system.nix
   ];
@@ -44,5 +41,31 @@
         to = 1764;
       }
     ];
+  };
+
+  services.smartd.enable = true;
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "monthly";
+    fileSystems = [
+      "/"
+    ];
+  };
+
+  systemd.user.services.gigabyte-usb-audio-profile = {
+    description = "Enable Gigabyte USB audio profile";
+    after = [ "wireplumber.service" ];
+    wantedBy = [ "wireplumber.service" ];
+    script = ''
+      # WirePlumber's Type=simple starts before its profile policy settles.
+      ${pkgs.coreutils}/bin/sleep 1
+      for _ in {1..50}; do
+        if ${pkgs.pulseaudio}/bin/pactl set-card-profile alsa_card.usb-Generic_USB_Audio-00 HiFi; then
+          exit 0
+        fi
+        ${pkgs.coreutils}/bin/sleep 0.1
+      done
+      exit 1
+    '';
   };
 }

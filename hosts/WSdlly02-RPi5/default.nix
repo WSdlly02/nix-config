@@ -1,9 +1,8 @@
 { pkgs, ... }:
 {
   imports = [
-    ../../profiles/nixos/base
-    ../../profiles/nixos/infrastructure
-    ../../profiles/nixos/infrastructure/bluetooth.nix
+    ../../profiles/nixos/base.nix
+    ../../profiles/nixos/infrastructure.nix
     ./system.nix
   ];
 
@@ -27,5 +26,14 @@
     extraAllowedPortRanges = [ ];
     lanOnlyPorts = [ 5353 ];
     lanOnlyPortRanges = [ ];
+  };
+
+  systemd.user.services = {
+    pipewire = {
+      preStart = "${pkgs.networkmanager}/bin/nm-online -q"; # Fix up
+      wantedBy = [ "default.target" ];
+    };
+    pipewire-pulse.wantedBy = [ "default.target" ];
+    wireplumber.wantedBy = [ "default.target" ];
   };
 }
