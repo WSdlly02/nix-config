@@ -66,40 +66,31 @@
         "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
         "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
       };
-      overlays = {
-        default = final: prev: {
-          # Overlays here will be applied to all packages
+      overlays.default =
+        final: _prev:
+        import ./pkgs {
+          pkgs = final;
+          inherit inputs;
         };
-        exposedPackages =
-          # Packages here will be exposed and used as libraries in other parts of the flake
-          final: prev:
-          (inputs.self.legacyPackages.${prev.stdenv.hostPlatform.system} or { }).exposedPackages or { };
-        libraryPackages =
-          # Packages here will be used as library but won't be exposed
-          final: prev:
-          (inputs.self.legacyPackages.${prev.stdenv.hostPlatform.system} or { }).libraryPackages or { };
-      };
     }
     // forExposedSystems (
-      system: with (pkgs' { inherit system; }); {
-        devShells."${system}" = inputs.my-codes.devShells."${system}" // rec {
-          aitools = callPackage ./pkgs/devShells-aitools.nix { };
-          default = aitools;
-          nixfmt = callPackage ./pkgs/devShells-nixfmt.nix { };
-        };
-        formatter."${system}" = nixfmt-tree;
-        legacyPackages."${system}" = {
-          exposedPackages = {
-            atrust-rs = rustPlatform.callPackage ./pkgs/atrust-rs.nix { inherit inputs; };
-            currentNixConfig = callPackage ./pkgs/currentNixConfig.nix { inherit inputs; };
-            looking-glass-client-dev = callPackage ./pkgs/looking-glass-client-dev.nix { };
-            prismagent = rustPlatform.callPackage ./pkgs/prismagent.nix { inherit inputs; };
+      system:
+      let
+        pkgs = pkgs' { inherit system; };
+        exposedPackages = import ./pkgs { inherit inputs pkgs; };
+      in
+      {
+        devShells."${system}" = { };
+        formatter."${system}" = pkgs.nixfmt-tree;
+        legacyPackages."${system}" =
+          exposedPackages
+          // inputs.my-codes.legacyPackages."${system}"
+          // {
+            nixpkgs-unstable = pkgs;
           };
-          libraryPackages = { };
-          my-codes-exposedPackages = inputs.my-codes.legacyPackages."${system}".exposedPackages; # For convenience
-          nixpkgs-unstable = pkgs' { inherit system; };
+        packages."${system}" = {
+          pkg-in-env = pkgs.callPackage ./lib/pkg-in-env.nix { inherit inputs; };
         };
-        packages."${system}".pkg-in-env = callPackage ./lib/pkg-in-env.nix { inherit inputs; };
       }
     );
 }

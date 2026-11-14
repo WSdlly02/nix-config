@@ -19,10 +19,8 @@ rec {
       }
       // config;
       overlays = [
-        inputs.my-codes.overlays.exposedPackages
+        inputs.my-codes.overlays.default
         inputs.self.overlays.default
-        inputs.self.overlays.exposedPackages
-        inputs.self.overlays.libraryPackages
 
         # overlays defined in here
         buildEnvWithSortedPathsOverlay
