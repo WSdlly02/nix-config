@@ -35,6 +35,8 @@ nix-config/
 1. 为每个配置注入 `inputs`
 2. 将每个配置指向各自的 `hosts/<name>` 入口
 
+WSL 的两个 flake 输出分别导入 [系统入口](hosts/WSdlly02-WSL/nixos.nix) 和 [Home 入口](hosts/WSdlly02-WSL/home.nix)。这两个文件分别调用 `nixosSystem` 和 `homeManagerConfiguration`，在主机目录中选择平台、包集和模块。
+
 当前约定：
 
 - 每个 `nixosConfigurations.<name>` 都显式设置 `specialArgs = { inherit inputs; };`

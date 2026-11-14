@@ -67,13 +67,7 @@
           ];
           pkgs = pkgs' { system = "x86_64-linux"; };
         };
-        "wsdlly02@WSdlly02-WSL" = inputs.home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/WSdlly02-WSL/home.nix
-          ];
-          pkgs = pkgs' { system = "x86_64-linux"; };
-        };
+        "wsdlly02@WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-RPi5" = inputs.home-manager.lib.homeManagerConfiguration {
           extraSpecialArgs = { inherit inputs; };
           modules = [
@@ -104,15 +98,7 @@
             ./hosts/WSdlly02-RPi5
           ];
         };
-        "WSdlly02-WSL" = lib.nixosSystem rec {
-          specialArgs = { inherit inputs; };
-          system = "x86_64-linux";
-          pkgs = pkgs' { inherit system; };
-          modules = [
-            inputs.nixos-wsl.nixosModules.default
-            ./hosts/WSdlly02-WSL
-          ];
-        };
+        "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-SRV" = lib.nixosSystem rec {
           specialArgs = { inherit inputs; };
           system = "x86_64-linux";
