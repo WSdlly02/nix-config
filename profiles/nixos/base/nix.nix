@@ -30,7 +30,7 @@
         };
         to = {
           type = "git";
-          url = "file:///home/${config.my.mainUser.name}/Documents/my-codes";
+          url = "file:///home/wsdlly02/Documents/my-codes";
         };
       };
       "nix-config" = {
@@ -40,7 +40,7 @@
         };
         to = {
           type = "git";
-          url = "file:///home/${config.my.mainUser.name}/Documents/nix-config";
+          url = "file:///home/wsdlly02/Documents/nix-config";
         };
       };
     };
@@ -60,13 +60,13 @@
       nix-path = [
         "home-manager=${inputs.home-manager}"
         "nixpkgs=${config.nixpkgs.flake.source}"
-        "my-codes=git+file:///home/${config.my.mainUser.name}/Documents/my-codes"
-        "nix-config=git+file:///home/${config.my.mainUser.name}/Documents/nix-config"
+        "my-codes=git+file:///home/wsdlly02/Documents/my-codes"
+        "nix-config=git+file:///home/wsdlly02/Documents/nix-config"
       ];
       substituters = [
         "https://mirrors.ustc.edu.cn/nix-channels/store"
       ];
-      trusted-users = [ config.my.mainUser.name ];
+      trusted-users = [ "wsdlly02" ];
     };
     package = pkgs.lix;
   };

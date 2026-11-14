@@ -4,11 +4,6 @@
 }:
 {
   options = {
-    my.mainUser.name = lib.mkOption {
-      default = "root";
-      type = lib.types.str;
-      description = "Primary interactive user name for modules that need a canonical per-host username.";
-    };
     my.networking.firewall = {
       extraAllowedPorts = lib.mkOption {
         default = [ ];

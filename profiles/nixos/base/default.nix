@@ -6,5 +6,6 @@
     ./neovim.nix
     ./nix.nix
     ./sudo.nix
+    ./user-wsdlly02.nix
   ];
 }

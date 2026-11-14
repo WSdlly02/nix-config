@@ -1,15 +1,10 @@
-let
-  username = "wsdlly02";
-in
 {
-  my.mainUser.name = username;
-
-  users.users.${username} = {
+  users.users.wsdlly02 = {
     isNormalUser = true;
     uid = 1000;
     linger = true;
     extraGroups = [
-      username
+      "wsdlly02"
       "audio"
       "networkmanager"
       "input"

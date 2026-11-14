@@ -2,7 +2,6 @@
 {
   imports = [
     ../../profiles/nixos/base
-    ../../profiles/nixos/base/user-wsdlly02.nix
     ../../profiles/nixos/base/smartd.nix
     ../../profiles/nixos/base/btrfs-scrub.nix
     ../../profiles/nixos/development

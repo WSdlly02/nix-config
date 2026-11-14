@@ -2,7 +2,6 @@
 {
   imports = [
     ../../profiles/nixos/base
-    ../../profiles/nixos/base/user-wsdlly02.nix
     ../../profiles/nixos/infrastructure
     ../../profiles/nixos/infrastructure/bluetooth.nix
     ./system.nix

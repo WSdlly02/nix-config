@@ -1,17 +1,10 @@
-{
-  config,
-  pkgs,
-  ...
-}:
-let
-  user = config.my.mainUser.name;
-in
+{ pkgs, ... }:
 {
   virtualisation.quadlet.containers.mihomo = {
     containerConfig = {
       image = "docker.io/metacubex/mihomo:latest";
       networks = [ "host" ];
-      volumes = [ "/home/${user}/.config/mihomo:/etc/mihomo" ];
+      volumes = [ "/home/wsdlly02/.config/mihomo:/etc/mihomo" ];
       addCapabilities = [ "NET_ADMIN" ];
       devices = [ "/dev/net/tun" ];
       exec = [
@@ -24,7 +17,7 @@ in
     serviceConfig = {
       Delegate = true;
       ExecStartPre = [
-        "${pkgs.coreutils}/bin/mkdir -p /home/${user}/.config/mihomo"
+        "${pkgs.coreutils}/bin/mkdir -p /home/wsdlly02/.config/mihomo"
         (pkgs.writeShellScript "wait-for-tailscale-up" ''
           if ${pkgs.systemd}/bin/systemctl is-active --quiet tailscale.service; then
             echo "tailscale is running, waiting for IP 100.64.16.64..."

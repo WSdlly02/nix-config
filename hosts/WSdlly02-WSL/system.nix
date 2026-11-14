@@ -1,4 +1,3 @@
-{ config, ... }:
 {
   imports = [
     ./system-modules/networking.nix
@@ -7,7 +6,7 @@
 
   wsl = {
     enable = true;
-    defaultUser = config.my.mainUser.name;
+    defaultUser = "wsdlly02";
     startMenuLaunchers = true;
     interop.register = true;
     useWindowsDriver = true;

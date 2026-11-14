@@ -5,7 +5,6 @@
 {
   imports = [
     ../../profiles/home/base
-    ../../profiles/home/base/user-wsdlly02.nix
     ./home-modules/network-autoswitch.nix
     ./home-modules/sh.nix
   ];

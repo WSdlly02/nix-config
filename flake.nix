@@ -122,16 +122,6 @@
             ./hosts/WSdlly02-SRV
           ];
         };
-        "Lily-PC" = lib.nixosSystem rec {
-          specialArgs = { inherit inputs; };
-          system = "x86_64-linux";
-          pkgs = pkgs' { inherit system; };
-          modules = [
-            { system.name = "Lily-PC"; }
-            inputs.quadlet-nix.nixosModules.quadlet
-            ./hosts/Lily-PC
-          ];
-        };
       };
       overlays = {
         default = final: prev: {

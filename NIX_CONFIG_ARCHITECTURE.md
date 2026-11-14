@@ -38,7 +38,7 @@ nix-config/
 当前约定：
 
 - 每个 `nixosConfigurations.<name>` 都显式设置 `specialArgs = { inherit inputs; };`
-- 每个 `homeConfigurations.<user@host>` 都显式设置 `extraSpecialArgs = { inherit inputs; };`
+- 每个 `homeConfigurations."wsdlly02@<host>"` 都显式设置 `extraSpecialArgs = { inherit inputs; };`
 - 不再通过 `inputs.self.nixosModules.default` 或 `inputs.self.homeModules.default` 注入旧式聚合模块
 
 ## NixOS 层
@@ -51,12 +51,10 @@ nix-config/
 - `hosts/WSdlly02-RPi5/`
 - `hosts/WSdlly02-WSL/`
 - `hosts/WSdlly02-SRV/`
-- `hosts/Lily-PC/`
 
 典型主机入口负责：
 
 - 导入共享 profile
-- 导入用户 profile
 - 导入本机 `hardware.nix` / `system.nix`
 - 放置极少量本机特有覆写，例如磁盘、驱动、网卡、打印机、特定服务参数
 
@@ -67,7 +65,6 @@ nix-config/
 - `profiles/nixos/desktop`
 - `profiles/nixos/gaming`
 - `profiles/nixos/infrastructure`
-- `profiles/nixos/base/user-wsdlly02.nix`
 - 若干本机模块
 
 ### 2. 系统级共享 profile：`profiles/nixos/`
@@ -94,14 +91,9 @@ nix-config/
 - [sudo.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/sudo.nix)：sudo 行为
 - [smartd.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/smartd.nix)：smartd
 - [btrfs-scrub.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/btrfs-scrub.nix)：Btrfs scrub
-- [user-wsdlly02.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/user-wsdlly02.nix)、[user-lily.nix](/home/wsdlly02/Documents/nix-config/profiles/nixos/base/user-lily.nix)：用户 profile
+- [user-wsdlly02.nix](profiles/nixos/base/user-wsdlly02.nix) 定义 PC、RPi5 和 WSL 共用的日常账户，由 base 直接导入。
 
-当前仅保留两个自定义接口：
-
-- `config.my.mainUser.name`
-- `config.my.networking.firewall.*`
-
-它们用于表达“主交互用户是谁”以及“仓库自定义的防火墙扩展语义”。其余原先塞进大桶里的配置已经回归原生 NixOS option 或显式 `imports`。
+自定义选项 `my.networking.firewall.*` 描述防火墙的端口与范围。
 
 #### `profiles/nixos/development/`
 
@@ -173,7 +165,7 @@ nix-config/
 - [hosts/WSdlly02-WSL/home.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-WSL/home.nix)
 - [hosts/WSdlly02-RPi5/home.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-RPi5/home.nix)
 
-用户信息直接通过 `home.username`、`home.homeDirectory` 等原生 Home Manager option 表达，不再使用 `hostUserSpecific`。
+三个入口共用 `profiles/home/base/default.nix` 中的 `home.username = "wsdlly02"` 和 `home.homeDirectory = "/home/wsdlly02"`。
 
 ## 当前设计原则
 

@@ -20,6 +20,8 @@
     };
 
     home = {
+      username = "wsdlly02";
+      homeDirectory = "/home/wsdlly02";
       packages = with pkgs; [
         fastfetch
         # currentNixConfig !!!

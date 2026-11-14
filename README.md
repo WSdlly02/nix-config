@@ -1,6 +1,6 @@
 # nix-config
 
-个人多机器 NixOS / Home Manager Flake 配置仓库。
+个人多机器 NixOS / Home Manager Flake 配置仓库，日常用户为 `wsdlly02`。
 
 - `hosts/`：每台机器的入口与主机专属模块
 - `profiles/nixos/`：系统级可复用 profile
@@ -14,7 +14,6 @@
 - `WSdlly02-RPi5`
 - `WSdlly02-WSL`
 - `WSdlly02-SRV`
-- `Lily-PC`
 
 当前由 `flake.nix` 暴露的 Home 配置：
 
