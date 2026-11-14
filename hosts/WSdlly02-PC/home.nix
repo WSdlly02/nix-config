@@ -15,7 +15,6 @@ let
       ];
       home = {
         packages = with pkgs; [
-          # pkgs from my-codes.exposedPackages overlay
           # !! Already installed in $HOME/.local/bin
           # duplicate-file-finder
           # mihomo-updater

@@ -1,31 +1,25 @@
 # nix-config
 
-个人多机器 NixOS / Home Manager Flake 配置仓库，日常用户为 `wsdlly02`。
+三台主机的 NixOS 和 Home Manager 配置，用户为 `wsdlly02`。
 
-- `hosts/`：每台机器的入口与主机专属模块
-- `profiles/nixos/`：系统级可复用 profile
-- `profiles/home/`：Home Manager 可复用 profile
-- `lib/`：共享辅助函数与 overlay 组装
-- `pkgs/`：自定义包与开发 shell
+## 配置入口
 
-当前由 `flake.nix` 暴露的主机：
+| 主机 | NixOS | Home Manager |
+| --- | --- | --- |
+| WSdlly02-PC | [nixos.nix](hosts/WSdlly02-PC/nixos.nix) | [home.nix](hosts/WSdlly02-PC/home.nix) |
+| WSdlly02-RPi5 | [nixos.nix](hosts/WSdlly02-RPi5/nixos.nix) | [home.nix](hosts/WSdlly02-RPi5/home.nix) |
+| WSdlly02-WSL | [nixos.nix](hosts/WSdlly02-WSL/nixos.nix) | [home.nix](hosts/WSdlly02-WSL/home.nix) |
 
-- `WSdlly02-PC`
-- `WSdlly02-RPi5`
-- `WSdlly02-WSL`
+主机专属配置放在各自主机目录。要看某台机器启用了哪些共享配置，直接看入口中的 `imports`。系统级配置在 [profiles/nixos/](profiles/nixos/)，三台机器共用的用户配置在 [profiles/home/base.nix](profiles/home/base.nix)。
 
-当前由 `flake.nix` 暴露的 Home 配置：
+自定义包在 [pkgs/default.nix](pkgs/default.nix) 登记一次，[flake.nix](flake.nix) 从这里生成默认 overlay 和各平台的 `legacyPackages`。
 
-- `wsdlly02@WSdlly02-PC`
-- `wsdlly02@WSdlly02-RPi5`
-- `wsdlly02@WSdlly02-WSL`
+## 构建
 
-常用命令：
+在仓库根目录运行。构建其他主机时，将命令中的 `WSdlly02-PC` 换成表中的主机名。
 
 ```bash
 nixos-rebuild build --flake .#WSdlly02-PC
 home-manager build --flake .#wsdlly02@WSdlly02-PC
 nix flake check
 ```
-
-更详细的结构说明见 [NIX_CONFIG_ARCHITECTURE.md](NIX_CONFIG_ARCHITECTURE.md)。

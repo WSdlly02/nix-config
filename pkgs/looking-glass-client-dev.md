@@ -1,18 +1,15 @@
 # Looking Glass development client
 
-The `looking-glass-client-dev` overlay attribute pins build
-`B7-826-236efcb1` (commit `236efcb155f952f5d7d9fcd5891a3060ad254e68`),
-including its recursive submodules. The normal `looking-glass-client`
-attribute remains B7, but WSdlly02-PC selects `looking-glass-client-dev` in
-`hosts/WSdlly02-PC/system/virtualisation.nix`. The active system client
-is the development build; `/run/current-system/sw/bin/looking-glass-client`
-is not a B7 rollback path.
+WSdlly02-PC installs `looking-glass-client-dev` through its
+[virtualisation module](../hosts/WSdlly02-PC/system/virtualisation.nix).
+For the matching Windows IDD build, use the version and source revision in the
+[client package definition](looking-glass-client-dev.nix).
 
-Build without activating a NixOS generation:
+From the repository root, build the development client without activating a NixOS generation:
 
 ```sh
 nix build --no-write-lock-file \
-  'path:/home/wsdlly02/Documents/nix-config#legacyPackages.x86_64-linux.nixpkgs-unstable.looking-glass-client-dev' \
+  .#looking-glass-client-dev \
   --out-link /home/wsdlly02/looking-glass-client-dev-result
 ```
 
@@ -39,7 +36,7 @@ output link (do not assume the system executable is stable):
 
 ```sh
 nix build --no-write-lock-file \
-  'path:/home/wsdlly02/Documents/nix-config#legacyPackages.x86_64-linux.nixpkgs-unstable.looking-glass-client' \
+  .#legacyPackages.x86_64-linux.nixpkgs-unstable.looking-glass-client \
   --out-link /home/wsdlly02/looking-glass-client-b7-result
 ```
 
