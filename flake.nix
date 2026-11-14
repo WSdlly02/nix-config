@@ -68,13 +68,7 @@
           pkgs = pkgs' { system = "x86_64-linux"; };
         };
         "wsdlly02@WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/home.nix { inherit inputs pkgs'; };
-        "wsdlly02@WSdlly02-RPi5" = inputs.home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/WSdlly02-RPi5/home.nix
-          ];
-          pkgs = pkgs' { system = "aarch64-linux"; };
-        };
+        "wsdlly02@WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/home.nix { inherit inputs pkgs'; };
       };
       lib = import ./lib { inherit lib inputs; };
       nixosConfigurations = {
@@ -87,17 +81,7 @@
             ./hosts/WSdlly02-PC
           ];
         };
-        "WSdlly02-RPi5" = inputs.nixos-raspberrypi.lib.nixosSystem {
-          specialArgs = { inherit inputs; };
-          modules = [
-            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.base
-            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.bluetooth
-            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
-            inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
-            inputs.quadlet-nix.nixosModules.quadlet
-            ./hosts/WSdlly02-RPi5
-          ];
-        };
+        "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
         "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-SRV" = lib.nixosSystem rec {
           specialArgs = { inherit inputs; };
