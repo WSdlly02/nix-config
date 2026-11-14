@@ -54,7 +54,6 @@ RPi5 同样通过 [系统入口](hosts/WSdlly02-RPi5/nixos.nix) 和 [Home 入口
 - `hosts/WSdlly02-PC/`
 - `hosts/WSdlly02-RPi5/`
 - `hosts/WSdlly02-WSL/`
-- `hosts/WSdlly02-SRV/`
 
 典型主机入口负责：
 

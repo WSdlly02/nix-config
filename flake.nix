@@ -83,15 +83,6 @@
         };
         "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
         "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
-        "WSdlly02-SRV" = lib.nixosSystem rec {
-          specialArgs = { inherit inputs; };
-          system = "x86_64-linux";
-          pkgs = pkgs' { inherit system; };
-          modules = [
-            { system.name = "WSdlly02-SRV"; }
-            ./hosts/WSdlly02-SRV
-          ];
-        };
       };
       overlays = {
         default = final: prev: {

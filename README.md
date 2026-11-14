@@ -13,7 +13,6 @@
 - `WSdlly02-PC`
 - `WSdlly02-RPi5`
 - `WSdlly02-WSL`
-- `WSdlly02-SRV`
 
 当前由 `flake.nix` 暴露的 Home 配置：
 
