@@ -58,15 +58,7 @@
     in
     {
       homeConfigurations = {
-        "wsdlly02@WSdlly02-PC" = inputs.home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = { inherit inputs; };
-          modules = [
-            inputs.quadlet-nix.homeManagerModules.quadlet
-            inputs.zen-browser.homeModules.beta
-            ./hosts/WSdlly02-PC/home.nix
-          ];
-          pkgs = pkgs' { system = "x86_64-linux"; };
-        };
+        "wsdlly02@WSdlly02-PC" = import ./hosts/WSdlly02-PC/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/home.nix { inherit inputs pkgs'; };
       };
