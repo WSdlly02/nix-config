@@ -4,7 +4,7 @@ The `looking-glass-client-dev` overlay attribute pins build
 `B7-826-236efcb1` (commit `236efcb155f952f5d7d9fcd5891a3060ad254e68`),
 including its recursive submodules. The normal `looking-glass-client`
 attribute remains B7, but WSdlly02-PC selects `looking-glass-client-dev` in
-`hosts/WSdlly02-PC/system-modules/virtualisation.nix`. The active system client
+`hosts/WSdlly02-PC/system/virtualisation.nix`. The active system client
 is the development build; `/run/current-system/sw/bin/looking-glass-client`
 is not a B7 rollback path.
 
@@ -50,7 +50,7 @@ Windows Host and its display source. Then use the explicit B7 output link's
 Shut Windows down normally when switching VM hardware configurations.
 
 VM baselines and rescue instructions:
-[windows11.md](../hosts/WSdlly02-PC/system-modules/windows11.md).
+[windows11.md](../hosts/WSdlly02-PC/system/windows11.md).
 
 Packaging differences from nixpkgs B7:
 

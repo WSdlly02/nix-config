@@ -35,6 +35,8 @@ nix-config/
 1. 为每个配置注入 `inputs`
 2. 将每个配置指向各自的 `hosts/<name>` 入口
 
+PC 的两个 flake 输出分别导入 [系统入口](hosts/WSdlly02-PC/nixos.nix) 和 [Home 入口](hosts/WSdlly02-PC/home.nix)。
+
 WSL 的两个 flake 输出分别导入 [系统入口](hosts/WSdlly02-WSL/nixos.nix) 和 [Home 入口](hosts/WSdlly02-WSL/home.nix)。这两个文件分别调用 `nixosSystem` 和 `homeManagerConfiguration`，在主机目录中选择平台、包集和模块。
 
 RPi5 同样通过 [系统入口](hosts/WSdlly02-RPi5/nixos.nix) 和 [Home 入口](hosts/WSdlly02-RPi5/home.nix) 组装。系统入口使用 `nixos-raspberrypi` 提供的构造器及板级模块，Home 入口使用仓库的 aarch64 包集。
@@ -58,17 +60,17 @@ RPi5 同样通过 [系统入口](hosts/WSdlly02-RPi5/nixos.nix) 和 [Home 入口
 典型主机入口负责：
 
 - 导入共享 profile
-- 导入本机 `hardware.nix` / `system.nix`
+- 导入本机需要的硬件和服务模块
 - 放置极少量本机特有覆写，例如磁盘、驱动、网卡、打印机、特定服务参数
 
-以 [hosts/WSdlly02-PC/default.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-PC/default.nix) 为例，它导入：
+以 [hosts/WSdlly02-PC/nixos.nix](/home/wsdlly02/Documents/nix-config/hosts/WSdlly02-PC/nixos.nix) 为例，它导入：
 
 - `profiles/nixos/base.nix`
 - `profiles/nixos/development.nix`
 - `profiles/nixos/desktop.nix`
 - `profiles/nixos/gaming.nix`
 - `profiles/nixos/infrastructure.nix`
-- 若干本机模块
+- 本机的硬件、路由防火墙、Samba 和虚拟化模块
 
 ### 2. 系统级共享 profile：`profiles/nixos/`
 
@@ -100,7 +102,7 @@ PC 和 WSL 共用编译器、语言工具链、uv 配置和 nix-ld 运行库。C
 - 字体
 - 桌面常用 GUI 应用
 
-PC 的 LACT 显卡风扇和功耗配置位于 `hosts/WSdlly02-PC/hardware-modules/gpu.nix`。
+PC 的 LACT 显卡风扇和功耗配置位于 `hosts/WSdlly02-PC/hardware/gpu.nix`。
 
 #### `profiles/nixos/gaming.nix`
 

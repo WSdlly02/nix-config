@@ -72,15 +72,7 @@
       };
       lib = import ./lib { inherit lib inputs; };
       nixosConfigurations = {
-        "WSdlly02-PC" = lib.nixosSystem rec {
-          specialArgs = { inherit inputs; };
-          system = "x86_64-linux";
-          pkgs = pkgs' { inherit system; };
-          modules = [
-            inputs.quadlet-nix.nixosModules.quadlet
-            ./hosts/WSdlly02-PC
-          ];
-        };
+        "WSdlly02-PC" = import ./hosts/WSdlly02-PC/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
         "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
       };

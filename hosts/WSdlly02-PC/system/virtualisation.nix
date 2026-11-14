@@ -39,6 +39,7 @@
       autoEscape = true;
     };
   };
+  users.users.wsdlly02.extraGroups = [ "libvirtd" ];
   programs.virt-manager.enable = true;
 
   boot =

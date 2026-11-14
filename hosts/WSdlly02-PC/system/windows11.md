@@ -43,7 +43,7 @@ Windows 内部驱动、显示设置不保存在 XML 中；画面传输成功也�
 
 ```sh
 virsh -c qemu:///system dumpxml --inactive 'Windows 11' > /tmp/windows11-current.xml
-diff -u hosts/WSdlly02-PC/system-modules/windows11.xml /tmp/windows11-current.xml
+diff -u hosts/WSdlly02-PC/system/windows11.xml /tmp/windows11-current.xml
 ```
 
 确认新的配置可正常使用后，可将上述导出文件复制覆盖基线，并更新此说明。
@@ -54,14 +54,14 @@ diff -u hosts/WSdlly02-PC/system-modules/windows11.xml /tmp/windows11-current.xm
 ```sh
 virsh -c qemu:///system domstate 'Windows 11'
 virsh -c qemu:///system dumpxml --inactive 'Windows 11' > /tmp/windows11-before-restore.xml
-virsh -c qemu:///system define --validate hosts/WSdlly02-PC/system-modules/windows11.xml
+virsh -c qemu:///system define --validate hosts/WSdlly02-PC/system/windows11.xml
 virsh -c qemu:///system start 'Windows 11'
 ```
 
 需要救援 VGA 时，在上述关机、备份流程中将 `define` 命令替换为：
 
 ```sh
-virsh -c qemu:///system define --validate hosts/WSdlly02-PC/system-modules/windows11-rescue-vga.xml
+virsh -c qemu:///system define --validate hosts/WSdlly02-PC/system/windows11-rescue-vga.xml
 ```
 
 救援完成后正常关机，再定义 `windows11.xml` 即可恢复日常配置。

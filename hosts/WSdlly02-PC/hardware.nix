@@ -5,21 +5,54 @@
 }:
 {
   imports = [
-    ./hardware-modules/bootloader.nix
-    ./hardware-modules/gpu.nix
-    ./hardware-modules/localdisksmount.nix
-    ./hardware-modules/plymouth.nix
-    ./hardware-modules/tpm.nix
+    ./hardware/gpu.nix
+    ./hardware/fs.nix
   ];
+
+  boot.loader = {
+    timeout = 6;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/efi";
+    };
+    limine = {
+      enable = true;
+      extraEntries = ''
+        /Windows 11
+          protocol: efi
+          path: boot():/EFI/Microsoft/Boot/bootmgfw.efi
+      '';
+      maxGenerations = 4;
+      secureBoot.enable = true;
+      style = {
+        interface = {
+          branding = "WSdlly02-PC Bootloader";
+          resolution = "2560x1440";
+        };
+        wallpapers = [
+          "${pkgs.nixos-artwork.wallpapers.catppuccin-latte.gnomeFilePath}"
+        ];
+      };
+    };
+  };
+  boot.plymouth = {
+    enable = true;
+    theme = "hexagon_dots";
+    themePackages = with pkgs; [
+      (adi1090x-plymouth-themes.override { selected_themes = [ "hexagon_dots" ]; })
+    ];
+  };
 
   boot = {
     initrd = {
+      systemd.tpm2.enable = true;
       supportedFilesystems = [
         "btrfs"
         "ext4"
       ];
       availableKernelModules = [
         "nvme"
+        "xhci_pci_prom21"
         "xhci_pci"
         "ahci"
         "usbhid"
@@ -51,100 +84,9 @@
       "iommu=pt"
     ];
     # blacklistedKernelModules = ["k10temp"];
-    # resumeDevice = ""; No longer required by config.boot.initrd.systemd.enable
     tmp = {
       useTmpfs = true;
       tmpfsSize = "50%";
-    };
-  };
-
-  fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
-      fsType = "btrfs";
-      options = [
-        "rw"
-        "noatime"
-        "ssd"
-        "discard=async"
-        "space_cache=v2"
-        "compress=zstd"
-        "subvol=@"
-      ];
-    };
-    "/nix" = {
-      device = "/dev/disk/by-uuid/a7715c2f-c6e1-48a9-b891-4fe319c6c727";
-      fsType = "ext4";
-      options = [
-        "rw"
-        "noatime"
-      ];
-    };
-    "/home" = {
-      device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
-      fsType = "btrfs";
-      options = [
-        "rw"
-        "noatime"
-        "ssd"
-        "discard=async"
-        "space_cache=v2"
-        "compress=zstd"
-        "subvol=@home"
-      ];
-    };
-    "/var/cache" = {
-      device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
-      fsType = "btrfs";
-      options = [
-        "rw"
-        "noatime"
-        "ssd"
-        "discard=async"
-        "space_cache=v2"
-        "compress=zstd"
-        "subvol=@var-cache"
-      ];
-    };
-    "/var/log" = {
-      device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
-      fsType = "btrfs";
-      options = [
-        "rw"
-        "noatime"
-        "ssd"
-        "discard=async"
-        "space_cache=v2"
-        "compress=zstd"
-        "subvol=@var-log"
-      ];
-    };
-    "/var/tmp" = {
-      device = "/dev/disk/by-uuid/9c058d11-63b8-4a19-8884-28519aaa8b16";
-      fsType = "btrfs";
-      options = [
-        "rw"
-        "noatime"
-        "ssd"
-        "discard=async"
-        "space_cache=v2"
-        "compress=zstd"
-        "subvol=@var-tmp"
-      ];
-    };
-    "/efi" = {
-      device = "/dev/disk/by-uuid/18B2-C53C";
-      fsType = "vfat";
-      options = [
-        "rw"
-        "relatime"
-        "fmask=0022"
-        "dmask=0022"
-        "codepage=437"
-        "iocharset=ascii"
-        "shortname=mixed"
-        "errors=remount-ro"
-      ];
     };
   };
 
@@ -173,4 +115,19 @@
     # uinput.enable = true; # Enable /dev/uinput
     xone.enable = true;
   };
+
+  systemd.tpm2.enable = true;
+  security.tpm2.enable = true;
+
+  services.udev.packages = [
+    (pkgs.writeTextFile {
+      name = "atk-f1-mouse-webhid-udev-rules";
+      destination = "/lib/udev/rules.d/70-atk-f1-mouse-webhid.rules";
+      text = ''
+        # Allow the active local desktop session to use the mouse configuration website.
+        # Display Name: Compx Wireless mouse 8k NANO dongle-L
+        SUBSYSTEM=="hidraw", ATTRS{idVendor}=="373b", ATTRS{idProduct}=="11fe", TAG+="uaccess"
+      '';
+    })
+  ];
 }
