@@ -138,4 +138,4 @@ mount -t ext4 /dev/vda1 /mnt
 
 2026-11-15 复核时，VPS 运行 NixOS `26.11.20261111.d4f25a3`，根分区为 `/dev/vda1`。EasyTier、Hysteria、Xray、mihomo-updater-resolver、yunzhizuo-server 和 yunzhizuo-cloudflared 六项服务均为 active。resolver 和 Yunzhizuo 的本机 `/health` 均返回 HTTP 200。切换时还核对了五个镜像 ID、Xray 两个卷的内容，Cloudflare Tunnel 已注册四条连接。线上验证了网络启动依赖修正生效，修正后未另行重启业务做冷启动验收。
 
-用户在迁移后重新设置了 `wsdlly02` 和 `root` 的密码。两者均已设置，root 的 SSH 登录仍被禁用。PC 备份和 VPS 上 `/var/lib/local-credentials/` 中的哈希对应迁移时的密码；下次从头重建并沿用当前密码时，应准备更新后的凭据。
+用户在迁移后重新设置了 `wsdlly02` 和 `root` 的密码。两者均已设置，root 的 SSH 登录仍被禁用。PC 备份和 VPS 上 `/var/lib/local-credentials/` 中的哈希对应迁移时的密码；日常配置通过 `passwd` 管理本机密码。从空盘重建时可用声明的公钥登录后设置密码；若要沿用当前密码，需恢复最新的凭据。

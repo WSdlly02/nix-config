@@ -59,11 +59,13 @@
       homeConfigurations = {
         "wsdlly02@WSdlly02-PC" = import ./hosts/WSdlly02-PC/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/home.nix { inherit inputs pkgs'; };
+        "wsdlly02@WSdlly02-SRV-JP" = import ./hosts/WSdlly02-SRV-JP/home.nix { inherit inputs pkgs'; };
         "wsdlly02@WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/home.nix { inherit inputs pkgs'; };
       };
       nixosConfigurations = {
         "WSdlly02-PC" = import ./hosts/WSdlly02-PC/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
+        "WSdlly02-SRV-JP" = import ./hosts/WSdlly02-SRV-JP/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
       };
       overlays.default =

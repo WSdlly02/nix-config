@@ -1,6 +1,6 @@
 # nix-config
 
-三台主机的 NixOS 和 Home Manager 配置，用户为 `wsdlly02`。
+四台主机的 NixOS 和 Home Manager 配置，用户为 `wsdlly02`。
 
 ## 配置入口
 
@@ -9,8 +9,9 @@
 | WSdlly02-PC | [nixos.nix](hosts/WSdlly02-PC/nixos.nix) | [home.nix](hosts/WSdlly02-PC/home.nix) |
 | WSdlly02-RPi5 | [nixos.nix](hosts/WSdlly02-RPi5/nixos.nix) | [home.nix](hosts/WSdlly02-RPi5/home.nix) |
 | WSdlly02-WSL | [nixos.nix](hosts/WSdlly02-WSL/nixos.nix) | [home.nix](hosts/WSdlly02-WSL/home.nix) |
+| WSdlly02-SRV-JP | [nixos.nix](hosts/WSdlly02-SRV-JP/nixos.nix) | [home.nix](hosts/WSdlly02-SRV-JP/home.nix) |
 
-主机专属配置放在各自主机目录。要看某台机器启用了哪些共享配置，直接看入口中的 `imports`。系统级配置在 [profiles/nixos/](profiles/nixos/)，三台机器共用的用户配置在 [profiles/home/base.nix](profiles/home/base.nix)。
+主机专属配置放在各自主机目录。要看某台机器启用了哪些共享配置，直接看入口中的 `imports`。共享的系统配置在 [profiles/nixos/](profiles/nixos/)，四台主机共用的用户配置在 [profiles/home/base.nix](profiles/home/base.nix)。
 
 SRV-JP 从 Debian 就地切换到 NixOS 的步骤、验收和快照回退方式见[迁移记录](hosts/WSdlly02-SRV-JP/migration/migration.md)。
 
