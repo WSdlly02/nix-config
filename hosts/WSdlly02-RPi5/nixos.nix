@@ -7,6 +7,7 @@ let
     {
       imports = [
         ../../profiles/nixos/base.nix
+        ../../profiles/nixos/server.nix
         ../../profiles/nixos/infrastructure.nix
       ];
 

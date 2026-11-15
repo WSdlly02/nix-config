@@ -75,6 +75,10 @@ let
         "net.ipv4.ip_unprivileged_port_start" = 80;
       };
 
+      services.logind.settings.Login = {
+        NAutoVTs = 1;
+        ReserveVT = 1;
+      };
       services.journald.settings.Journal = {
         Compress = true;
         SystemMaxUse = "128M";
@@ -85,7 +89,11 @@ let
       };
       virtualisation.podman.enable = true;
       nix.settings.max-jobs = 1;
-      environment.systemPackages = [ pkgs.sqlite ];
+      environment.systemPackages = with pkgs; [
+        python3
+        sqlite
+        unzip
+      ];
     };
 in
 inputs.nixpkgs-unstable.lib.nixosSystem {

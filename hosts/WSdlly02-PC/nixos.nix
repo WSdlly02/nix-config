@@ -8,6 +8,7 @@ let
         ../../profiles/nixos/development.nix
         ../../profiles/nixos/desktop.nix
         ../../profiles/nixos/gaming.nix
+        ../../profiles/nixos/server.nix
         ../../profiles/nixos/infrastructure.nix
         ./hardware.nix
         ./system/networking.nix
