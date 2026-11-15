@@ -12,6 +12,8 @@
 
 主机专属配置放在各自主机目录。要看某台机器启用了哪些共享配置，直接看入口中的 `imports`。系统级配置在 [profiles/nixos/](profiles/nixos/)，三台机器共用的用户配置在 [profiles/home/base.nix](profiles/home/base.nix)。
 
+SRV-JP 从 Debian 就地切换到 NixOS 的步骤、验收和快照回退方式见[迁移记录](hosts/WSdlly02-SRV-JP/migration/migration.md)。
+
 自定义包在 [pkgs/default.nix](pkgs/default.nix) 登记一次，[flake.nix](flake.nix) 从这里生成默认 overlay 和各平台的 `legacyPackages`。
 
 ## 构建
