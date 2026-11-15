@@ -5,6 +5,7 @@ let
     {
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
+        ../../profiles/nixos/base.nix
         ../../profiles/nixos/server.nix
       ];
       system.stateVersion = "26.11";

@@ -1,19 +1,5 @@
 { lib, pkgs, ... }:
 {
-  i18n.defaultLocale = "en_US.UTF-8";
-  nix = {
-    channel.enable = false;
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-      trusted-users = [ "wsdlly02" ];
-    };
-    package = pkgs.lix;
-  };
-
   boot.kernelModules = [ "tcp_bbr" ];
   boot.kernel.sysctl = {
     "net.core.default_qdisc" = "fq";
@@ -62,32 +48,6 @@
     "vm.swappiness" = 10;
   };
 
-  users.groups.wsdlly02.gid = 1000;
-  users.users.wsdlly02 = {
-    isNormalUser = true;
-    uid = 1000;
-    group = "wsdlly02";
-    extraGroups = [
-      "wheel"
-      "systemd-journal"
-    ];
-    linger = true;
-    openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkH7l0JnwQeP+cmD+ty29i0kdxHdvnvedkiXKcp8dCYRYAoGBIS6FIzD6p058cNwp1DDHN+TTrlNZz9DEizKqbS1SOPJyiWrln6lx3jh9p/AD1pbPRjsgVLzvdBS6bJ6NgtXe2q0bV4UgGktVi6VxDAt4jBQPsUKfyGYx9hh95xeWjvt9AEYcD2hOak9bBRHkE4IQcus5xV1kXNSiVec0DMhB2IObADbx+6H4C+oIIAxVccr+SOivwrSgwmn9XhQ0VgopJomVKg9zmlr7idorwmDZdIsMmpeU346Gu2Piq+Amvn1FM7H37ThBNx81dUO18UZ/gw35zT7G6Hh4CisYFDJWocKfYKMdT4IdzxcyOWkUr3PSfcpOUc+60h+BlpI0ogxYRoXM6R9bWRGYM3x26hRrfcBR8fwTepTa9H+Vz70KNJh4qNrHuMICnyerX+h9igkVXoysPjbzfqidGPzLIbbi+iUU56/8C4JGL2haEppoZgq/bx1Lo5rv1BT7Q732BkhcnS96vaDqsAffAKupHWQ1eRFZ9uId8uRTNbKZmstgKJthcoSdizrbXvlx7b3Kzob9Y4mix9tlUU2Z5i5sm2FFa/AYfTNrLVg6jA4fSrB0vKRyeCaBBzHOhwPOIWZAa0MG/2LZ40M2jT3270HCToHH3kBCMQthByCos20h/IQ== wsdlly02@WSdlly02-PC"
-    ];
-  };
-
-  environment = {
-    homeBinInPath = true;
-    localBinInPath = true;
-  };
-
-  security.sudo = {
-    execWheelOnly = true;
-    wheelNeedsPassword = false;
-    extraConfig = "Defaults env_keep += \"http_proxy https_proxy all_proxy\"";
-  };
-
   services.openssh = {
     enable = true;
     ports = [ 10022 ];
@@ -105,37 +65,8 @@
     ReserveVT = 1;
   };
 
-  programs.fish.enable = true;
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
-
   environment.systemPackages = with pkgs; [
-    aria2
-    btop
-    curl
-    dnsutils
-    fastfetch
-    fzf
-    git
-    htop
-    iperf
-    iptables
-    jq
-    lsof
-    ncdu
-    net-tools
-    nmap
     python3
-    rclone
-    ripgrep
-    rsync
-    tree
     unzip
-    wget
-    zellij
   ];
 }

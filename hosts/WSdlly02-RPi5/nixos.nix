@@ -18,10 +18,7 @@ let
         raspberrypi-eeprom
       ];
 
-      users.users.wsdlly02.extraGroups = [
-        "i2c"
-        "video"
-      ];
+      users.users.wsdlly02.extraGroups = [ "i2c" ];
 
       my.networking.firewall = {
         extraAllowedPorts = [

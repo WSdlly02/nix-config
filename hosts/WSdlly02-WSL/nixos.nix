@@ -9,6 +9,9 @@ let
       ../../profiles/nixos/development.nix
     ];
 
+    time.timeZone = "Asia/Singapore";
+    i18n.extraLocales = [ "zh_CN.UTF-8/UTF-8" ];
+
     nix.settings.max-jobs = 64;
     environment.systemPackages = with pkgs; [
       wsl-open

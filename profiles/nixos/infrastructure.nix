@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -41,6 +42,62 @@
   };
 
   config = {
+    users.users.wsdlly02.extraGroups = [
+      "audio"
+      "networkmanager"
+      "render"
+      "video"
+    ];
+
+    environment.systemPackages = with pkgs; [
+      android-tools
+      compsize
+      cryptsetup
+      lm_sensors
+      pciutils
+      psmisc
+      usbutils
+    ];
+
+    time.timeZone = "Asia/Singapore";
+    i18n.extraLocales = [ "zh_CN.UTF-8/UTF-8" ];
+
+    services.atd.enable = true;
+    services.journald.settings.Journal = {
+      Compress = true;
+      Storage = "auto";
+      SystemMaxUse = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "512M" else "256M";
+    };
+
+    nix.registry = {
+      home-manager.to = {
+        type = "path";
+        path = "${inputs.home-manager}";
+      };
+      nixpkgs.to = {
+        type = "path";
+        path = "${config.nixpkgs.flake.source}";
+      };
+      my-codes.to = {
+        type = "git";
+        url = "file:///home/wsdlly02/Documents/my-codes";
+      };
+      nix-config.to = {
+        type = "git";
+        url = "file:///home/wsdlly02/Documents/nix-config";
+      };
+    };
+    nix.settings = {
+      accept-flake-config = true;
+      nix-path = [
+        "home-manager=${inputs.home-manager}"
+        "nixpkgs=${config.nixpkgs.flake.source}"
+        "my-codes=git+file:///home/wsdlly02/Documents/my-codes"
+        "nix-config=git+file:///home/wsdlly02/Documents/nix-config"
+      ];
+      substituters = [ "https://mirrors.ustc.edu.cn/nix-channels/store" ];
+    };
+
     networking = {
       hostName = config.system.name;
       resolvconf = {
