@@ -35,32 +35,6 @@ let
         "except:interface-name:wlan0"
       ];
 
-      systemd.services.route-switch = {
-        description = "Auto switch default route between eth0 and wlan0";
-        path = with pkgs; [
-          coreutils
-          gawk
-          gnugrep
-          iproute2
-          iputils
-          util-linux
-        ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.bash}/bin/bash ${./route-switch.sh}";
-        };
-      };
-
-      systemd.timers.route-switch = {
-        description = "Periodically run route-switch to choose best interface";
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnBootSec = "5s";
-          OnUnitActiveSec = "60s";
-          Unit = "route-switch.service";
-        };
-      };
-
       systemd.user.services = {
         pipewire = {
           preStart = "${pkgs.networkmanager}/bin/nm-online -q"; # Fix up
