@@ -26,3 +26,5 @@ nixos-rebuild build --flake .#WSdlly02-PC
 home-manager build --flake .#wsdlly02@WSdlly02-PC
 nix flake check
 ```
+
+在 PC 运行 `./hosts/WSdlly02-SRV-JP/deploy.py`，会用当前 Git 提交及其 `flake.lock` 构建 NixOS 和 Home Manager，通过 SSH 别名 `wsdlly02-srv-jp` 增量传输并依次激活，再检查 Home Manager 配置为默认启动的服务。只验证本机构建时使用 `--build-only`。
