@@ -15,7 +15,7 @@ let
 
       home = {
         packages = with pkgs; [ mcrcon ];
-        stateVersion = "25.05";
+        stateVersion = "26.11";
       };
 
       programs.java = {

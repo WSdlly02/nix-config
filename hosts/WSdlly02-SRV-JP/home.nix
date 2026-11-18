@@ -3,7 +3,7 @@ let
   homeModule = {
     imports = [ ../../profiles/home/base.nix ];
 
-    home.stateVersion = "26.05";
+    home.stateVersion = "26.11";
 
     virtualisation.quadlet.containers = {
       easytier = {

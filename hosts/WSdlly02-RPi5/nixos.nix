@@ -47,7 +47,7 @@ let
       system = {
         name = "WSdlly02-RPi5";
         # nixos.tag = [];
-        stateVersion = "25.05";
+        stateVersion = "26.11";
       };
 
       boot.loader.raspberryPi.bootloader = lib.mkForce "kernel";

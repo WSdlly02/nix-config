@@ -31,7 +31,7 @@ let
     ];
     system = {
       name = "WSdlly02-WSL";
-      stateVersion = "25.05";
+      stateVersion = "26.11";
     };
     networking = {
       hostName = config.system.name;
