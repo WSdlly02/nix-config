@@ -26,6 +26,9 @@
       # Node.js
       nodejs
       npm-check-updates
+
+      # Lean
+      elan
     ];
     etc."uv/uv.toml".text = ''
       # Only use managed Python versions
