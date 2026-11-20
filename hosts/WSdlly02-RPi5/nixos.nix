@@ -36,20 +36,6 @@ let
         lanOnlyPortRanges = [ ];
       };
 
-      networking.networkmanager.unmanaged = [
-        "except:interface-name:end0"
-        "except:interface-name:wlan0"
-      ];
-
-      systemd.user.services = {
-        pipewire = {
-          preStart = "${pkgs.networkmanager}/bin/nm-online -q"; # Fix up
-          wantedBy = [ "default.target" ];
-        };
-        pipewire-pulse.wantedBy = [ "default.target" ];
-        wireplumber.wantedBy = [ "default.target" ];
-      };
-
       system = {
         name = "WSdlly02-RPi5";
         # nixos.tag = [];

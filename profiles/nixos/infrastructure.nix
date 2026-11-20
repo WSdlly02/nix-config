@@ -131,10 +131,9 @@
         scanRandMacAddress = false;
         powersave = false;
       };
-      unmanaged = lib.mkDefault [
-        # WSdlly02-PC Interfaces managed by NetworkManager
-        "except:interface-name:enp14s0"
-        "except:interface-name:wlp15s0"
+      unmanaged = [
+        "except:type:ethernet"
+        "except:type:wifi"
       ];
       # rc-manager has been set as unmanaged
     };
