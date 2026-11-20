@@ -126,6 +126,7 @@ let
   };
 in
 inputs.home-manager.lib.homeManagerConfiguration {
+  extraSpecialArgs = { inherit inputs; };
   pkgs = pkgs' { system = "x86_64-linux"; };
   modules = [
     inputs.quadlet-nix.homeManagerModules.quadlet

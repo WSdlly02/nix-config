@@ -96,7 +96,9 @@ let
       ];
     };
 in
-inputs.nixpkgs-unstable.lib.nixosSystem {
-  pkgs = pkgs' { system = "x86_64-linux"; };
+inputs.nixpkgs-unstable.lib.nixosSystem rec {
+  specialArgs = { inherit inputs; };
+  system = "x86_64-linux";
+  pkgs = pkgs' { inherit system; };
   modules = [ hostModule ];
 }
