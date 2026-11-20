@@ -20,7 +20,7 @@ let
 
       programs.java = {
         enable = true;
-        package = pkgs.zulu25;
+        package = pkgs.zulu27;
       };
 
       programs.fish = {

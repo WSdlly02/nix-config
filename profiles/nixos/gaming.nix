@@ -9,7 +9,7 @@
     gamemode.enable = true;
     java = {
       enable = true;
-      package = pkgs.zulu25;
+      package = pkgs.zulu27;
     };
   };
 
@@ -17,7 +17,7 @@
     mindustry-wayland
     (prismlauncher.override {
       jdks = [
-        zulu25
+        zulu27
       ];
       textToSpeechSupport = false;
     })
