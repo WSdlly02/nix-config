@@ -1,11 +1,17 @@
 {
   inputs,
+  pkgs',
 }:
 let
   hostModule =
-    { lib, pkgs, ... }:
+    {
+      modulesPath,
+      pkgs,
+      ...
+    }:
     {
       imports = [
+        (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
         ../../profiles/nixos/base.nix
         ../../profiles/nixos/server.nix
         ../../profiles/nixos/infrastructure.nix
@@ -30,8 +36,8 @@ let
         lanOnlyPortRanges = [ ];
       };
 
-      networking.networkmanager.unmanaged = lib.mkForce [
-        "except:interface-name:eth0"
+      networking.networkmanager.unmanaged = [
+        "except:interface-name:end0"
         "except:interface-name:wlan0"
       ];
 
@@ -50,25 +56,16 @@ let
         stateVersion = "26.11";
       };
 
-      boot.loader.raspberryPi.bootloader = lib.mkForce "kernel";
       fileSystems = {
         "/" = {
           device = "/dev/disk/by-label/NIXOS_SD";
           fsType = "ext4";
-          options = [
-            "noatime"
-            "x-initrd.mount"
-          ];
+          options = [ "noatime" ];
         };
         "/boot/firmware" = {
           device = "/dev/disk/by-label/FIRMWARE";
           fsType = "vfat";
-          options = [
-            "noauto"
-            "noatime"
-            "x-systemd.automount"
-            "x-systemd.idle-timeout=1min"
-          ];
+          options = [ "noatime" ];
         };
       };
 
@@ -79,14 +76,9 @@ let
       };
     };
 in
-inputs.nixos-raspberrypi.lib.nixosSystem {
+inputs.nixpkgs-unstable.lib.nixosSystem rec {
   specialArgs = { inherit inputs; };
-  modules = [
-    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.base
-    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.bluetooth
-    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.display-vc4
-    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
-    inputs.quadlet-nix.nixosModules.quadlet
-    hostModule
-  ];
+  system = "aarch64-linux";
+  pkgs = pkgs' { inherit system; };
+  modules = [ hostModule ];
 }

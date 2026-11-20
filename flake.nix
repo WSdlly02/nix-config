@@ -28,7 +28,6 @@
       url = "github:WSdlly02/my-codes/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/develop";
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
