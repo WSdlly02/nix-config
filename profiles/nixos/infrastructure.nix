@@ -100,10 +100,6 @@
 
     networking = {
       hostName = config.system.name;
-      resolvconf = {
-        enable = true;
-        useLocalResolver = true;
-      };
       nftables.enable = lib.mkDefault false;
       tempAddresses = "disabled";
       firewall = {
@@ -119,7 +115,6 @@
         allowedUDPPorts = config.networking.firewall.allowedTCPPorts;
         allowedUDPPortRanges = config.networking.firewall.allowedTCPPortRanges;
       };
-      nameservers = [ "127.0.0.1" ];
       timeServers = [
         "ntp.ntsc.ac.cn"
         "cn.ntp.org.cn"
@@ -164,144 +159,44 @@
       };
     };
 
-    virtualisation.quadlet.containers.dnsmasq =
-      let
-        dnsmasq-conf = pkgs.writeText "dnsmasq.conf" ''
-          # 只监听本地 loopback 接口的 53 端口（避免与其他接口冲突）
-          listen-address=127.0.0.1
-          listen-address=::1
-
-          # 强烈推荐：只绑定指定的地址（额外保险）
-          bind-interfaces
-
-          # 不使用系统的 /etc/resolv.conf（防止循环或污染）
-          no-resolv
-          no-poll
-
-          dns-forward-max=150
-
-          # 上游 DNS：优先转发到你的本地服务（10053端口）
-          # 如果 10053 不可用（超时/拒绝/无响应），自动回退到后面的
-          server=127.0.0.1#10053
-          server=223.5.5.5#53
-          server=8.8.8.8#53
-          server=8.8.4.4#53
-          server=1.1.1.1#53
-
-          # 严格按顺序尝试上游（先全力尝试 10053，失败再用公共 DNS）
-          strict-order
-
-          # 禁用缓存（确保每次查询都是最新的）
-          cache-size=0
-          no-negcache
-
-          # 可选：日志查询，便于调试（生产可注释掉）
-          #log-queries
-          #log-facility=/var/log/dnsmasq.log
-
-          # 可选：不提供 DHCP 服务（我们只做 DNS 转发）
-          port=53                     # 明确指定端口（默认就是53）
-          no-dhcp-interface=*
-        '';
-      in
-      {
-        containerConfig = {
-          image = "docker.io/dockurr/dnsmasq:latest";
-          networks = [ "host" ];
-          addCapabilities = [
-            "NET_ADMIN"
-            "NET_BIND_SERVICE"
-          ];
-          user = "0";
-          autoUpdate = "registry";
-          volumes = [ "${dnsmasq-conf}:/etc/dnsmasq.conf:ro" ];
-        };
-
-        serviceConfig = {
-          Delegate = true;
-          Restart = "always";
-        };
-
-        unitConfig = {
-          Description = "Dnsmasq in Podman container";
-          After = [ "network-online.target" ];
-          Wants = [ "network-online.target" ];
-        };
-      };
-
-    virtualisation.quadlet.containers.mihomo = {
-      containerConfig = {
-        image = "docker.io/metacubex/mihomo:latest";
-        networks = [ "host" ];
-        volumes = [ "/home/wsdlly02/.config/mihomo:/etc/mihomo" ];
-        addCapabilities = [ "NET_ADMIN" ];
-        devices = [ "/dev/net/tun" ];
-        exec = [
-          "-d"
-          "/etc/mihomo"
+    services.dnsmasq = {
+      enable = true;
+      alwaysKeepRunning = true;
+      settings = {
+        listen-address = [
+          "127.0.0.1"
+          "::1"
         ];
-        autoUpdate = "registry";
-      };
-
-      serviceConfig = {
-        Delegate = true;
-        ExecStartPre = [
-          "${pkgs.coreutils}/bin/mkdir -p /home/wsdlly02/.config/mihomo"
-          (pkgs.writeShellScript "wait-for-tailscale-up" ''
-            if ${pkgs.systemd}/bin/systemctl is-active --quiet tailscale.service; then
-              echo "tailscale is running, waiting for IP 100.64.16.64..."
-              until ${pkgs.iproute2}/bin/ip addr show tailscale0 | ${pkgs.gnugrep}/bin/grep -q "100.64.16.64"; do
-                ${pkgs.coreutils}/bin/sleep 1
-              done
-              echo "IP 100.64.16.64 is ready."
-            else
-              echo "tailscale is not running, skipping wait."
-            fi
-          '')
+        bind-interfaces = true;
+        # Keep resolvconf's interface-specific upstreams out of the forwarding list.
+        conf-file = [ ];
+        resolv-file = [ ];
+        no-resolv = true;
+        no-poll = true;
+        server = [
+          "127.0.0.1#10053"
+          "223.5.5.5"
+          "1.1.1.1"
+          "8.8.8.8"
+          "8.8.4.4"
         ];
-        Restart = "always";
-      };
-
-      unitConfig = {
-        Description = "Mihomo in Podman container";
-        After = [
-          "network-online.target"
-          "tailscale.service"
-        ];
-        Wants = [ "network-online.target" ];
+        strict-order = true;
+        cache-size = 0;
+        no-negcache = true;
+        no-dhcp-interface = "*";
       };
     };
 
-    virtualisation.quadlet.containers.easytier = {
-      containerConfig = {
-        image = "docker.io/easytier/easytier:latest";
-        networks = [ "host" ];
-        volumes = [
-          "/home/wsdlly02/.config/easytier:/etc/easytier"
-          "/etc/machine-id:/etc/machine-id:ro"
-        ];
-        addCapabilities = [
-          "NET_ADMIN"
-          "NET_RAW"
-        ];
-        devices = [ "/dev/net/tun" ];
-        exec = [
-          "--config-dir"
-          "/etc/easytier"
-        ];
-        autoUpdate = "registry";
-      };
+    services.mihomo = {
+      enable = true;
+      tunMode = true;
+      configFile = "/home/wsdlly02/.config/mihomo/config.yaml";
+      webui = pkgs.metacubexd;
+    };
 
-      serviceConfig = {
-        Delegate = true;
-        Restart = "always";
-      };
-
-      unitConfig = {
-        Description = "EasyTier in Podman container";
-        After = [ "network-online.target" ];
-        Wants = [ "network-online.target" ];
-      };
+    services.easytier = {
+      enable = true;
+      instances.default.configFile = "/home/wsdlly02/.config/easytier/config.toml";
     };
 
     boot.kernel.sysctl = {

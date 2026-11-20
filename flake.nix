@@ -64,7 +64,7 @@
       };
       nixosConfigurations = {
         "WSdlly02-PC" = import ./hosts/WSdlly02-PC/nixos.nix { inherit inputs pkgs'; };
-        "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs; };
+        "WSdlly02-RPi5" = import ./hosts/WSdlly02-RPi5/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-SRV-JP" = import ./hosts/WSdlly02-SRV-JP/nixos.nix { inherit inputs pkgs'; };
         "WSdlly02-WSL" = import ./hosts/WSdlly02-WSL/nixos.nix { inherit inputs pkgs'; };
       };
