@@ -90,7 +90,6 @@ let
       virtualisation.podman.enable = true;
       nix.settings.max-jobs = 1;
       environment.systemPackages = with pkgs; [
-        python3
         sqlite
         unzip
       ];

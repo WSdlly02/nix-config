@@ -18,7 +18,7 @@
 
       # Python
       uv
-      python3Env
+      # python3Env # Already in base.nix
 
       # Golang
       go

@@ -58,6 +58,7 @@
     ncdu
     net-tools
     nmap
+    python3Env
     rclone
     ripgrep
     rsync
