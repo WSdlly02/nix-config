@@ -27,4 +27,13 @@ home-manager build --flake .#wsdlly02@WSdlly02-PC
 nix flake check
 ```
 
-在 PC 运行 `./hosts/WSdlly02-SRV-JP/deploy.py`，会用当前 Git 提交及其 `flake.lock` 构建 NixOS 和 Home Manager，通过 SSH 别名 `wsdlly02-srv-jp` 增量传输并依次激活，再检查 Home Manager 配置为默认启动的服务。只验证本机构建时使用 `--build-only`。
+在构建机上运行 [remote-deploy.py](remote-deploy.py)，参数是目标主机的 SSH 别名。脚本使用当前 Git 提交及其 `flake.lock` 在本机构建，默认先切换 NixOS，再激活 Home Manager。目标是本机时直接激活，远端主机通过 SSH 增量传输和激活。构建机需要能构建目标架构。
+
+`--nixos-only` 和 `--hm-only` 分别选择系统或用户配置，两者互斥。加上 `--build-only` 只构建选中的配置。
+
+```bash
+./remote-deploy.py wsdlly02-pc --nixos-only --build-only
+./remote-deploy.py wsdlly02-rpi5 --hm-only
+./remote-deploy.py wsdlly02-rpi5
+./remote-deploy.py wsdlly02-srv-jp
+```
