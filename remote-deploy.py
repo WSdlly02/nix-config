@@ -13,7 +13,7 @@ TARGETS = {
 }
 
 
-def build(flake: str, attribute: str, link: Path) -> Path:
+def build(repo: Path, attribute: str, link: Path) -> Path:
     subprocess.run(
         [
             "nix",
@@ -23,8 +23,9 @@ def build(flake: str, attribute: str, link: Path) -> Path:
             "--no-update-lock-file",
             "--out-link",
             link,
-            f"{flake}#{attribute}",
+            f".#{attribute}",
         ],
+        cwd=repo,
         check=True,
     )
     return link.resolve(strict=True)
@@ -37,7 +38,7 @@ def run_on_target(ssh_host: str | None, *args: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="在本机构建当前 Git 提交的 NixOS 和 Home Manager，并部署到目标主机。"
+        description="在本机构建当前工作树的 NixOS 和 Home Manager，并部署到目标主机。"
     )
     parser.add_argument("target", choices=TARGETS, help="目标主机的 SSH 别名")
     parser.add_argument("--build-only", action="store_true", help="只在本机构建")
@@ -52,24 +53,20 @@ def main() -> None:
     home_config = "wsdlly02@" + nixos_config
 
     repo = Path(__file__).resolve().parent
-    revision = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=repo, text=True
-    ).strip()
-    flake = f"git+{repo.as_uri()}?rev={revision}"
-    print(f"Building {nixos_config} from {revision}", flush=True)
+    print(f"Building {nixos_config} from {repo}", flush=True)
 
     with TemporaryDirectory() as tmp:
         nixos = home = None
         if not args.hm_only:
             nixos = build(
-                flake,
+                repo,
                 f"nixosConfigurations.{nixos_config}.config.system.build.toplevel",
                 Path(tmp) / "system",
             )
             print(f"NixOS: {nixos}", flush=True)
         if not args.nixos_only:
             home = build(
-                flake,
+                repo,
                 f'homeConfigurations."{home_config}".activationPackage',
                 Path(tmp) / "home",
             )
