@@ -75,11 +75,21 @@ def main() -> None:
             return
 
         if home and ssh_host:
-            subprocess.run(["nix", "copy", "--to", f"ssh://{ssh_host}", home], check=True)
+            subprocess.run(
+                [
+                    "nix",
+                    "copy",
+                    "--substitute-on-destination",
+                    "--to",
+                    f"ssh://{ssh_host}",
+                    home,
+                ],
+                check=True,
+            )
         if nixos:
             switch = ["nixos-rebuild", "switch", "--store-path", str(nixos), "--sudo"]
             if ssh_host:
-                switch.extend(["--target-host", ssh_host])
+                switch.extend(["--target-host", ssh_host, "--use-substitutes"])
             subprocess.run(switch, check=True)
             run_on_target(ssh_host, "test", "/run/current-system", "-ef", str(nixos))
         if home:
