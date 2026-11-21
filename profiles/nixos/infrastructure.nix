@@ -245,9 +245,6 @@
     programs.gnupg = {
       agent = {
         enable = true;
-        enableSSHSupport = true;
-        enableBrowserSocket = true;
-        enableExtraSocket = true;
         pinentryPackage = pkgs.writeShellScriptBin "pinentry" ''
           # SSH 一律 TUI
           if [ -n "''${SSH_TTY-}" ] || [ -n "''${SSH_CONNECTION-}" ]; then
