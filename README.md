@@ -37,3 +37,20 @@ nix flake check
 ./remote-deploy.py wsdlly02-rpi5
 ./remote-deploy.py wsdlly02-srv-jp
 ```
+
+### SRV-JP 首次从 Quadlet 切换到原生服务
+
+Hysteria、Xray 和 Yunzhizuo 的 Cloudflare Tunnel 由 NixOS 管理。三份密文和收件人规则在 [secrets/](hosts/WSdlly02-SRV-JP/secrets/)。在该目录用 `agenix -e 文件名.age` 编辑。重装时先恢复 SRV-JP 的 SSH 主机私钥，或用管理员密钥为新主机重新加密。
+
+首次切换时，先在 PC 运行 `./remote-deploy.py wsdlly02-srv-jp --build-only`。在 VPS 上以 `wsdlly02` 导出旧 Xray 的配置卷供回退，再停止三个旧用户服务，复制 Hysteria 的现有 ACME 账户和证书。
+
+```bash
+backup=$(mktemp -d "$HOME/xray-quadlet.XXXXXX")
+volume=$(podman inspect xray -f '{{range .Mounts}}{{if eq .Destination "/usr/local/etc/xray"}}{{.Name}}{{end}}{{end}}')
+podman volume export "$volume" --output "$backup/config-volume.tar"
+systemctl --user stop hysteria.service xray.service yunzhizuo-cloudflared.service
+sudo install -d -m 0700 /var/lib/private/hysteria
+sudo test ! -e /var/lib/private/hysteria/acme && sudo cp -a --no-preserve=ownership ~/.local/share/hysteria/acme /var/lib/private/hysteria/
+```
+
+确认复制成功后，在 PC 运行 `./remote-deploy.py wsdlly02-srv-jp`。在 VPS 用 `systemctl is-active hysteria xray yunzhizuo-cloudflared` 检查系统服务，再确认 UDP/TCP 443 和 Tunnel 的实际连通性。Yunzhizuo 后端仍是用户服务，监听 `127.0.0.1:3080`。

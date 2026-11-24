@@ -22,28 +22,6 @@ let
           RestartSec = 3;
         };
       };
-      hysteria = {
-        unitConfig = {
-          After = "network-online.target";
-          Wants = "network-online.target";
-        };
-        containerConfig = {
-          name = "hysteria2";
-          image = "docker.io/tobyxdd/hysteria:latest";
-          networks = [ "host" ];
-          exec = "server -c /etc/hysteria.yaml";
-          volumes = [
-            "%h/.config/hysteria/config.yaml:/etc/hysteria.yaml:ro"
-            "%h/.local/share/hysteria/acme:/acme"
-          ];
-          environments.HYSTERIA_LOG_LEVEL = "warn";
-          autoUpdate = "registry";
-        };
-        serviceConfig = {
-          Restart = "always";
-          RestartSec = 3;
-        };
-      };
       mihomo-updater-resolver = {
         containerConfig = {
           image = "ghcr.io/wsdlly02/my-codes/mihomo-updater-resolver:latest";
@@ -61,42 +39,6 @@ let
           Delegate = true;
           Restart = "on-failure";
           TimeoutStartSec = 900;
-        };
-      };
-      xray = {
-        unitConfig = {
-          After = "network-online.target";
-          Wants = "network-online.target";
-        };
-        containerConfig = {
-          image = "ghcr.io/xtls/xray-core:latest";
-          networks = [ "host" ];
-          volumes = [ "%h/.config/xray/config.json:/usr/local/etc/xray/config.json" ];
-          autoUpdate = "registry";
-        };
-        serviceConfig = {
-          Restart = "always";
-          RestartSec = 3;
-        };
-      };
-      yunzhizuo-cloudflared = {
-        unitConfig = {
-          After = [
-            "network-online.target"
-            "yunzhizuo-server.service"
-          ];
-          Wants = "network-online.target";
-        };
-        containerConfig = {
-          image = "docker.io/cloudflare/cloudflared:latest";
-          networks = [ "host" ];
-          secrets = [ "yunzhizuo-tunnel-token,type=env,target=TUNNEL_TOKEN" ];
-          exec = "tunnel --no-autoupdate run";
-          autoUpdate = "registry";
-        };
-        serviceConfig = {
-          Restart = "always";
-          RestartSec = 5;
         };
       };
     };

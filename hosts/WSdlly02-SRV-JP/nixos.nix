@@ -1,10 +1,16 @@
 { inputs, pkgs' }:
 let
   hostModule =
-    { modulesPath, pkgs, ... }:
+    {
+      config,
+      modulesPath,
+      pkgs,
+      ...
+    }:
     {
       imports = [
         (modulesPath + "/profiles/qemu-guest.nix")
+        inputs.agenix.nixosModules.default
         ../../profiles/nixos/base.nix
         ../../profiles/nixos/server.nix
       ];
@@ -69,10 +75,54 @@ let
         ];
       };
 
-      boot.kernel.sysctl = {
-        "net.ipv6.conf.eth0.autoconf" = 0;
-        # Rootless Hysteria and Xray bind port 443.
-        "net.ipv4.ip_unprivileged_port_start" = 80;
+      boot.kernel.sysctl."net.ipv6.conf.eth0.autoconf" = 0;
+
+      age.secrets = {
+        hysteria.file = ./secrets/hysteria.yaml.age;
+        xray.file = ./secrets/xray.json.age;
+        cloudflared-token.file = ./secrets/cloudflared-token.age;
+      };
+
+      systemd.services.hysteria = {
+        description = "Hysteria 2 server";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        restartTriggers = [ config.age.secrets.hysteria.file ];
+        environment.HYSTERIA_LOG_LEVEL = "warn";
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "hysteria";
+          StateDirectoryMode = "0700";
+          LoadCredential = "config.yaml:${config.age.secrets.hysteria.path}";
+          ExecStart = "${pkgs.hysteria}/bin/hysteria server -c %d/config.yaml";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+          Restart = "always";
+          RestartSec = 3;
+        };
+      };
+
+      services.xray = {
+        enable = true;
+        settingsFile = config.age.secrets.xray.path;
+      };
+      systemd.services.xray.restartTriggers = [ config.age.secrets.xray.file ];
+
+      # Ingress is managed in Cloudflare. This connector only needs its tunnel token.
+      systemd.services.yunzhizuo-cloudflared = {
+        description = "Cloudflare Tunnel for Yunzhizuo";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
+        restartTriggers = [ config.age.secrets.cloudflared-token.file ];
+        serviceConfig = {
+          DynamicUser = true;
+          LoadCredential = "token:${config.age.secrets.cloudflared-token.path}";
+          ExecStart = "${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token-file %d/token";
+          Restart = "always";
+          RestartSec = 5;
+        };
       };
 
       services.logind.settings.Login = {

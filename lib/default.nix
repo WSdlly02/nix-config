@@ -22,7 +22,8 @@ rec {
         inputs.my-codes.overlays.default
         inputs.self.overlays.default
 
-        # overlays defined in here
+        inputs.agenix.overlays.default # add agenix script to pkgs
+
         buildEnvWithSortedPathsOverlay
         utilsSelfOverlay
       ]

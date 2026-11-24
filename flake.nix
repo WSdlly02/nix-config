@@ -10,7 +10,14 @@
       flake = false;
     };
 
-    codex-desktop-linux.url = "github:ilysenko/codex-desktop-linux";
+    agenix = {
+      url = "github:ryantm/agenix/main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    codex-desktop-linux = {
+      url = "github:ilysenko/codex-desktop-linux/main";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
