@@ -74,5 +74,5 @@ inputs.home-manager.lib.homeManagerConfiguration {
     inputs.zen-browser.homeModules.beta
     homeModule
   ];
-  pkgs = pkgs' { system = "x86_64-linux"; };
+  pkgs = pkgs' "x86_64-linux";
 }

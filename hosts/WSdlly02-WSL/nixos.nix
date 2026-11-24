@@ -44,7 +44,7 @@ in
 inputs.nixpkgs-unstable.lib.nixosSystem rec {
   specialArgs = { inherit inputs; };
   system = "x86_64-linux";
-  pkgs = pkgs' { inherit system; };
+  pkgs = pkgs' system;
   modules = [
     inputs.nixos-wsl.nixosModules.default
     hostModule

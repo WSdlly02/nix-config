@@ -75,7 +75,7 @@
     // forExposedSystems (
       system:
       let
-        pkgs = pkgs' { inherit system; };
+        pkgs = pkgs' system;
         exposedPackages = import ./pkgs { inherit inputs pkgs; };
       in
       {

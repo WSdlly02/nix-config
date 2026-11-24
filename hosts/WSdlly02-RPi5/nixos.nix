@@ -65,6 +65,6 @@ in
 inputs.nixpkgs-unstable.lib.nixosSystem rec {
   specialArgs = { inherit inputs; };
   system = "aarch64-linux";
-  pkgs = pkgs' { inherit system; };
+  pkgs = pkgs' system;
   modules = [ hostModule ];
 }

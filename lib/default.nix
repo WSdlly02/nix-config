@@ -4,20 +4,14 @@ rec {
   # pkgs' is a helper to construct a nixpkgs instance with
   # the project's common config and overlays applied.
   pkgs' =
-    {
-      nixpkgsInstance ? inputs.nixpkgs-unstable,
-      config ? { },
-      overlays ? [ ],
-      system,
-    }:
-    import nixpkgsInstance {
+    system:
+    import inputs.nixpkgs-unstable {
       inherit system;
       config = {
         allowAliases = false;
         allowUnfree = true;
         # rocmSupport = true;
-      }
-      // config;
+      };
       overlays = [
         inputs.my-codes.overlays.default
         inputs.self.overlays.default
@@ -26,8 +20,7 @@ rec {
 
         buildEnvWithSortedPathsOverlay
         utilsSelfOverlay
-      ]
-      ++ overlays;
+      ];
     };
   buildEnvWithSortedPathsOverlay = final: prev: {
     /*

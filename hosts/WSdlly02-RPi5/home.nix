@@ -35,5 +35,5 @@ in
 inputs.home-manager.lib.homeManagerConfiguration {
   extraSpecialArgs = { inherit inputs; };
   modules = [ homeModule ];
-  pkgs = pkgs' { system = "aarch64-linux"; };
+  pkgs = pkgs' "aarch64-linux";
 }

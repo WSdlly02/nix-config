@@ -12,5 +12,5 @@ in
 inputs.home-manager.lib.homeManagerConfiguration {
   extraSpecialArgs = { inherit inputs; };
   modules = [ homeModule ];
-  pkgs = pkgs' { system = "x86_64-linux"; };
+  pkgs = pkgs' "x86_64-linux";
 }
