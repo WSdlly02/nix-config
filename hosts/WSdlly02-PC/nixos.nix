@@ -45,7 +45,7 @@ let
         vdpauinfo
         vulkan-tools
       ];
-
+      services.easytier.instances.default.settings.ipv4 = "10.144.144.64/24";
       my.networking.firewall = {
         extraAllowedPorts = [ ];
         extraAllowedPortRanges = [ ];
@@ -75,6 +75,7 @@ inputs.nixpkgs-unstable.lib.nixosSystem rec {
   system = "x86_64-linux";
   pkgs = pkgs' system;
   modules = [
+    inputs.agenix.nixosModules.default
     inputs.quadlet-nix.nixosModules.quadlet
     hostModule
   ];

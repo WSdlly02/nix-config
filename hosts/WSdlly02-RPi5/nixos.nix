@@ -26,7 +26,7 @@ let
       ];
 
       users.users.wsdlly02.extraGroups = [ "i2c" ];
-
+      services.easytier.instances.default.settings.ipv4 = "10.144.144.32/24";
       my.networking.firewall = {
         extraAllowedPorts = [
           8080
@@ -66,5 +66,8 @@ inputs.nixpkgs-unstable.lib.nixosSystem rec {
   specialArgs = { inherit inputs; };
   system = "aarch64-linux";
   pkgs = pkgs' system;
-  modules = [ hostModule ];
+  modules = [
+    inputs.agenix.nixosModules.default
+    hostModule
+  ];
 }

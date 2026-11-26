@@ -6,22 +6,6 @@ let
     home.stateVersion = "26.11";
 
     virtualisation.quadlet.containers = {
-      easytier = {
-        unitConfig = {
-          After = "network-online.target";
-          Wants = "network-online.target";
-        };
-        containerConfig = {
-          image = "docker.io/easytier/easytier:latest";
-          networks = [ "host" ];
-          exec = "--relay-network-whitelist=wsdlly02-easytier";
-          autoUpdate = "registry";
-        };
-        serviceConfig = {
-          Restart = "always";
-          RestartSec = 3;
-        };
-      };
       mihomo-updater-resolver = {
         containerConfig = {
           image = "ghcr.io/wsdlly02/my-codes/mihomo-updater-resolver:latest";

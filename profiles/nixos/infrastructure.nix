@@ -194,10 +194,46 @@
       webui = pkgs.metacubexd;
     };
 
+    age.secrets = {
+      easytier-secret.file = ../secrets/easytier-secret.age;
+    };
+    assertions = [
+      {
+        assertion = config.services.easytier.instances.default.settings.ipv4 != null;
+        message = "Please set the IPv4 address for EasyTier in the configuration.";
+      }
+    ];
     services.easytier = {
       enable = true;
-      instances.default.configFile = "/home/wsdlly02/.config/easytier/config.toml";
+      instances.default = {
+        settings =
+          let
+            addrList = addr: [
+              "udp://${addr}:11010"
+              "tcp://${addr}:11010"
+              "wg://${addr}:11011"
+              "ws://${addr}:11011/"
+              "quic://${addr}:11012"
+              "wss://${addr}:11012/"
+              "faketcp://${addr}:11013"
+            ];
+          in
+          {
+            hostname = config.system.name;
+            peers = addrList "31.57.172.176";
+            listeners = addrList "0.0.0.0";
+            network_name = "wsdlly02-easytier";
+          };
+        environmentFiles = [
+          config.age.secrets.easytier-secret.path # ET_NETWORK_SECRET
+        ];
+        extraSettings.flags = {
+          dev_name = "easytier0";
+          enable_exit_node = true;
+        };
+      };
     };
+    systemd.services.easytier-default.restartTriggers = [ config.age.secrets.easytier-secret.file ];
 
     boot.kernel.sysctl = {
       "net.ipv4.conf.all.rp_filter" = 1; # 反向路径过滤

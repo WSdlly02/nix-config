@@ -77,6 +77,24 @@ let
 
       boot.kernel.sysctl."net.ipv6.conf.eth0.autoconf" = 0;
 
+      services.easytier = {
+        enable = true;
+        instances.default = {
+          settings.listeners = [
+            "tcp://0.0.0.0:11010"
+            "udp://0.0.0.0:11010"
+            "wg://0.0.0.0:11011"
+            "ws://0.0.0.0:11011/"
+            "quic://0.0.0.0:11012"
+            "wss://0.0.0.0:11012/"
+            "faketcp://0.0.0.0:11013"
+          ];
+          extraArgs = [
+            "--relay-network-whitelist=wsdlly02-easytier"
+          ];
+        };
+      };
+
       age.secrets = {
         hysteria.file = ./secrets/hysteria.yaml.age;
         xray.file = ./secrets/xray.json.age;
