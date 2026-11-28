@@ -3,6 +3,7 @@ import argparse
 import shlex
 import socket
 import subprocess
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -13,7 +14,7 @@ TARGETS = {
 }
 
 
-def build(repo: Path, attribute: str, link: Path) -> Path:
+def build(repo: Path, attribute: str, link: Path, nix_args: list[str]) -> Path:
     subprocess.run(
         [
             "nix",
@@ -24,6 +25,7 @@ def build(repo: Path, attribute: str, link: Path) -> Path:
             "--out-link",
             link,
             f".#{attribute}",
+            *nix_args,
         ],
         cwd=repo,
         check=True,
@@ -38,14 +40,21 @@ def run_on_target(ssh_host: str | None, *args: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="在本机构建当前工作树的 NixOS 和 Home Manager，并部署到目标主机。"
+        description="在本机构建当前工作树的 NixOS 和 Home Manager，并部署到目标主机。",
+        epilog="在 -- 后追加 nix build 参数，例如 -- --show-trace -L。"
     )
     parser.add_argument("target", choices=TARGETS, help="目标主机的 SSH 别名")
     parser.add_argument("--build-only", action="store_true", help="只在本机构建")
     scope = parser.add_mutually_exclusive_group()
     scope.add_argument("--nixos-only", action="store_true", help="只处理 NixOS")
     scope.add_argument("--hm-only", action="store_true", help="只处理 Home Manager")
-    args = parser.parse_args()
+    argv = sys.argv[1:]
+    nix_args = []
+    if "--" in argv:
+        separator = argv.index("--")
+        nix_args = argv[separator + 1 :]
+        argv = argv[:separator]
+    args = parser.parse_args(argv)
 
     nixos_config = TARGETS[args.target]
     is_local = socket.gethostname().casefold() == nixos_config.casefold()
@@ -62,6 +71,7 @@ def main() -> None:
                 repo,
                 f"nixosConfigurations.{nixos_config}.config.system.build.toplevel",
                 Path(tmp) / "system",
+                nix_args,
             )
             print(f"NixOS: {nixos}", flush=True)
         if not args.nixos_only:
@@ -69,6 +79,7 @@ def main() -> None:
                 repo,
                 f'homeConfigurations."{home_config}".activationPackage',
                 Path(tmp) / "home",
+                nix_args,
             )
             print(f"Home Manager: {home}", flush=True)
         if args.build_only:

@@ -37,6 +37,7 @@
     packages = with pkgs; [
       fastfetch
       # currentNixConfig !!!
+      dix
       nixd
       nixfmt
       nix-diff

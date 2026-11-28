@@ -32,7 +32,7 @@ nix flake check
 `--nixos-only` 和 `--hm-only` 分别选择系统或用户配置，两者互斥。加上 `--build-only` 只构建选中的配置。
 
 ```bash
-./remote-deploy.py wsdlly02-pc --nixos-only --build-only
+./remote-deploy.py wsdlly02-pc --nixos-only --build-only -- --show-trace -L
 ./remote-deploy.py wsdlly02-rpi5 --hm-only
 ./remote-deploy.py wsdlly02-rpi5
 ./remote-deploy.py wsdlly02-srv-jp

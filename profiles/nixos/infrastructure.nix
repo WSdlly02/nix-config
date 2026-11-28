@@ -95,7 +95,10 @@
         "my-codes=git+file:///home/wsdlly02/Documents/my-codes"
         "nix-config=git+file:///home/wsdlly02/Documents/nix-config"
       ];
-      substituters = [ "https://mirrors.ustc.edu.cn/nix-channels/store" ];
+      substituters = [
+        "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+        "https://mirrors.ustc.edu.cn/nix-channels/store"
+      ];
     };
 
     networking = {
